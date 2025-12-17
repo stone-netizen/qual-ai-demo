@@ -1,19 +1,81 @@
+/**
+ * LeakDetector.ai - LEAK-FOCUSED Report
+ * 
+ * Core Principle: Show LEAKS not revenue
+ * - "Revenue slipping through the cracks" not "Current Revenue"
+ * - Focus on gaps, losses, and recovery potential
+ * 
+ * 7 Sections:
+ * 1. Executive Summary (Leak-focused hero with big leak number)
+ * 2. Competitive Intelligence (Leakage comparison)
+ * 3. Competitive Reality (Emotional urgency callout)
+ * 4. Funnel Breakdown (Where leads are slipping through)
+ * 5. Priority Fixes (Recovery potential)
+ * 6. ROI Calculator (Recovery vs Investment)
+ * 7. What Happens Next + Final CTA
+ */
+
 import { useRoute } from "wouter";
-import { MOCK_REPORT_DATA } from "@/lib/mock-data";
-import { StickyCTA } from "@/components/ui/sticky-cta";
-import { MermaidDiagram } from "@/components/ui/mermaid-diagram";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { AlertTriangle, TrendingUp, DollarSign, Activity, Check, Phone } from "lucide-react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
-import { useEffect, useState } from "react";
-import { ReportData } from "@/lib/calculations";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Download, Share2, Loader2 } from "lucide-react";
+import { 
+  ExecutiveSummary,
+  CompetitiveIntelligence,
+  CompetitiveReality,
+  FunnelBreakdown,
+  PriorityFixes,
+  ROICalculator,
+  NextStepsProcess,
+  FinalCTA
+} from "@/components/report";
+import { 
+  type ReportDataV2, 
+  calculateReportV2,
+  getBenchmarksForType,
+  SERVICE_MONTHLY_COST
+} from "@/lib/calculations-v2";
+
+// Default mock data for development
+const DEFAULT_REPORT: ReportDataV2 = calculateReportV2({
+  business_type: 'dental',
+  clinic_name: 'Acme Dental',
+  city: 'New York',
+  role: 'owner',
+  leads_per_month: 150,
+  missed_calls_week: 20,
+  response_time: '30_to_120',
+  contact_rate: 45,
+  booking_rate: 40,
+  show_rate: 70,
+  close_rate: 30,
+  avg_value: 500
+});
+
+// Response time to minutes mapping - GRANULAR
+const RESPONSE_TIME_MINUTES: Record<string, number> = {
+  // New granular options
+  under_5: 3,
+  '5_to_15': 10,
+  '15_to_30': 22,
+  '30_to_60': 45,
+  '1_to_2_hours': 90,
+  '2_to_4_hours': 180,
+  '4_plus': 360,
+  // Legacy options (for backwards compatibility)
+  '5_to_30': 15,
+  '30_to_120': 60,
+  hours_plus: 180,
+  next_day: 1440
+};
 
 export default function ReportPage() {
   const [match, params] = useRoute("/report/:id");
-  const [data, setData] = useState<ReportData>(MOCK_REPORT_DATA as unknown as ReportData);
+  const [data, setData] = useState<ReportDataV2>(DEFAULT_REPORT);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (params?.id) {
@@ -24,199 +86,354 @@ export default function ReportPage() {
     }
   }, [params?.id]);
 
-  // Mock tracking
-  const trackEvent = (type: string, meta: any) => {
-    console.log("TRACKING EVENT:", type, meta);
-    // In real app: await fetch('/api/events', ...)
-    const events = JSON.parse(localStorage.getItem("qual_events") || "[]");
-    events.push({
-      id: crypto.randomUUID(),
-      created_at: new Date().toISOString(),
-      event_type: type,
-      metadata: meta
-    });
-    localStorage.setItem("qual_events", JSON.stringify(events));
+  const handleScheduleClick = useCallback(() => {
+    const calendlyUrl = import.meta.env.VITE_CALENDLY_URL || "https://calendly.com/evensonstone/new-meeting";
+    window.open(calendlyUrl, '_blank');
+  }, []);
+
+  const handleGeneratePDF = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      const { generatePDF } = await import("@/lib/pdf-generator");
+      await generatePDF(data);
+    } catch (error) {
+      console.error("PDF generation error:", error);
+      window.print();
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
-  const handleBookClick = () => {
-    trackEvent("cta_clicked", { location: "report_sticky" });
+  const handleShare = async () => {
+    const shareUrl = window.location.href;
+    if (navigator.share) {
+      await navigator.share({
+        title: `Lead Leakage Analysis - ${data.business_name}`,
+        text: `Lead leakage analysis for ${data.business_name}`,
+        url: shareUrl
+      });
+    } else {
+      await navigator.clipboard.writeText(shareUrl);
+      alert("Link copied to clipboard!");
+    }
   };
 
-  const formatCurrency = (val: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(val);
+  // Scroll to content section
+  const scrollToContent = () => {
+    contentRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Calculate derived values
+  const benchmarks = useMemo(() => getBenchmarksForType(data.business_type), [data.business_type]);
+  
+  const responseTimeMinutes = useMemo(() => 
+    RESPONSE_TIME_MINUTES[data.inputs.response_time] || 60
+  , [data.inputs.response_time]);
+
+  // ===== LEAK-FOCUSED METRICS =====
+  
+  // Monthly leak = total opportunity being lost
+  const monthlyLeak = data.losses.monthly;
+  const annualLeak = data.losses.annual;
+  
+  // Leads lost = leads that entered funnel but didn't close
+  const leadsLost = data.inputs.leads_per_month - data.current.leads_closed;
+  
+  // Leads recoverable = additional closes with AI
+  const leadsRecoverable = data.projected.leads_closed - data.current.leads_closed;
+  
+  // Conversion rates
+  const currentConversionRate = useMemo(() => {
+    if (data.inputs.leads_per_month === 0) return 0;
+    return Math.round((data.current.leads_closed / data.inputs.leads_per_month) * 100);
+  }, [data.current.leads_closed, data.inputs.leads_per_month]);
+
+  // Top performer rate - 10% matches optimized funnel (use consistently everywhere)
+  const topPerformerRate = 10;
+  
+  // Conversion gap
+  const conversionGap = topPerformerRate - currentConversionRate;
+  
+  // Capture rate = what % of leads are they converting
+  const captureRate = currentConversionRate;
+  
+  // Per second loss rate
+  const perSecondLoss = useMemo(() => data.losses.per_second, [data.losses.per_second]);
+
+  // ===== COMPETITIVE INTELLIGENCE METRICS (LEAK-FOCUSED) =====
+  
+  const yourMetrics = useMemo(() => ({
+    responseTime: responseTimeMinutes,
+    contactRate: data.inputs.contact_rate,
+    bookingRate: data.inputs.booking_rate,
+    showRate: data.inputs.show_rate,
+    closeRate: data.inputs.close_rate,
+    leakage: monthlyLeak // LEAKAGE not revenue
+  }), [responseTimeMinutes, data.inputs, monthlyLeak]);
+
+  const industryAvg = useMemo(() => ({
+    responseTime: 45, // 45 min average
+    contactRate: benchmarks.contact,
+    bookingRate: benchmarks.booking,
+    showRate: benchmarks.show,
+    closeRate: benchmarks.close,
+    leakage: Math.round(monthlyLeak * 0.85) // Industry loses slightly less
+  }), [benchmarks, monthlyLeak]);
+
+  // Top performers: 80% × 55% × 80% × 28% = ~10% overall conversion
+  const topPerformers = useMemo(() => ({
+    responseTime: 1, // Under 1 min
+    contactRate: 80,
+    bookingRate: 55,
+    showRate: 80,
+    closeRate: 28, // Realistic close rate for healthcare
+    leakage: Math.round(monthlyLeak * 0.15) // Top performers lose only 15% of what you lose
+  }), [monthlyLeak]);
+
+  // ===== FUNNEL METRICS =====
+  
+  const totalLeakage = monthlyLeak;
+  const recoverable = data.recovery.monthly;
+
+  // ===== ROI METRICS (RECOVERY-FOCUSED) =====
+  
+  const monthlyRecovery = recoverable;
+  const netRecovery = monthlyRecovery - SERVICE_MONTHLY_COST;
+  const roi = SERVICE_MONTHLY_COST > 0 ? Math.round((netRecovery / SERVICE_MONTHLY_COST) * 100) : 0;
+  const paybackDays = data.roi.paybackPeriodDays;
+  const weekLeak = Math.round(data.losses.weekly);
+  const monthLeak = monthlyLeak;
+  const quarterLeak = data.losses.quarterly;
+  const yearOneRecovery = netRecovery * 12;
+
+  // Next available slot (dynamic based on current time)
+  const nextAvailableSlot = useMemo(() => {
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayName = tomorrow.toLocaleDateString('en-US', { weekday: 'long' });
+    return `${dayName} at 2:00 PM`;
+  }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-24 lg:pb-12">
-      {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-40 backdrop-blur-sm bg-white/80">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+    <div className="min-h-screen bg-white" ref={reportRef}>
+      
+      {/* Fixed Header - Shows on scroll */}
+      <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-slate-200/50 z-40 opacity-0 translate-y-[-100%] transition-all duration-300" id="header">
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">Q</div>
-            <span className="font-bold text-lg tracking-tight">Qual AI</span>
+            <div className="w-7 h-7 bg-slate-900 rounded flex items-center justify-center text-white font-bold text-xs">
+              LD
+            </div>
+            <span className="font-medium text-slate-700 text-sm">LeakDetector</span>
           </div>
-          <Badge variant="outline" className="font-mono text-xs">
-            REPORT #{params?.id?.slice(0, 8)}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleShare}
+              className="text-slate-500"
+            >
+              <Share2 className="w-4 h-4" />
+            </Button>
+            <Button 
+              size="sm"
+              variant="ghost"
+              onClick={handleGeneratePDF}
+              disabled={isGeneratingPDF}
+              className="text-slate-500"
+            >
+              {isGeneratingPDF ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Download className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Main Content Column */}
-          <div className="lg:col-span-8 space-y-8">
-            
-            {/* Executive Summary */}
-            <section className="space-y-4">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
-                Lost Revenue Report for {data.business_name}
-              </h1>
-              <Card className="bg-white border-primary/10 shadow-sm">
-                <CardContent className="pt-6">
-                  <div className="flex flex-col md:flex-row gap-6 items-start">
-                    <div className="flex-1 space-y-2">
-                       <h2 className="text-lg font-semibold flex items-center gap-2">
-                         <Activity className="w-5 h-5 text-primary" />
-                         Executive Summary
-                       </h2>
-                       <p className="text-slate-600 leading-relaxed">
-                         {data.ai_report_json.executive_summary}
-                       </p>
-                    </div>
-                    <div className="bg-red-50 border border-red-100 rounded-xl p-4 min-w-[200px] text-center">
-                       <p className="text-xs text-red-600 font-medium uppercase tracking-wider">Estimated Monthly Loss</p>
-                       <p className="text-3xl font-bold text-red-700 mt-1">{formatCurrency(data.metrics.monthly_revenue_lost)}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
+      {/* ============================================ */}
+      {/* SECTION 1: EXECUTIVE SUMMARY (Leak-Focused Hero) */}
+      {/* ============================================ */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <ExecutiveSummary
+          businessName={data.business_name}
+          city={data.city}
+          businessType={data.business_type}
+          monthlyLeak={monthlyLeak}
+          annualLeak={annualLeak}
+          leadsPerMonth={data.inputs.leads_per_month}
+          leadsLost={leadsLost}
+          conversionGap={conversionGap}
+          currentRate={currentConversionRate}
+          topRate={topPerformerRate}
+          avgValue={data.inputs.avg_value}
+          perSecondLoss={perSecondLoss}
+          captureRate={captureRate}
+          proceduresLost={leadsRecoverable}
+          responseTime={
+            data.inputs.response_time === 'under_5' ? '< 5 min' : 
+            data.inputs.response_time === '5_to_15' ? '5-15 min' :
+            data.inputs.response_time === '15_to_30' ? '15-30 min' :
+            data.inputs.response_time === '30_to_60' ? '30-60 min' :
+            data.inputs.response_time === '1_to_2_hours' ? '1-2 hours' :
+            data.inputs.response_time === '2_to_4_hours' ? '2-4 hours' :
+            data.inputs.response_time === '4_plus' ? '4+ hours' :
+            // Legacy mappings
+            data.inputs.response_time === '5_to_30' ? '5-30 min' :
+            data.inputs.response_time === '30_to_120' ? '30+ min' :
+            data.inputs.response_time === 'hours_plus' ? '2+ hours' : 'Next day'
+          }
+          onScrollToBreakdown={scrollToContent}
+        />
+      </motion.div>
 
-            {/* Top Leaks */}
-            <section className="space-y-4">
-              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-amber-500" />
-                Top Revenue Leaks
-              </h3>
-              <div className="grid gap-4">
-                {data.ai_report_json.leaks.map((leak, i) => (
-                  <Card key={i} className="overflow-hidden border-l-4 border-l-amber-500">
-                    <CardContent className="p-4 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-semibold text-slate-900">{leak.name}</h4>
-                          <Badge variant="secondary" className="text-xs">{leak.confidence} confidence</Badge>
-                        </div>
-                        <p className="text-sm text-slate-600 mt-1">{leak.why}</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-xs text-slate-500 block">Potential Loss</span>
-                        <span className="font-mono font-bold text-red-600">{formatCurrency(leak.monthly_loss_estimate)}</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </section>
+      {/* Content sections */}
+      <div ref={contentRef}>
+        
+        {/* ============================================ */}
+        {/* SECTION 2: COMPETITIVE INTELLIGENCE (Leakage Comparison) */}
+        {/* ============================================ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <CompetitiveIntelligence
+            businessName={data.business_name}
+            city={data.city}
+            businessType={data.business_type}
+            yourMetrics={yourMetrics}
+            industryAvg={industryAvg}
+            topPerformers={topPerformers}
+          />
+        </motion.div>
 
-            {/* Visual Charts */}
-            <section className="grid md:grid-cols-2 gap-6">
-               <Card>
-                 <CardHeader>
-                   <CardTitle className="text-sm font-medium text-slate-500">Loss Breakdown</CardTitle>
-                 </CardHeader>
-                 <CardContent>
-                   <div className="h-[200px] w-full">
-                     <ResponsiveContainer width="100%" height="100%">
-                       <BarChart data={data.ai_report_json.leaks}>
-                         <XAxis dataKey="name" fontSize={10} tickLine={false} axisLine={false} />
-                         <YAxis fontSize={10} tickLine={false} axisLine={false} tickFormatter={(val) => `$${val}`} />
-                         <Tooltip 
-                            formatter={(value) => [`$${value}`, "Loss"]}
-                            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                         />
-                         <Bar dataKey="monthly_loss_estimate" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                       </BarChart>
-                     </ResponsiveContainer>
-                   </div>
-                 </CardContent>
-               </Card>
-
-               <Card className="bg-primary/5 border-primary/10">
-                 <CardHeader>
-                   <CardTitle className="text-sm font-medium text-primary">90-Day Upside</CardTitle>
-                 </CardHeader>
-                 <CardContent className="flex flex-col items-center justify-center h-[200px]">
-                   <TrendingUp className="w-12 h-12 text-primary mb-4" />
-                   <div className="text-4xl font-bold text-slate-900">
-                     {formatCurrency(data.metrics.ninety_day_upside)}
-                   </div>
-                   <p className="text-sm text-slate-500 mt-2 text-center">
-                     Recoverable revenue with Qual AI automation
-                   </p>
-                 </CardContent>
-               </Card>
-            </section>
-
-            {/* Diagrams */}
-            <section className="space-y-8">
-               <div className="space-y-4">
-                 <h3 className="text-xl font-bold text-slate-900">Current Process (The Leak)</h3>
-                 <MermaidDiagram chart={data.ai_report_json.mermaid_current_funnel} />
-               </div>
-               
-               <div className="relative">
-                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent -z-10 rounded-3xl transform scale-105" />
-                 <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                   <div className="p-1 bg-primary rounded text-white">
-                     <Check className="w-4 h-4" />
-                   </div>
-                   Qual AI Fix Funnel
-                 </h3>
-                 <MermaidDiagram chart={data.ai_report_json.mermaid_fix_funnel} />
-               </div>
-            </section>
-
-            {/* Demo CTA */}
-            <section className="bg-slate-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              <div className="relative z-10 text-center space-y-6 max-w-2xl mx-auto">
-                <Badge variant="secondary" className="bg-primary/20 text-primary-foreground hover:bg-primary/30 border-none">
-                  Live Demo
-                </Badge>
-                <h2 className="text-3xl font-bold">Don't believe it? Call the Agent.</h2>
-                <p className="text-slate-300 text-lg">
-                  Experience the "Zero-Delay" response time yourself. Call our demo line and try to stump the AI receptionist.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                  <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 h-14 px-8 text-lg w-full sm:w-auto" onClick={() => window.location.href = "tel:+15550123456"}>
-                    <Phone className="w-5 h-5 mr-2 text-primary" />
-                    Call +1 (555) 012-3456
-                  </Button>
-                  <p className="text-xs text-slate-400 mt-2 sm:mt-0">
-                    Available 24/7 (just like the real thing)
-                  </p>
-                </div>
-              </div>
-            </section>
+        {/* ============================================ */}
+        {/* SECTION 3: COMPETITIVE REALITY CHECK */}
+        {/* ============================================ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+          className="px-4 sm:px-8 py-8 bg-slate-50"
+        >
+          <div className="max-w-6xl mx-auto">
+            <CompetitiveReality
+              businessType={data.business_type}
+              city={data.city}
+              monthlyLoss={monthlyLeak}
+              responseTimeMinutes={responseTimeMinutes}
+            />
           </div>
+        </motion.div>
 
-          {/* Sidebar CTA Column */}
-          <div className="lg:col-span-4 relative">
-             <StickyCTA 
-               metrics={data.metrics} 
-               topLeak={data.ai_report_json.leaks[0].name}
-               tier={data.ai_report_json.tier}
-               onBookClick={handleBookClick}
-             />
-          </div>
+        {/* ============================================ */}
+        {/* SECTION 4: FUNNEL BREAKDOWN (Where Leads Slip Through) */}
+        {/* ============================================ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <FunnelBreakdown
+            currentFunnel={data.funnel_current}
+            optimizedFunnel={data.funnel_projected}
+            leadsPerMonth={data.inputs.leads_per_month}
+            avgValue={data.inputs.avg_value}
+            totalLeakage={totalLeakage}
+            recoverable={recoverable}
+            leadsLost={leadsLost}
+            leadsRecoverable={leadsRecoverable}
+          />
+        </motion.div>
 
-        </div>
-      </main>
+        {/* ============================================ */}
+        {/* SECTION 5: PRIORITY FIXES (Recovery Potential) */}
+        {/* ============================================ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <PriorityFixes
+            leaks={data.leaks}
+            avgValue={data.inputs.avg_value}
+            totalMonthlyLoss={totalLeakage}
+            businessType={data.business_type}
+          />
+        </motion.div>
+
+        {/* ============================================ */}
+        {/* SECTION 6: ROI CALCULATOR (Recovery vs Investment) */}
+        {/* ============================================ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <ROICalculator
+            monthlyInvestment={SERVICE_MONTHLY_COST}
+            monthlyRecovery={monthlyRecovery}
+            netRecovery={netRecovery}
+            roi={roi}
+            paybackDays={paybackDays}
+            weekLeak={weekLeak}
+            monthLeak={monthLeak}
+            quarterLeak={quarterLeak}
+            yearOneRecovery={yearOneRecovery}
+          />
+        </motion.div>
+
+        {/* ============================================ */}
+        {/* SECTION 7: WHAT HAPPENS NEXT */}
+        {/* ============================================ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <NextStepsProcess />
+        </motion.div>
+
+        {/* ============================================ */}
+        {/* SECTION 8: FINAL CTA */}
+        {/* ============================================ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <FinalCTA
+            monthlyRecoverable={recoverable}
+            nextAvailableSlot={nextAvailableSlot}
+            onScheduleClick={handleScheduleClick}
+            businessType={data.business_type}
+          />
+        </motion.div>
+
+      </div>
+
+      {/* Minimal Footer */}
+      <footer className="py-8 text-center border-t border-slate-100">
+        <p className="text-xs text-slate-400">
+          Projections based on industry benchmarks and your stated lead volume. 
+          Individual results depend on implementation quality and market conditions.
+        </p>
+      </footer>
+
     </div>
   );
 }

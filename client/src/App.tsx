@@ -6,7 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import ReportPage from "@/pages/report";
 import ThankYouPage from "@/pages/thank-you";
-import { useEffect } from "react";
 
 import HomePage from "@/pages/home";
 import ApplyPage from "@/pages/apply";
