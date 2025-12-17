@@ -8,20 +8,16 @@ import ReportPage from "@/pages/report";
 import ThankYouPage from "@/pages/thank-you";
 import { useEffect } from "react";
 
-function RedirectToReport() {
-  const [, setLocation] = useLocation();
-  useEffect(() => {
-    setLocation("/report/demo-123");
-  }, [setLocation]);
-  return null;
-}
+import HomePage from "@/pages/home";
+import ApplyPage from "@/pages/apply";
 
 function Router() {
   return (
     <Switch>
+      <Route path="/" component={HomePage} />
+      <Route path="/apply" component={ApplyPage} />
       <Route path="/report/:id" component={ReportPage} />
       <Route path="/thank-you" component={ThankYouPage} />
-      <Route path="/" component={RedirectToReport} />
       <Route component={NotFound} />
     </Switch>
   );

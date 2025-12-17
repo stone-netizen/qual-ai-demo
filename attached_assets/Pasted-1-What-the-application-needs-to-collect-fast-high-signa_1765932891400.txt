@@ -1,0 +1,353 @@
+1) What the application needs to collect (fast, high-signal)
+Required inputs (the “Lost Revenue Core”)
+
+Business type (medspa / dental/ortho / chiro / other)
+Leads per month (total) = calls + forms + DMs
+Missed calls per week (or % missed)
+Average response time (bucket)
+Contact rate (% leads you actually speak to) or “not sure”
+Booking rate (% leads → consult) or “not sure”
+Show rate (% consults that show) or “not sure”
+Close rate (% shows that become paying clients) or “not sure”
+Average first payment (or 30-day value)
+Capacity (can you take more bookings right now?) yes/no
+
+Optional (makes the report feel insanely “custom”)
+
+Ad spend/month + CPL (if they run ads)
+
+“What happens after a missed call?” (free text)
+
+Current tools (Zenoti/Vagaro/Mindbody/GHL/Calendly/etc.)
+
+Biggest issue (dropdown)
+
+If they don’t know some numbers, your app should still work by using conservative defaults and labeling them as assumptions.
+
+2) How the “Lost Revenue” should be calculated (simple + credible)
+
+You’re not trying to be perfectly precise — you’re trying to be directionally undeniable and conservative so it creates urgency without sounding fake.
+
+Current monthly revenue from leads (baseline)
+
+Let:
+
+L = total leads/month
+
+c = contact rate
+
+b = booking rate
+
+s = show rate
+
+k = close rate
+
+A = avg first payment (or 30-day value)
+
+Current projected revenue/month
+R_current = L * c * b * s * k * A
+
+Target rates (the “healthy funnel”)
+
+Instead of claiming industry benchmarks, make targets:
+
+Either selected by business type (editable presets)
+
+Or chosen as “Conservative / Normal / Aggressive”
+
+Example preset idea (you can tune these later):
+
+Conservative targets: modest improvements (ex: contact +10 pts, show +5 pts, close +3 pts)
+
+Normal targets: strong but believable
+
+Aggressive: “if everything is dialed”
+
+Target projected revenue/month
+R_target = L * c_target * b_target * s_target * k_target * A
+
+Lost revenue
+
+LostRevenue = max(0, R_target - R_current)
+
+Missed call specific leakage (high urgency)
+
+If they give missed calls/week (MCw):
+
+MCm = MCw * 4.33 (monthly)
+
+Estimate recoverable fraction with fast SMS + follow-up = r (set conservative, like 0.35–0.55 depending on their current process)
+
+Add:
+RecoveredLeads = MCm * r
+Then compute upside on those leads using downstream rates.
+
+This is great because it creates an “after-hours leak” story immediately.
+
+Output as a range (so it’s honest + persuasive)
+
+Show:
+
+Low / Mid / High lost revenue based on conservative assumptions if numbers are unknown.
+
+3) What the AI should do (the part that feels “premium”)
+
+You want the AI to generate a report that reads like Deloitte but is still simple.
+
+AI responsibilities
+
+Interpret free-text answers (ex: “front desk texts back when they can”) → map to leaks
+
+Choose assumptions when unknown (and label them)
+
+Rank top 3 leaks by dollar impact
+
+Generate two visual workflows:
+
+“Current funnel” with leak points + $ lost at each stage
+
+“Qual AI fixed funnel” showing automations that plug each leak
+
+Create a 30-second summary script you can read in person
+
+4) The visual workflows (what you should show on-screen)
+A) Current funnel diagram (Mermaid flowchart)
+
+Nodes like:
+Lead Sources → Inbound (Calls/Forms/DMs) → Speed-to-lead → Contacted → Booked → Showed → Closed → Collected $
+
+Leak annotations:
+
+Missed calls = $X
+
+Slow follow-up reduces contact rate = $Y
+
+No-show leakage = $Z
+
+Low close leakage = $W
+
+B) Qual AI fix diagram
+
+Same funnel, but add:
+
+Missed call trigger → SMS in 60 seconds → follow-up sequence
+
+Qualification capture (5–10 datapoints)
+
+Calendar booking automation
+
+No-show reduction (confirm + reschedule + deposit option)
+
+Reactivation workflow for old leads
+
+Dashboard + reporting
+
+Key: show “before” and “after” side-by-side. That’s what makes the demo feel inevitable.
+
+5) The “Urgency Moment” you’ll use in your consult
+
+Your app should spit out:
+
+Estimated Monthly Revenue Leakage: $X – $Y
+
+Top 3 revenue leaks: (ranked)
+
+What fixing it looks like: “+N booked consults/month”
+
+90-day upside: $___
+
+Then you say:
+“Right now your funnel is bleeding here, here, and here. We don’t need new ads to win—this is conversion infrastructure. If we install the fix flow, you recover this revenue automatically.”
+
+6) Replit prompt (copy/paste)
+
+Use this exact prompt:
+
+Build a production-ready web app called “Qual AI — Lost Revenue Application Funnel”.
+
+Goal:
+A clinic owner fills out a 3-step application. The app calculates a “Lost Revenue Report” (low/mid/high) and generates:
+1) A clear revenue leakage summary (monthly + 90-day upside)
+2) A “Current Funnel” visual workflow with leak points and $ lost at each stage
+3) A “Qual AI Fix Funnel” visual workflow showing automations that plug each leak
+4) A downloadable PDF report
+
+Stack:
+- Next.js (App Router) + TypeScript
+- Tailwind CSS
+- Supabase Postgres for storage
+- Zod validation
+- OpenAI API for analysis + narrative report generation
+- Mermaid for workflow diagrams (render to SVG)
+- Recharts for simple bar chart breakdown ($ lost by leak)
+- PDF export (react-pdf or server-side HTML->PDF)
+
+Pages:
+1) / (landing)
+   - “Calculate your Lost Revenue from missed calls + slow follow-up”
+   - CTA: Start Application
+2) /apply (multi-step form, 3 steps)
+   Step 1: Business basics (business type, role, clinic name, city, website/IG, email, phone)
+   Step 2: Lead volume + speed (leads/month, missed calls/week, response time bucket, tools)
+   Step 3: Funnel rates (contact rate, booking rate, show rate, close rate, avg first payment/30-day value, capacity)
+   - allow “not sure” on rates
+   - include a free-text question: “Describe what happens after a missed call or web lead comes in”
+3) /report/[id]
+   - shows Lost Revenue Report (low/mid/high)
+   - top 3 leaks ranked by $ impact
+   - bar chart: lost $ by leak type
+   - Mermaid diagram: current funnel with annotations
+   - Mermaid diagram: Qual AI fix funnel
+   - button: Download PDF
+
+Core calculations:
+Define:
+L = leads_per_month
+c = contact_rate
+b = booking_rate
+s = show_rate
+k = close_rate
+A = avg_first_payment_or_30day_value
+
+R_current = L*c*b*s*k*A
+
+Targets:
+Use presets selectable (Conservative / Normal / Aggressive) and also adjusted by business type.
+Example approach:
+- Conservative: small lifts in contact/show/close
+- Normal: medium lifts
+- Aggressive: larger lifts
+If the user chose “not sure”, use conservative defaults and label them clearly as assumptions in the report.
+
+Missed call leakage:
+MCm = missed_calls_per_week * 4.33
+recoverable_rate r depends on response_time_bucket:
+  - <5 min => 0.20
+  - 5-30 => 0.35
+  - 30-120 => 0.45
+  - hours+ => 0.55
+RecoveredLeads = MCm * r
+Compute incremental revenue from RecoveredLeads through downstream funnel.
+
+LostRevenue = max(0, R_target - R_current)
+Output low/mid/high by varying assumptions +/- 15-25% when unknown inputs exist.
+
+AI analysis (OpenAI):
+Send a structured JSON payload of the application + computed metrics.
+Ask the model to return strict JSON with:
+- executive_summary (3-5 sentences)
+- assumptions_used (array)
+- leaks (array of {name, why, monthly_loss_estimate, confidence})
+- recommendations (array, prioritized)
+- mermaid_current_funnel (string)
+- mermaid_fix_funnel (string)
+- 30_second_talk_track (string)
+
+Database:
+table applications:
+id uuid pk, created_at,
+business_type, role, clinic_name, city_state, website_ig, email, phone,
+leads_per_month, missed_calls_per_week, response_time_bucket, tools text[],
+contact_rate_bucket_or_value, booking_rate_bucket_or_value, show_rate_bucket_or_value, close_rate_bucket_or_value,
+avg_value,
+capacity_bool,
+free_text_process,
+calc_json (jsonb),
+ai_report_json (jsonb)
+
+Behavior:
+- On submit, compute metrics and store.
+- Then call OpenAI to generate the report JSON and store it.
+- Render report from stored JSON (no repeated OpenAI calls).
+- Provide a shareable report URL.
+
+Env vars:
+SUPABASE_URL
+SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY (server only)
+OPENAI_API_KEY
+
+Also:
+- Add basic spam protection (honeypot + simple rate limiting)
+- Add a “Preview demo” mode with sample data for fast sales demos.
+- Provide README with setup steps + Supabase SQL schema.
+
+Deliver fully working code.
+
+
+If you want, I can also write you the exact 45-second D2D script that gets them to scan the QR code and fill this out on the spot (and makes the report feel like a “diagnostic,” not a sales pitch).
+
+No I do need D2D script, but I want to add onto this. After they get their report it should give a CTA to book and Ai Growth consultation 
+
+Perfect — the report should end like a doctor’s diagnosis with a single next step: book the AI Growth Consultation.
+
+1) Add this to the funnel (Report → CTA → Booking)
+
+After /report/[id], include a sticky CTA section:
+
+CTA section (always visible)
+
+Headline: “Want us to plug these leaks for you?”
+
+3 bullets: “Install in 7–14 days • Done-for-you • Track ROI weekly”
+
+Button: “Book AI Growth Consultation”
+
+Secondary: “Or text us ‘REPORT’ and we’ll follow up” (optional)
+
+Booking options (pick one)
+
+A) Calendly embed on the report page (fastest)
+B) Button → /book page with Calendly + short “pre-call” questions
+C) Button → Stripe deposit (later) to filter tire-kickers
+
+2) Make the CTA dynamic (based on their score + loss)
+
+Have the AI generate a recommendation tier and the app uses it to choose copy.
+
+Example tiers:
+
+Tier 1 (Qualified / High loss): “Priority Install Slot”
+
+Tier 2 (Borderline): “Audit + Pilot”
+
+Tier 3 (Low fit): “Free teardown + waitlist”
+
+Dynamic CTA copy examples:
+
+If lost revenue > $10k/mo:
+“You’re leaking ~$X/mo. Let’s patch it this week.”
+
+If response time is hours+:
+“Fixing speed-to-lead alone typically creates the fastest lift.”
+
+3) Update the Replit build prompt (CTA + booking tracking)
+
+Paste this “add-on” into your prompt (or replace the report page section):
+
+Enhance /report/[id] with a conversion-focused CTA to book an “AI Growth Consultation”.
+
+Requirements:
+- Add a sticky CTA card on desktop and a bottom sticky bar on mobile.
+- Button: “Book AI Growth Consultation”
+- Embed Calendly directly below the CTA (use CALENDLY_URL env var).
+- Track CTA clicks + Calendly booking intent events (store as events table).
+
+Dynamic CTA content:
+- Use ai_report_json.tier (priority_install / audit_pilot / waitlist) returned by AI.
+- Show personalized copy using their estimated lost revenue and top leak.
+- Display “What you get on the consult” bullets:
+  1) Your exact fix funnel
+  2) Implementation plan + timeline
+  3) ROI projection + KPI dashboard
+
+Add DB table:
+events:
+id uuid pk, created_at, application_id uuid fk,
+event_type text (cta_clicked, calendly_viewed, calendly_booked),
+metadata jsonb
+
+Also add:
+- A post-booking confirmation page /thank-you that asks 3 pre-call questions:
+  main goal, current tools, biggest bottleneck
+- Include those answers in DB and email them to ADMIN_EMAIL.
