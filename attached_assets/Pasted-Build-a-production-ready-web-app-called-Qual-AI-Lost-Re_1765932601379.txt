@@ -1,0 +1,110 @@
+Build a production-ready web app called “Qual AI — Lost Revenue Application Funnel”.
+
+Goal:
+A clinic owner fills out a 3-step application. The app calculates a “Lost Revenue Report” (low/mid/high) and generates:
+1) A clear revenue leakage summary (monthly + 90-day upside)
+2) A “Current Funnel” visual workflow with leak points and $ lost at each stage
+3) A “Qual AI Fix Funnel” visual workflow showing automations that plug each leak
+4) A downloadable PDF report
+
+Stack:
+- Next.js (App Router) + TypeScript
+- Tailwind CSS
+- Supabase Postgres for storage
+- Zod validation
+- OpenAI API for analysis + narrative report generation
+- Mermaid for workflow diagrams (render to SVG)
+- Recharts for simple bar chart breakdown ($ lost by leak)
+- PDF export (react-pdf or server-side HTML->PDF)
+
+Pages:
+1) / (landing)
+   - “Calculate your Lost Revenue from missed calls + slow follow-up”
+   - CTA: Start Application
+2) /apply (multi-step form, 3 steps)
+   Step 1: Business basics (business type, role, clinic name, city, website/IG, email, phone)
+   Step 2: Lead volume + speed (leads/month, missed calls/week, response time bucket, tools)
+   Step 3: Funnel rates (contact rate, booking rate, show rate, close rate, avg first payment/30-day value, capacity)
+   - allow “not sure” on rates
+   - include a free-text question: “Describe what happens after a missed call or web lead comes in”
+3) /report/[id]
+   - shows Lost Revenue Report (low/mid/high)
+   - top 3 leaks ranked by $ impact
+   - bar chart: lost $ by leak type
+   - Mermaid diagram: current funnel with annotations
+   - Mermaid diagram: Qual AI fix funnel
+   - button: Download PDF
+
+Core calculations:
+Define:
+L = leads_per_month
+c = contact_rate
+b = booking_rate
+s = show_rate
+k = close_rate
+A = avg_first_payment_or_30day_value
+
+R_current = L*c*b*s*k*A
+
+Targets:
+Use presets selectable (Conservative / Normal / Aggressive) and also adjusted by business type.
+Example approach:
+- Conservative: small lifts in contact/show/close
+- Normal: medium lifts
+- Aggressive: larger lifts
+If the user chose “not sure”, use conservative defaults and label them clearly as assumptions in the report.
+
+Missed call leakage:
+MCm = missed_calls_per_week * 4.33
+recoverable_rate r depends on response_time_bucket:
+  - <5 min => 0.20
+  - 5-30 => 0.35
+  - 30-120 => 0.45
+  - hours+ => 0.55
+RecoveredLeads = MCm * r
+Compute incremental revenue from RecoveredLeads through downstream funnel.
+
+LostRevenue = max(0, R_target - R_current)
+Output low/mid/high by varying assumptions +/- 15-25% when unknown inputs exist.
+
+AI analysis (OpenAI):
+Send a structured JSON payload of the application + computed metrics.
+Ask the model to return strict JSON with:
+- executive_summary (3-5 sentences)
+- assumptions_used (array)
+- leaks (array of {name, why, monthly_loss_estimate, confidence})
+- recommendations (array, prioritized)
+- mermaid_current_funnel (string)
+- mermaid_fix_funnel (string)
+- 30_second_talk_track (string)
+
+Database:
+table applications:
+id uuid pk, created_at,
+business_type, role, clinic_name, city_state, website_ig, email, phone,
+leads_per_month, missed_calls_per_week, response_time_bucket, tools text[],
+contact_rate_bucket_or_value, booking_rate_bucket_or_value, show_rate_bucket_or_value, close_rate_bucket_or_value,
+avg_value,
+capacity_bool,
+free_text_process,
+calc_json (jsonb),
+ai_report_json (jsonb)
+
+Behavior:
+- On submit, compute metrics and store.
+- Then call OpenAI to generate the report JSON and store it.
+- Render report from stored JSON (no repeated OpenAI calls).
+- Provide a shareable report URL.
+
+Env vars:
+SUPABASE_URL
+SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY (server only)
+OPENAI_API_KEY
+
+Also:
+- Add basic spam protection (honeypot + simple rate limiting)
+- Add a “Preview demo” mode with sample data for fast sales demos.
+- Provide README with setup steps + Supabase SQL schema.
+
+Deliver fully working code.
