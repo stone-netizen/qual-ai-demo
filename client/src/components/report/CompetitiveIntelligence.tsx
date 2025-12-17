@@ -18,6 +18,7 @@ interface MetricData {
   bookingRate: number;
   showRate: number;
   closeRate: number;
+  overallConversion?: number; // Optional: pre-calculated overall conversion rate
   leakage: number; // Monthly leakage, not revenue
 }
 
@@ -358,7 +359,7 @@ export function CompetitiveIntelligence({
             <div className={`mt-8 pt-6 border-t ${colors.topBottomBorder}`}>
               <p className={`text-sm ${colors.topLabel} mb-1`}>Overall Conversion Rate</p>
               <p className={`text-2xl sm:text-3xl font-bold ${colors.topValue}`}>
-                {Math.round((topPerformers.contactRate / 100) * (topPerformers.bookingRate / 100) * (topPerformers.showRate / 100) * (topPerformers.closeRate / 100) * 100)}%
+                {topPerformers.overallConversion ?? Math.round((topPerformers.contactRate / 100) * (topPerformers.bookingRate / 100) * (topPerformers.showRate / 100) * (topPerformers.closeRate / 100) * 100)}%
               </p>
               <p className={`text-xs ${colors.topLabel} mt-1`}>Best-in-class</p>
             </div>

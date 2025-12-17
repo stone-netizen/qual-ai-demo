@@ -5,6 +5,7 @@ import {
   ChevronDown, 
   PhoneOff, 
   TrendingDown, 
+  TrendingUp,
   DollarSign,
   Moon,
   Clock,
@@ -137,14 +138,14 @@ export function ExecutiveSummary({
             valueColor: 'text-orange-400'
           },
           {
-            icon: DollarSign,
-            title: 'Customers Lost',
+            icon: TrendingUp,
+            title: 'Recoverable Monthly',
             value: proceduresLost.toString(),
-            description: 'Additional customers recoverable with AI automation',
-            borderColor: 'border-red-500/30',
-            iconBg: 'bg-red-500/20',
-            iconColor: 'text-red-400',
-            valueColor: 'text-red-400'
+            description: 'Additional customers you can capture with AI automation',
+            borderColor: 'border-green-500/30',
+            iconBg: 'bg-green-500/20',
+            iconColor: 'text-green-400',
+            valueColor: 'text-green-400'
           }
         ];
         

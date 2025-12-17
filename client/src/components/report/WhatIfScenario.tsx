@@ -29,7 +29,12 @@ const MAX_SINGLE_FACTOR_PERCENT = 40;
 
 export function WhatIfScenario({
   baseMonthlyRevenue,
+  currentContactRate,
+  currentBookingRate,
+  showRate,
+  closeRate,
   avgValue,
+  leadsPerMonth,
   missedCallsPerWeek
 }: WhatIfScenarioProps) {
   const [captureBoost, setCaptureBoost] = useState(0);
@@ -53,9 +58,14 @@ export function WhatIfScenario({
     incrementalGain += responseGain;
 
     // Missed call recovery
+    // Uses actual showRate and closeRate props instead of hardcoded values
     if (neverMissCall && missedCallsPerWeek > 0) {
       const recoveredCalls = missedCallsPerWeek * 4.33 * 0.50;
-      const conversionRate = 0.15;
+      // Use actual showRate and closeRate props (converted from percentage to decimal)
+      // Full funnel: recovered calls → show → close
+      const showRateDecimal = showRate / 100;
+      const closeRateDecimal = closeRate / 100;
+      const conversionRate = showRateDecimal * closeRateDecimal;
       const callRevenue = recoveredCalls * conversionRate * avgValue;
       incrementalGain += callRevenue;
     }
@@ -71,7 +81,7 @@ export function WhatIfScenario({
       increase: cappedGain,
       percentIncrease: isFinite(percentIncrease) ? percentIncrease : 0
     };
-  }, [captureBoost, responseImprovement, neverMissCall, baseMonthlyRevenue, missedCallsPerWeek, avgValue]);
+  }, [captureBoost, responseImprovement, neverMissCall, baseMonthlyRevenue, missedCallsPerWeek, avgValue, showRate, closeRate]);
 
   const responseLabels = ["Current", "1 hour", "30 min", "5 min", "Instant"];
 

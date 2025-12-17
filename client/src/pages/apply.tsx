@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -168,6 +168,27 @@ export default function ApplyPage() {
     form3.setValue("show_rate", newBenchmarks.show);
     form3.setValue("close_rate", newBenchmarks.close);
   };
+
+  // Auto-select the suggested missed calls range when estimate helper calculates
+  const leadsPerMonth = form2.watch('leads_per_month');
+  const responseTime = form2.watch('response_time');
+  
+  useEffect(() => {
+    // Only auto-select if we have the necessary inputs and user hasn't manually selected yet
+    if (leadsPerMonth && responseTime && formData.business_type && !selectedMissedCalls) {
+      const estimate = estimateMissedCalls(
+        Number(leadsPerMonth),
+        responseTime,
+        formData.business_type
+      );
+      
+      // Auto-select the suggested range
+      if (estimate.suggestedRange) {
+        setSelectedMissedCalls(estimate.suggestedRange);
+        form2.setValue('missed_calls_range', estimate.suggestedRange);
+      }
+    }
+  }, [leadsPerMonth, responseTime, formData.business_type, selectedMissedCalls, form2]);
 
   const onStep1Submit = (data: Step1Data) => {
     setFormData(prev => ({ ...prev, ...data }));

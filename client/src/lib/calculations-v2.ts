@@ -179,12 +179,24 @@ export const RESPONSE_TIME_IMPROVEMENT: Record<ResponseTimeKey, number> = {
 export const AI_CONTACT_RATE = 0.95;
 
 /**
- * AI-enhanced booking rate improvement
+ * TOP PERFORMER RATES - These MUST match what's shown in Market Position "Top 10%"
+ * Used for both the Competitive Intelligence display AND the Optimized Funnel calculation
+ */
+export const TOP_PERFORMER_RATES = {
+  contact: 0.80,   // 80% contact rate
+  booking: 0.55,   // 55% booking rate
+  show: 0.80,      // 80% show rate
+  close: 0.30      // 30% close rate
+  // Overall conversion: 0.80 * 0.55 * 0.80 * 0.30 = 10.56% ≈ 10%
+};
+
+/**
+ * AI-enhanced booking rate improvement (legacy - kept for backwards compatibility)
  */
 export const AI_BOOKING_RATE_BOOST = 0.15;
 
 /**
- * AI-enhanced show rate improvement
+ * AI-enhanced show rate improvement (legacy - kept for backwards compatibility)
  */
 export const AI_SHOW_RATE_BOOST = 0.15;
 
@@ -264,7 +276,8 @@ function calculateCurrentFunnel(
 
 /**
  * Calculate projected funnel with AI enhancement
- * FIXED: Uses same lead count as current - improvement is in conversion rates, not lead volume
+ * FIXED: Uses TOP_PERFORMER_RATES to match Market Position "Top 10%" display
+ * This ensures consistency between the Competitive Intelligence section and Optimized Funnel
  */
 function calculateProjectedFunnel(
   leads: number,
@@ -274,23 +287,25 @@ function calculateProjectedFunnel(
   closeRate: number,
   avgValue: number,
   missedCallsPerWeek: number
-): { stages: FunnelStage[], revenue: number } {
-  // Improved contact rate (capped at 95%)
-  const contactRate = Math.min(0.95, currentContactRate + 0.30);
+): { stages: FunnelStage[], revenue: number, conversion: number, rates: typeof TOP_PERFORMER_RATES } {
+  // USE FIXED TOP PERFORMER RATES - must match Market Position display
+  // This ensures: 60 leads → 48 → 26 → 21 → 6 (10% conversion)
+  const contactRate = TOP_PERFORMER_RATES.contact;   // 80%
+  const bookingRate = TOP_PERFORMER_RATES.booking;   // 55%
+  const showRate = TOP_PERFORMER_RATES.show;         // 80%
+  const optimizedCloseRate = TOP_PERFORMER_RATES.close; // 30%
   
-  // Boost booking and show rates
-  const bookingRate = Math.min(0.85, currentBookingRate + AI_BOOKING_RATE_BOOST);
-  const showRate = Math.min(0.95, currentShowRate + AI_SHOW_RATE_BOOST);
-  
-  // FIXED: Keep same lead count as current funnel - the improvement is in conversion, not lead volume
-  // Missed call recovery is captured in the overall recovery estimate, not as phantom leads
+  // Keep same lead count as current funnel - improvement is in conversion, not lead volume
   const totalLeads = leads;
   
   const contacted = Math.round(totalLeads * contactRate);
   const booked = Math.round(contacted * bookingRate);
   const showed = Math.round(booked * showRate);
-  const closed = Math.round(showed * closeRate);
+  const closed = Math.round(showed * optimizedCloseRate);
   const revenue = closed * avgValue;
+  
+  // Calculate overall conversion for display
+  const overallConversion = leads > 0 ? (closed / leads) * 100 : 0;
   
   const stages: FunnelStage[] = [
     {
@@ -330,7 +345,12 @@ function calculateProjectedFunnel(
     }
   ];
   
-  return { stages, revenue };
+  return { 
+    stages, 
+    revenue, 
+    conversion: overallConversion,
+    rates: TOP_PERFORMER_RATES // Return rates for verification
+  };
 }
 
 /**

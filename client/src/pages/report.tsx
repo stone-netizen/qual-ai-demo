@@ -34,7 +34,8 @@ import {
   type ReportDataV2, 
   calculateReportV2,
   getBenchmarksForType,
-  SERVICE_MONTHLY_COST
+  SERVICE_MONTHLY_COST,
+  TOP_PERFORMER_RATES
 } from "@/lib/calculations-v2";
 
 // Default mock data for development
@@ -180,13 +181,21 @@ export default function ReportPage() {
     leakage: Math.round(monthlyLeak * 0.85) // Industry loses slightly less
   }), [benchmarks, monthlyLeak]);
 
-  // Top performers: 80% × 55% × 80% × 28% = ~10% overall conversion
+  // Top performers: Uses TOP_PERFORMER_RATES directly from calculations-v2.ts
+  // 80% × 55% × 80% × 30% = ~10.56% overall conversion
   const topPerformers = useMemo(() => ({
     responseTime: 1, // Under 1 min
-    contactRate: 80,
-    bookingRate: 55,
-    showRate: 80,
-    closeRate: 28, // Realistic close rate for healthcare
+    contactRate: Math.round(TOP_PERFORMER_RATES.contact * 100),  // 80%
+    bookingRate: Math.round(TOP_PERFORMER_RATES.booking * 100),  // 55%
+    showRate: Math.round(TOP_PERFORMER_RATES.show * 100),     // 80%
+    closeRate: Math.round(TOP_PERFORMER_RATES.close * 100),    // 30%
+    overallConversion: Math.round(
+      TOP_PERFORMER_RATES.contact * 
+      TOP_PERFORMER_RATES.booking * 
+      TOP_PERFORMER_RATES.show * 
+      TOP_PERFORMER_RATES.close * 
+      100
+    ), // ~10.56% rounded
     leakage: Math.round(monthlyLeak * 0.15) // Top performers lose only 15% of what you lose
   }), [monthlyLeak]);
 
@@ -418,7 +427,6 @@ export default function ReportPage() {
         >
           <FinalCTA
             monthlyRecoverable={recoverable}
-            nextAvailableSlot={nextAvailableSlot}
             onScheduleClick={handleScheduleClick}
             businessType={data.business_type}
           />

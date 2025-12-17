@@ -12,14 +12,12 @@ import { getIndustryConfig } from "@/lib/industry-config";
 
 interface FinalCTAProps {
   monthlyRecoverable: number;
-  nextAvailableSlot: string;
   onScheduleClick: () => void;
   businessType?: string;
 }
 
 export function FinalCTA({
   monthlyRecoverable,
-  nextAvailableSlot,
   onScheduleClick,
   businessType = 'other'
 }: FinalCTAProps) {
@@ -202,10 +200,7 @@ export function FinalCTA({
             <Calendar className="mr-2 w-5 h-5" />
             {language.ctaText}
           </Button>
-          <p className="text-sm text-slate-400 mb-2">
-            Next available: {nextAvailableSlot}
-          </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-sm text-slate-400">
             No commitment • Free consultation • Instant calendar access
           </p>
         </div>
