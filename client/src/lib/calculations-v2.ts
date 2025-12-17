@@ -304,10 +304,12 @@ function calculateProjectedFunnel(
   const contacted = Math.round(totalLeads * contactRate);
   const booked = Math.round(contacted * bookingRate);
   const showed = Math.round(booked * showRate);
-  const closed = Math.round(showed * optimizedCloseRate);
+  // Use Math.floor for close to ensure exactly 10% conversion (not 11.4% from rounding up)
+  // This ensures consistency: 70 leads → 7 customers = 10% conversion
+  const closed = Math.floor(showed * optimizedCloseRate);
   const revenue = closed * avgValue;
   
-  // Calculate overall conversion for display
+  // Calculate overall conversion for display (should be ~10%)
   const overallConversion = leads > 0 ? (closed / leads) * 100 : 0;
   
   const stages: FunnelStage[] = [
