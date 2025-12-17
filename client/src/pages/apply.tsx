@@ -174,21 +174,22 @@ export default function ApplyPage() {
   const responseTime = form2.watch('response_time');
   
   useEffect(() => {
-    // Only auto-select if we have the necessary inputs and user hasn't manually selected yet
-    if (leadsPerMonth && responseTime && formData.business_type && !selectedMissedCalls) {
+    // Auto-select based on estimate - update even if user has selected something
+    // This ensures the selection matches the calculated estimate
+    if (leadsPerMonth && responseTime && formData.business_type) {
       const estimate = estimateMissedCalls(
         Number(leadsPerMonth),
         responseTime,
         formData.business_type
       );
       
-      // Auto-select the suggested range
-      if (estimate.suggestedRange) {
+      // Always update to match the estimate (prevents mismatch like 24-30 estimate vs 5-10 selection)
+      if (estimate.suggestedRange && selectedMissedCalls !== estimate.suggestedRange) {
         setSelectedMissedCalls(estimate.suggestedRange);
         form2.setValue('missed_calls_range', estimate.suggestedRange);
       }
     }
-  }, [leadsPerMonth, responseTime, formData.business_type, selectedMissedCalls, form2]);
+  }, [leadsPerMonth, responseTime, formData.business_type, form2]);
 
   const onStep1Submit = (data: Step1Data) => {
     setFormData(prev => ({ ...prev, ...data }));
@@ -594,11 +595,6 @@ export default function ApplyPage() {
                                   </div>
                                   <p className="text-xs text-blue-700">
                                     This accounts for calls during patient care, lunch breaks, after-hours, and busy periods.
-                                    {selectedMissedCalls !== estimate.suggestedRange && (
-                                      <span className="block mt-1 font-medium">
-                                        💡 We suggest selecting "{estimate.suggestedRange}" based on your inputs
-                                      </span>
-                                    )}
                                   </p>
                                 </>
                               );

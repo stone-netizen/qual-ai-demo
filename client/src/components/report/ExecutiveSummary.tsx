@@ -154,7 +154,7 @@ export function ExecutiveSummary({
           {
             icon: AlertCircle,
             title: 'Emergency Losses',
-            value: emergencyCalls || Math.round(leadsLost * 0.42).toString(),
+            value: emergencyCalls > 0 ? emergencyCalls.toString() : Math.round(leadsLost * 0.42).toString(),
             description: 'Emergency calls/week going to voicemail during business hours',
             borderColor: 'border-red-500/30',
             iconBg: 'bg-red-500/20',

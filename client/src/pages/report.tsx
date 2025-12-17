@@ -289,6 +289,7 @@ export default function ReportPage() {
           perSecondLoss={perSecondLoss}
           captureRate={captureRate}
           proceduresLost={leadsRecoverable}
+          emergencyCalls={data.inputs.missed_calls_week || 0} // Use actual missed calls from form
           responseTime={
             data.inputs.response_time === 'under_5' ? '< 5 min' : 
             data.inputs.response_time === '5_to_15' ? '5-15 min' :

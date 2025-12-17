@@ -195,14 +195,11 @@ export function FinalCTA({
           <Button 
             size="lg" 
             onClick={onScheduleClick}
-            className={`px-12 py-6 text-lg ${colors.ctaBg} mb-4`}
+            className={`px-12 py-6 text-lg ${colors.ctaBg}`}
           >
             <Calendar className="mr-2 w-5 h-5" />
             {language.ctaText}
           </Button>
-          <p className="text-sm text-slate-400">
-            No commitment • Free consultation • Instant calendar access
-          </p>
         </div>
 
       </div>
