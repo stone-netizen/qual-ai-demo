@@ -321,12 +321,12 @@ export default function ApplyPage() {
                 </div>
                 <div className="text-xs text-slate-400 flex justify-between animate-in fade-in duration-500 delay-300">
                   <span>Calculating opportunity gap...</span>
-                  <Check className="w-3 h-3 text-green-500" />
-                </div>
+                   <Check className="w-3 h-3 text-green-500" />
+                 </div>
                 <div className="text-xs text-slate-400 flex justify-between animate-in fade-in duration-500 delay-500">
                   <span>Identifying priority improvements...</span>
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                </div>
+                   <Loader2 className="w-3 h-3 animate-spin" />
+                 </div>
                 <div className="text-xs text-slate-400 flex justify-between animate-in fade-in duration-500 delay-700">
                   <span>Generating your report...</span>
                   <Loader2 className="w-3 h-3 animate-spin text-slate-300" />
@@ -713,82 +713,82 @@ export default function ApplyPage() {
                       <div className="p-6 border border-amber-200 bg-amber-50 rounded-lg space-y-4">
                         <h4 className="font-semibold text-slate-900">Manual Adjustments</h4>
                         
-                        <FormField
-                          control={form3.control}
-                          name="contact_rate"
-                          render={({ field }) => (
-                            <FormItem>
+                      <FormField
+                        control={form3.control}
+                        name="contact_rate"
+                        render={({ field }) => (
+                          <FormItem>
                               <div className="flex justify-between">
                                 <FormLabel className="text-sm">Contact Rate</FormLabel>
                                 <span className="text-sm font-mono">{field.value}%</span>
                               </div>
-                              <Slider
+                              <Slider 
                                 value={[field.value || benchmarks.contact]}
-                                onValueChange={(val) => field.onChange(val[0])}
+                                onValueChange={(val) => field.onChange(val[0])} 
                                 max={100}
                                 step={5}
                               />
-                            </FormItem>
-                          )}
-                        />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={form3.control}
-                          name="booking_rate"
-                          render={({ field }) => (
-                            <FormItem>
+                      <FormField
+                        control={form3.control}
+                        name="booking_rate"
+                        render={({ field }) => (
+                          <FormItem>
                               <div className="flex justify-between">
                                 <FormLabel className="text-sm">Booking Rate</FormLabel>
                                 <span className="text-sm font-mono">{field.value}%</span>
                               </div>
-                              <Slider
+                              <Slider 
                                 value={[field.value || benchmarks.booking]}
-                                onValueChange={(val) => field.onChange(val[0])}
+                                onValueChange={(val) => field.onChange(val[0])} 
                                 max={100}
                                 step={5}
                               />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form3.control}
-                          name="show_rate"
-                          render={({ field }) => (
-                            <FormItem>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form3.control}
+                        name="show_rate"
+                        render={({ field }) => (
+                          <FormItem>
                               <div className="flex justify-between">
                                 <FormLabel className="text-sm">Show Rate</FormLabel>
                                 <span className="text-sm font-mono">{field.value}%</span>
                               </div>
-                              <Slider
+                              <Slider 
                                 value={[field.value || benchmarks.show]}
-                                onValueChange={(val) => field.onChange(val[0])}
+                                onValueChange={(val) => field.onChange(val[0])} 
                                 max={100}
                                 step={5}
                               />
-                            </FormItem>
-                          )}
-                        />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={form3.control}
-                          name="close_rate"
-                          render={({ field }) => (
-                            <FormItem>
+                      <FormField
+                        control={form3.control}
+                        name="close_rate"
+                        render={({ field }) => (
+                          <FormItem>
                               <div className="flex justify-between">
                                 <FormLabel className="text-sm">Close Rate</FormLabel>
                                 <span className="text-sm font-mono">{field.value}%</span>
                               </div>
-                              <Slider
+                              <Slider 
                                 value={[field.value || benchmarks.close]}
-                                onValueChange={(val) => field.onChange(val[0])}
+                                onValueChange={(val) => field.onChange(val[0])} 
                                 max={100}
                                 step={5}
                               />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     )}
 
                     {/* Final CTA Preview */}
@@ -816,7 +816,7 @@ export default function ApplyPage() {
                           <span>Implementation plan specific to {getBusinessTypeLabel(formData.business_type || "other")}</span>
                         </li>
                       </ul>
-                    </div>
+                            </div>
                   </CardContent>
                   <CardFooter className="flex flex-col gap-4">
                     <div className="flex gap-4 w-full">
@@ -827,7 +827,7 @@ export default function ApplyPage() {
                       <Button type="submit" className="flex-1 py-6 text-lg">
                         Show Me My Revenue Leaks
                         <ArrowRight className="w-5 h-5 ml-2" />
-                      </Button>
+                    </Button>
                     </div>
                     <p className="text-xs text-slate-500 text-center">
                       No credit card • No commitment • Instant access

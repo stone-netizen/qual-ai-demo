@@ -182,22 +182,26 @@ export default function ReportPage() {
   }), [benchmarks, monthlyLeak]);
 
   // Top performers: Uses TOP_PERFORMER_RATES directly from calculations-v2.ts
-  // 80% × 55% × 80% × 30% = ~10.56% overall conversion
-  const topPerformers = useMemo(() => ({
-    responseTime: 1, // Under 1 min
-    contactRate: Math.round(TOP_PERFORMER_RATES.contact * 100),  // 80%
-    bookingRate: Math.round(TOP_PERFORMER_RATES.booking * 100),  // 55%
-    showRate: Math.round(TOP_PERFORMER_RATES.show * 100),     // 80%
-    closeRate: Math.round(TOP_PERFORMER_RATES.close * 100),    // 30%
-    overallConversion: Math.round(
-      TOP_PERFORMER_RATES.contact * 
-      TOP_PERFORMER_RATES.booking * 
-      TOP_PERFORMER_RATES.show * 
-      TOP_PERFORMER_RATES.close * 
-      100
-    ), // ~10.56% rounded
-    leakage: Math.round(monthlyLeak * 0.15) // Top performers lose only 15% of what you lose
-  }), [monthlyLeak]);
+  // Actual conversion with Math.floor: 70 leads → 7 customers = 10.0% (not 10.56% theoretical)
+  const topPerformers = useMemo(() => {
+    // Calculate actual conversion using same logic as optimized funnel (with Math.floor)
+    const sampleLeads = 70;
+    const contacted = Math.round(sampleLeads * TOP_PERFORMER_RATES.contact);
+    const booked = Math.round(contacted * TOP_PERFORMER_RATES.booking);
+    const showed = Math.round(booked * TOP_PERFORMER_RATES.show);
+    const closed = Math.floor(showed * TOP_PERFORMER_RATES.close);
+    const actualConversion = Math.round((closed / sampleLeads) * 100); // 10%
+    
+    return {
+      responseTime: 1, // Under 1 min
+      contactRate: Math.round(TOP_PERFORMER_RATES.contact * 100),  // 80%
+      bookingRate: Math.round(TOP_PERFORMER_RATES.booking * 100),  // 55%
+      showRate: Math.round(TOP_PERFORMER_RATES.show * 100),     // 80%
+      closeRate: Math.round(TOP_PERFORMER_RATES.close * 100),    // 30%
+      overallConversion: actualConversion, // 10% (matches optimized funnel)
+      leakage: Math.round(monthlyLeak * 0.15) // Top performers lose only 15% of what you lose
+    };
+  }, [monthlyLeak]);
 
   // ===== FUNNEL METRICS =====
   

@@ -78,10 +78,10 @@ export const StickyCTA = memo(function StickyCTA({ metrics, topLeak, tier, onBoo
           <p className="text-sm text-slate-500">Pick a time that works for you</p>
         </CardHeader>
         <CardContent className="p-0 h-[650px]">
-          <InlineWidget 
+           <InlineWidget 
             url={import.meta.env.VITE_CALENDLY_URL || "https://calendly.com/evensonstone/new-meeting"} 
-            styles={{ height: '100%', width: '100%' }}
-          />
+             styles={{ height: '100%', width: '100%' }}
+           />
         </CardContent>
       </Card>
     );
@@ -116,19 +116,19 @@ export const StickyCTA = memo(function StickyCTA({ metrics, topLeak, tier, onBoo
             </div>
             
             <CardTitle className="text-xl font-bold text-slate-900">
-              Stop Losing {formatCurrency(metrics.monthly_revenue_lost)}/mo
-            </CardTitle>
+            Stop Losing {formatCurrency(metrics.monthly_revenue_lost)}/mo
+          </CardTitle>
             <p className="text-sm text-slate-500 mt-1">
               Fix your biggest leak: <span className="font-semibold text-slate-700">{topLeak}</span>
-            </p>
-          </CardHeader>
+          </p>
+        </CardHeader>
           
           <CardContent className="pt-2 space-y-5">
             {/* What You Get */}
-            <div className="space-y-3">
+          <div className="space-y-3">
               <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
                 On the Consultation:
-              </h4>
+            </h4>
               <ul className="space-y-2.5">
                 {[
                   "Your exact Fix Funnel blueprint",
@@ -139,9 +139,9 @@ export const StickyCTA = memo(function StickyCTA({ metrics, topLeak, tier, onBoo
                   <li key={i} className="flex items-start gap-2 text-sm">
                     <div className="mt-0.5 bg-green-100 p-1 rounded-full flex-shrink-0">
                       <Check className="w-3 h-3 text-green-600" />
-                    </div>
+                </div>
                     <span className="text-slate-700">{item}</span>
-                  </li>
+              </li>
                 ))}
               </ul>
             </div>
@@ -157,18 +157,18 @@ export const StickyCTA = memo(function StickyCTA({ metrics, topLeak, tier, onBoo
                   <p className="text-xs text-slate-500">No credit card required</p>
                 </div>
               </div>
-            </div>
+          </div>
 
             {/* CTA Button */}
-            <Button 
-              size="lg" 
+          <Button 
+            size="lg" 
               className="w-full text-base font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all group h-12"
-              onClick={handleBookClick}
-            >
+            onClick={handleBookClick}
+          >
               <Zap className="w-4 h-4 mr-2" />
               Book Onboarding
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Button>
 
             {/* Urgency */}
             <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
@@ -187,8 +187,8 @@ export const StickyCTA = memo(function StickyCTA({ metrics, topLeak, tier, onBoo
                 500+ Businesses
               </div>
             </div>
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
 
         {/* Scarcity Message */}
         <motion.div

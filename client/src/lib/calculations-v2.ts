@@ -290,7 +290,7 @@ function calculateProjectedFunnel(
 ): { stages: FunnelStage[], revenue: number, conversion: number, rates: typeof TOP_PERFORMER_RATES } {
   // USE FIXED TOP PERFORMER RATES - must match Market Position display
   // CRITICAL: These rates MUST match what's shown in Competitive Intelligence "Top 10%" section
-  // This ensures: 70 leads → 56 → 31 → 25 → 8 (10% conversion)
+  // This ensures: 70 leads → 56 → 31 → 25 → 7 (10% conversion) using Math.floor for close
   // DO NOT use currentContactRate, currentBookingRate, or currentShowRate - use TOP_PERFORMER_RATES only
   const contactRate = TOP_PERFORMER_RATES.contact;   // 0.80 = 80%
   const bookingRate = TOP_PERFORMER_RATES.booking;   // 0.55 = 55%
