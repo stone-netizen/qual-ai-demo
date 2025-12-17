@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Check, ArrowRight, Loader2, Building2, Phone, TrendingUp } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { calculateReport } from "@/lib/calculations";
 
 // Schema Definitions
 const step1Schema = z.object({
@@ -74,16 +75,22 @@ export default function ApplyPage() {
   };
 
   const onStep3Submit = async (data: Step3Data) => {
-    setFormData(prev => ({ ...prev, ...data }));
+    const finalData = { ...formData, ...data };
+    setFormData(finalData);
     setLoading(true);
     
     // Simulate AI Processing
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // In real app: POST to backend
-    // const result = await api.post('/applications', { ...formData, ...data });
+    // Generate Report
+    const report = calculateReport(finalData);
     
-    setLocation("/report/demo-123");
+    // Save to LocalStorage (Mock persistence)
+    const reports = JSON.parse(localStorage.getItem("qual_reports") || "{}");
+    reports[report.id] = report;
+    localStorage.setItem("qual_reports", JSON.stringify(reports));
+    
+    setLocation(`/report/${report.id}`);
   };
 
   return (
@@ -112,7 +119,7 @@ export default function ApplyPage() {
 
         {/* Loading State */}
         {loading ? (
-          <Card className="border-primary/20 shadow-lg">
+          <Card className="border-primary/20 shadow-lg animate-in fade-in zoom-in-95 duration-500">
             <CardContent className="pt-12 pb-12 flex flex-col items-center text-center space-y-6">
               <div className="relative">
                 <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />

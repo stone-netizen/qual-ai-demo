@@ -7,10 +7,21 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { AlertTriangle, TrendingUp, DollarSign, Activity, Check } from "lucide-react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { useEffect, useState } from "react";
+import { ReportData } from "@/lib/calculations";
 
 export default function ReportPage() {
   const [match, params] = useRoute("/report/:id");
-  const data = MOCK_REPORT_DATA; // In real app, fetch based on params.id
+  const [data, setData] = useState<ReportData>(MOCK_REPORT_DATA as unknown as ReportData);
+
+  useEffect(() => {
+    if (params?.id) {
+      const savedReports = JSON.parse(localStorage.getItem("qual_reports") || "{}");
+      if (savedReports[params.id]) {
+        setData(savedReports[params.id]);
+      }
+    }
+  }, [params?.id]);
 
   // Mock tracking
   const trackEvent = (type: string, meta: any) => {
@@ -61,7 +72,7 @@ export default function ReportPage() {
             {/* Executive Summary */}
             <section className="space-y-4">
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
-                Lost Revenue Report
+                Lost Revenue Report for {data.business_name}
               </h1>
               <Card className="bg-white border-primary/10 shadow-sm">
                 <CardContent className="pt-6">
