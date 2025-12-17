@@ -289,15 +289,18 @@ function calculateProjectedFunnel(
   missedCallsPerWeek: number
 ): { stages: FunnelStage[], revenue: number, conversion: number, rates: typeof TOP_PERFORMER_RATES } {
   // USE FIXED TOP PERFORMER RATES - must match Market Position display
-  // This ensures: 60 leads → 48 → 26 → 21 → 6 (10% conversion)
-  const contactRate = TOP_PERFORMER_RATES.contact;   // 80%
-  const bookingRate = TOP_PERFORMER_RATES.booking;   // 55%
-  const showRate = TOP_PERFORMER_RATES.show;         // 80%
-  const optimizedCloseRate = TOP_PERFORMER_RATES.close; // 30%
+  // CRITICAL: These rates MUST match what's shown in Competitive Intelligence "Top 10%" section
+  // This ensures: 70 leads → 56 → 31 → 25 → 8 (10% conversion)
+  // DO NOT use currentContactRate, currentBookingRate, or currentShowRate - use TOP_PERFORMER_RATES only
+  const contactRate = TOP_PERFORMER_RATES.contact;   // 0.80 = 80%
+  const bookingRate = TOP_PERFORMER_RATES.booking;   // 0.55 = 55%
+  const showRate = TOP_PERFORMER_RATES.show;         // 0.80 = 80%
+  const optimizedCloseRate = TOP_PERFORMER_RATES.close; // 0.30 = 30%
   
   // Keep same lead count as current funnel - improvement is in conversion, not lead volume
   const totalLeads = leads;
   
+  // Calculate using TOP_PERFORMER_RATES (not the current rates passed as parameters)
   const contacted = Math.round(totalLeads * contactRate);
   const booked = Math.round(contacted * bookingRate);
   const showed = Math.round(booked * showRate);
@@ -504,8 +507,14 @@ function generateCompetitorComparison(
   userContactRate: number,
   responseTime: ResponseTimeKey
 ): CompetitorComparison[] {
-  const responseTimeLabels: Record<ResponseTimeKey, string> = {
+  const responseTimeLabels: Record<string, string> = {
     under_5: '<5 minutes',
+    '5_to_15': '5-15 minutes',
+    '15_to_30': '15-30 minutes',
+    '30_to_60': '30-60 minutes',
+    '1_to_2_hours': '1-2 hours',
+    '2_to_4_hours': '2-4 hours',
+    '4_plus': '4+ hours',
     '5_to_30': '5-30 minutes',
     '30_to_120': '30 min - 2 hrs',
     hours_plus: '2+ hours',
@@ -515,7 +524,7 @@ function generateCompetitorComparison(
   return [
     {
       metric: 'Response Time',
-      yours: responseTimeLabels[responseTime],
+      yours: responseTimeLabels[responseTime] || 'Unknown',
       competitors: '<1 minute',
       advantage: 'Faster response improves contact rates'
     },
