@@ -125,23 +125,72 @@ export function calculateReport(formData: any): ReportData {
   // 8. Dynamic Diagrams
   const mermaid_current = `
       graph TD
-      A[Leads: ${L}/mo] -->|${Math.round((1-c)*100)}% Unreached| B(Voicemail/Ghosted)
-      A -->|${Math.round(c*100)}% Contacted| C(Conversation)
-      B -->|Manual Chase| C
-      C -->|${Math.round(b*100)}% Book| D(Appt Booked)
-      D -->|${Math.round(s*100)}% Show| E(Show Up)
-      E -->|${Math.round(k*100)}% Close| F(Revenue: $${Math.round(R_current).toLocaleString()})
-      style B fill:#ffcccc,stroke:#ff0000,stroke-width:2px
+      %% Nodes
+      Leads[Inbound Leads: ${L}/mo]
+      
+      subgraph Leaks [Revenue Leaks]
+        Voicemail(Voicemail / No Answer)
+        Ghosted(Manual Chase / Ghosted)
+        NoShow(No-Show / Cancellation)
+      end
+
+      subgraph Process [Current Process]
+        Reception(Reception Answered)
+        Booked(Booked Consult)
+        Showed(Showed Up)
+        Revenue(Closed Revenue: $${Math.round(R_current).toLocaleString()})
+      end
+
+      %% Flows
+      Leads -->|${Math.round((1-c)*100)}% Missed| Voicemail
+      Leads -->|${Math.round(c*100)}% Answered| Reception
+      
+      Voicemail -.->|Lost Opportunity| Ghosted
+      Reception -->|Manual Follow-up| Booked
+      
+      Booked -->|${Math.round((1-s)*100)}% Drop-off| NoShow
+      Booked -->|${Math.round(s*100)}% Show| Showed
+      
+      Showed -->|${Math.round(k*100)}% Close| Revenue
+
+      %% Styles
+      style Voicemail fill:#ffebee,stroke:#ef5350,stroke-width:2px,color:#c62828
+      style Ghosted fill:#ffebee,stroke:#ef5350,stroke-width:2px,color:#c62828
+      style NoShow fill:#ffebee,stroke:#ef5350,stroke-width:2px,color:#c62828
+      style Revenue fill:#f1f8e9,stroke:#8bc34a,stroke-width:2px,color:#33691e
+      style Leads fill:#fafafa,stroke:#e0e0e0,stroke-width:1px
   `;
 
   const mermaid_fix = `
       graph TD
-      A[Leads: ${L}/mo] -->|AI Instant Answer| B(Conversation)
-      B -->|Auto-Qualify| C(Appt Booked)
-      C -->|SMS Reminders| D(Show Up)
-      D -->|Revenue: $${Math.round(R_target + missed_call_upside).toLocaleString()}| E(Growth)
-      style B fill:#ccffcc,stroke:#00aa00,stroke-width:2px
-      style C fill:#ccffcc,stroke:#00aa00,stroke-width:2px
+      %% Nodes
+      Leads[Inbound Leads: ${L}/mo]
+
+      subgraph AI_Layer [Qual AI Automation Layer]
+        Instant(Instant AI Answer 24/7)
+        Qualify(Auto-Qualification)
+        SmartBook(Smart Booking & Deposit)
+        Reminders(SMS Reminders & Nurture)
+      end
+
+      subgraph Revenue_Growth [Revenue Growth]
+        Growth(Recovered Revenue: $${Math.round(R_target + missed_call_upside).toLocaleString()})
+      end
+
+      %% Flows
+      Leads -->|0s Response Time| Instant
+      Instant -->|Engage| Qualify
+      Qualify -->|Convert| SmartBook
+      SmartBook -->|Retain| Reminders
+      Reminders -->|Close| Growth
+
+      %% Styles
+      style Instant fill:#e0f2f1,stroke:#26a69a,stroke-width:2px,color:#00695c
+      style Qualify fill:#e0f2f1,stroke:#26a69a,stroke-width:2px,color:#00695c
+      style SmartBook fill:#e0f2f1,stroke:#26a69a,stroke-width:2px,color:#00695c
+      style Reminders fill:#e0f2f1,stroke:#26a69a,stroke-width:2px,color:#00695c
+      style Growth fill:#ccff90,stroke:#7cb342,stroke-width:2px,color:#33691e
+      style Leads fill:#fafafa,stroke:#e0e0e0,stroke-width:1px
   `;
 
   // 9. Determine Tier

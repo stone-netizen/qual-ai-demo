@@ -5,10 +5,11 @@ import { MermaidDiagram } from "@/components/ui/mermaid-diagram";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { AlertTriangle, TrendingUp, DollarSign, Activity, Check } from "lucide-react";
+import { AlertTriangle, TrendingUp, DollarSign, Activity, Check, Phone } from "lucide-react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { useEffect, useState } from "react";
 import { ReportData } from "@/lib/calculations";
+import { Button } from "@/components/ui/button";
 
 export default function ReportPage() {
   const [match, params] = useRoute("/report/:id");
@@ -178,6 +179,29 @@ export default function ReportPage() {
                  </h3>
                  <MermaidDiagram chart={data.ai_report_json.mermaid_fix_funnel} />
                </div>
+            </section>
+
+            {/* Demo CTA */}
+            <section className="bg-slate-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="relative z-10 text-center space-y-6 max-w-2xl mx-auto">
+                <Badge variant="secondary" className="bg-primary/20 text-primary-foreground hover:bg-primary/30 border-none">
+                  Live Demo
+                </Badge>
+                <h2 className="text-3xl font-bold">Don't believe it? Call the Agent.</h2>
+                <p className="text-slate-300 text-lg">
+                  Experience the "Zero-Delay" response time yourself. Call our demo line and try to stump the AI receptionist.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                  <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 h-14 px-8 text-lg w-full sm:w-auto" onClick={() => window.location.href = "tel:+15550123456"}>
+                    <Phone className="w-5 h-5 mr-2 text-primary" />
+                    Call +1 (555) 012-3456
+                  </Button>
+                  <p className="text-xs text-slate-400 mt-2 sm:mt-0">
+                    Available 24/7 (just like the real thing)
+                  </p>
+                </div>
+              </div>
             </section>
           </div>
 
