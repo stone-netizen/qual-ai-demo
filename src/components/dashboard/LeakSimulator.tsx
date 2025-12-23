@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -33,13 +33,13 @@ export function LeakSimulator({
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       // Easing function for smooth animation
       const eased = 1 - Math.pow(1 - progress, 3);
       const currentValue = startValue + (targetValue - startValue) * eased;
-      
+
       setDisplayedLoss(Math.round(currentValue));
-      
+
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       }
@@ -52,15 +52,15 @@ export function LeakSimulator({
         cancelAnimationFrame(animationRef.current);
       }
     };
+    // NOTE: displayedLoss intentionally not in deps; we animate from the last rendered value.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [annualLoss]);
 
-  const handleValuesChange = useCallback(() => {
-    onValuesChange?.(projectValue, missedCalls);
-  }, [projectValue, missedCalls, onValuesChange]);
-
+  // Persist simulator values upward ONLY when the numeric values change.
+  // (Do not depend on onValuesChange identity to avoid render loops.)
   useEffect(() => {
-    handleValuesChange();
-  }, [handleValuesChange]);
+    onValuesChange?.(projectValue, missedCalls);
+  }, [projectValue, missedCalls]);
 
   const formatCurrency = (val: number) => {
     if (val >= 1000000) {
