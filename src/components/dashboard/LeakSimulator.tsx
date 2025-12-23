@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -18,37 +18,49 @@ export function LeakSimulator({
   const [projectValue, setProjectValue] = useState(initialProjectValue);
   const [missedCalls, setMissedCalls] = useState(initialMissedCalls);
   const [displayedLoss, setDisplayedLoss] = useState(0);
+  const animationRef = useRef<number | null>(null);
 
   // Calculate annual loss: missed calls * 12 months * 30% close rate * project value
   const annualLoss = missedCalls * 12 * 0.3 * projectValue;
 
-  // Animate the displayed value
+  // Animate the displayed value using requestAnimationFrame
   useEffect(() => {
     const duration = 600;
-    const steps = 20;
+    const startTime = performance.now();
     const startValue = displayedLoss;
-    const diff = annualLoss - startValue;
-    const stepValue = diff / steps;
-    let current = startValue;
-    let step = 0;
+    const targetValue = annualLoss;
 
-    const timer = setInterval(() => {
-      step++;
-      current += stepValue;
-      if (step >= steps) {
-        setDisplayedLoss(annualLoss);
-        clearInterval(timer);
-      } else {
-        setDisplayedLoss(Math.round(current));
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing function for smooth animation
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const currentValue = startValue + (targetValue - startValue) * eased;
+      
+      setDisplayedLoss(Math.round(currentValue));
+      
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
       }
-    }, duration / steps);
+    };
 
-    return () => clearInterval(timer);
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
   }, [annualLoss]);
 
-  useEffect(() => {
+  const handleValuesChange = useCallback(() => {
     onValuesChange?.(projectValue, missedCalls);
   }, [projectValue, missedCalls, onValuesChange]);
+
+  useEffect(() => {
+    handleValuesChange();
+  }, [handleValuesChange]);
 
   const formatCurrency = (val: number) => {
     if (val >= 1000000) {
