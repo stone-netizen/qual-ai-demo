@@ -106,9 +106,8 @@ export const calculatorFormSchema = z.object({
   reengagementFrequency: z.string().optional(),
   reengagementResponseRate: z.coerce.number().min(0).max(100).optional(),
 
-  // Step 7: Dormant Leads, Reactivation, and Customer Value (merged)
-  repeatCustomers: z.boolean().nullable(),
-  avgPurchasesPerCustomer: z.coerce.number().min(1).max(50).optional(),
+  // Step 7: Customer Value (simplified - no longer ask yes/no for repeat purchases)
+  avgPurchasesPerCustomer: z.coerce.number().min(1, "Must be at least 1").max(50, "Maximum 50"),
 });
 
 export type CalculatorFormData = z.infer<typeof calculatorFormSchema>;
@@ -173,8 +172,7 @@ const defaultValues: CalculatorFormData = {
   sendsReengagementCampaigns: null,
   reengagementFrequency: "",
   reengagementResponseRate: 0,
-  // Step 7 - includes customer value now
-  repeatCustomers: null,
+  // Step 7 - customer value (simplified)
   avgPurchasesPerCustomer: 1,
 };
 
@@ -302,11 +300,8 @@ export const useCalculatorForm = () => {
           }
         }
         
-        // Customer value validation (merged from Step 8)
-        if (values.repeatCustomers === null) return false;
-        if (values.repeatCustomers === true) {
-          if (!values.avgPurchasesPerCustomer || values.avgPurchasesPerCustomer < 1) return false;
-        }
+        // Customer value validation (simplified - just need avgPurchasesPerCustomer >= 1)
+        if (!values.avgPurchasesPerCustomer || values.avgPurchasesPerCustomer < 1) return false;
         
         return true;
       }
