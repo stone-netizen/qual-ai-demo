@@ -22,6 +22,8 @@ import {
   Check,
   LayoutDashboard,
   Sparkles,
+  CheckCircle2,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,6 +54,7 @@ import { toast } from "sonner";
 import { ReactivationHeroCard } from "@/components/results/ReactivationHeroCard";
 import { ReactivationBreakdown } from "@/components/results/ReactivationBreakdown";
 import { ReactivationROICalculator } from "@/components/results/ReactivationROICalculator";
+import { CalendlyModal } from "@/components/CalendlyModal";
 
 const RESULTS_STORAGE_KEY = "leakDetectorResults";
 
@@ -186,6 +189,8 @@ export default function Results() {
   const [expandedLeaks, setExpandedLeaks] = useState<Set<string>>(new Set());
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+  const [showStickyBar, setShowStickyBar] = useState(false);
   const leakRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
@@ -206,6 +211,15 @@ export default function Results() {
       navigate("/calculator");
     }
   }, [navigate]);
+
+  // Show sticky bar after scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowStickyBar(window.scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleLeak = (leakType: string) => {
     setExpandedLeaks((prev) => {
@@ -236,6 +250,12 @@ export default function Results() {
   const handleDownloadPDF = () => {
     toast.info("Coming soon!", {
       description: "PDF generation will be available in a future update.",
+    });
+  };
+
+  const handleEmailResults = () => {
+    toast.info("Coming soon!", {
+      description: "Email delivery will be available in a future update.",
     });
   };
 
@@ -279,24 +299,15 @@ export default function Results() {
 
   return (
     <div className="min-h-screen bg-slate-900">
-      {/* Fixed Header with Edit Button */}
+      {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-emerald-500 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-slate-900" />
+            <div className="text-lg font-bold bg-gradient-to-r from-violet-400 to-indigo-400 text-transparent bg-clip-text">
+              LeakDetector
             </div>
-            <span className="text-sm font-medium text-white">LeakDetector</span>
           </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate("/leak-dashboard")}
-              className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10 mr-2"
-            >
-              <LayoutDashboard className="h-4 w-4 mr-2" />
-              Dashboard
-            </Button>
+          <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -306,6 +317,7 @@ export default function Results() {
               <Edit3 className="h-4 w-4 mr-2" />
               Edit Inputs
             </Button>
+          </div>
         </div>
       </header>
 
@@ -323,7 +335,7 @@ export default function Results() {
         </motion.section>
       )}
 
-      {/* Hero Section */}
+      {/* Hero Section with Big Loss Number */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -362,23 +374,39 @@ export default function Results() {
                 </Badge>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-4 mt-8">
-                <Button
-                  variant="outline"
-                  className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                  onClick={() => setShareModalOpen(true)}
+              {/* Main CTA - Book Strategy Call */}
+              <div className="mt-8 space-y-4">
+                <Button 
+                  size="lg"
+                  onClick={() => setIsCalendlyOpen(true)}
+                  className="w-full px-8 py-5 h-auto bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-lg rounded-xl hover:shadow-lg hover:shadow-violet-500/50 transition-all hover:scale-[1.02]"
                 >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Share Results
+                  Book Your Free Strategy Call
                 </Button>
-                <Button
-                  variant="outline"
-                  className="border-slate-600 text-slate-300 hover:bg-slate-700"
-                  onClick={handleDownloadPDF}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Download PDF
-                </Button>
+                
+                <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  15 minutes • No pressure • Free action plan
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <Button 
+                    variant="outline"
+                    className="px-4 py-3 h-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-700 transition-all"
+                    onClick={handleDownloadPDF}
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download Full Report
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="px-4 py-3 h-auto bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl border border-slate-700 transition-all"
+                    onClick={handleEmailResults}
+                  >
+                    <Mail className="h-4 w-4 mr-2" />
+                    Email Me Results
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -478,51 +506,41 @@ export default function Results() {
         <div className="max-w-4xl mx-auto">
           <Card className="bg-slate-800/50 border-slate-700">
             <CardHeader>
-              <CardTitle className="text-xl text-slate-200 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-emerald-500" />
-                Your Revenue Leaks (Ranked by Impact)
+              <CardTitle className="text-xl text-slate-200">
+                Loss Distribution by Category
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[400px] w-full">
+              <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={chartData}
                     layout="vertical"
-                    margin={{ top: 10, right: 80, left: 20, bottom: 10 }}
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                   >
                     <XAxis
                       type="number"
-                      tickFormatter={(value) => formatCurrency(value)}
-                      stroke="#94a3b8"
-                      fontSize={12}
+                      tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+                      tick={{ fill: "#94a3b8", fontSize: 12 }}
+                      axisLine={{ stroke: "#475569" }}
+                      tickLine={{ stroke: "#475569" }}
                     />
                     <YAxis
                       type="category"
                       dataKey="name"
-                      stroke="#94a3b8"
-                      fontSize={12}
+                      tick={{ fill: "#94a3b8", fontSize: 12 }}
+                      axisLine={{ stroke: "#475569" }}
+                      tickLine={{ stroke: "#475569" }}
                       width={150}
-                      tickLine={false}
                     />
                     <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const data = payload[0].payload;
-                          return (
-                            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 shadow-xl">
-                              <p className="text-slate-200 font-medium">{data.name}</p>
-                              <p className="text-red-400 font-bold">
-                                {formatCurrency(data.value)}/month
-                              </p>
-                              <p className="text-slate-400 text-sm capitalize">
-                                {data.severity} priority
-                              </p>
-                            </div>
-                          );
-                        }
-                        return null;
+                      formatter={(value: number) => [formatCurrency(value), "Monthly Loss"]}
+                      contentStyle={{
+                        backgroundColor: "#1e293b",
+                        border: "1px solid #475569",
+                        borderRadius: "8px",
                       }}
+                      labelStyle={{ color: "#e2e8f0" }}
                     />
                     <Bar
                       dataKey="value"
@@ -533,7 +551,7 @@ export default function Results() {
                       {chartData.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={SEVERITY_COLORS[entry.severity]}
+                          fill={SEVERITY_COLORS[entry.severity as keyof typeof SEVERITY_COLORS]}
                         />
                       ))}
                     </Bar>
@@ -544,10 +562,10 @@ export default function Results() {
                 {Object.entries(SEVERITY_COLORS).map(([severity, color]) => (
                   <div key={severity} className="flex items-center gap-2">
                     <div
-                      className="w-3 h-3 rounded-full"
+                      className="w-3 h-3 rounded"
                       style={{ backgroundColor: color }}
                     />
-                    <span className="text-slate-400 text-sm capitalize">{severity}</span>
+                    <span className="text-sm text-slate-400 capitalize">{severity}</span>
                   </div>
                 ))}
               </div>
@@ -556,7 +574,7 @@ export default function Results() {
         </div>
       </motion.section>
 
-      {/* Detailed Leak Cards */}
+      {/* Leak Details */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -564,167 +582,130 @@ export default function Results() {
         className="py-8 px-4"
       >
         <div className="max-w-4xl mx-auto space-y-4">
-          <h2 className="text-xl font-semibold text-slate-200 mb-6">
-            Detailed Analysis
+          <h2 className="text-2xl font-bold text-slate-200 mb-6">
+            Leak Analysis Details
           </h2>
           {results.leaks.map((leak, index) => (
             <motion.div
               key={leak.type}
               ref={(el) => (leakRefs.current[leak.type] = el)}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 * index }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * index, duration: 0.3 }}
             >
               <Card
-                className={`bg-slate-800/50 border-slate-700 cursor-pointer transition-all duration-200 hover:border-slate-600 ${
+                className={`bg-slate-800/50 border-slate-700 overflow-hidden transition-all duration-300 ${
                   expandedLeaks.has(leak.type) ? "ring-1 ring-slate-600" : ""
                 }`}
-                onClick={() => toggleLeak(leak.type)}
               >
-                <CardContent className="p-0">
-                  {/* Header */}
-                  <div className="flex items-center justify-between p-4 md:p-6">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center ${SEVERITY_BG[leak.severity]}`}
-                      >
-                        {LEAK_ICONS[leak.type]}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-3">
-                          <Badge
-                            className={`${SEVERITY_BG[leak.severity]} border text-xs`}
-                          >
-                            {leak.severity.toUpperCase()}
-                          </Badge>
-                          <span className="text-slate-500 text-sm">#{leak.rank}</span>
-                        </div>
-                        <h3 className="text-lg font-medium text-slate-200 mt-1">
+                <button
+                  onClick={() => toggleLeak(leak.type)}
+                  className="w-full text-left p-6 flex items-center justify-between hover:bg-slate-700/30 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`p-3 rounded-xl ${
+                        SEVERITY_BG[leak.severity as keyof typeof SEVERITY_BG]
+                      } border`}
+                    >
+                      {LEAK_ICONS[leak.type] || <DollarSign className="h-5 w-5" />}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <h3 className="text-lg font-semibold text-slate-200">
                           {leak.label}
                         </h3>
+                        <Badge
+                          variant="outline"
+                          className={SEVERITY_BG[leak.severity as keyof typeof SEVERITY_BG]}
+                        >
+                          {leak.severity}
+                        </Badge>
+                        {leak.quickWin && (
+                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                            <Zap className="h-3 w-3 mr-1" />
+                            Quick Win
+                          </Badge>
+                        )}
                       </div>
-                    </div>
-                    <div className="text-right flex items-center gap-4">
-                      <div>
-                        <p className="text-xl font-bold text-red-400">
-                          {formatCurrency(leak.monthlyLoss)}
-                          <span className="text-sm font-normal">/mo</span>
-                        </p>
-                        <p className="text-sm text-slate-500">
-                          {formatCurrency(leak.annualLoss)}/year
-                        </p>
-                      </div>
-                      {expandedLeaks.has(leak.type) ? (
-                        <ChevronUp className="h-5 w-5 text-slate-400" />
-                      ) : (
-                        <ChevronDown className="h-5 w-5 text-slate-400" />
-                      )}
                     </div>
                   </div>
-
-                  {/* Expanded Content */}
-                  <AnimatePresence>
-                    {expandedLeaks.has(leak.type) && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-4 md:px-6 pb-6 pt-2 border-t border-slate-700">
-                          <div className="grid md:grid-cols-2 gap-6 mt-4">
-                            {/* The Problem */}
-                            <div>
-                              <h4 className="text-sm font-semibold text-red-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <AlertTriangle className="h-4 w-4" />
-                                The Problem
-                              </h4>
-                              <ul className="space-y-2">
-                                {LEAK_PROBLEMS[leak.type]?.map((problem, i) => (
-                                  <li
-                                    key={i}
-                                    className="text-slate-400 text-sm flex items-start gap-2"
-                                  >
-                                    <span className="text-red-400 mt-1">•</span>
-                                    {problem}
-                                  </li>
-                                ))}
-                              </ul>
-
-                              {/* Details */}
-                              <div className="mt-4 p-3 bg-slate-900/50 rounded-lg">
-                                <h5 className="text-xs font-semibold text-slate-500 uppercase mb-2">
-                                  Your Numbers
-                                </h5>
-                                <div className="grid grid-cols-2 gap-2 text-sm">
-                                  {Object.entries(leak.details)
-                                    .filter(([key]) => key !== "applicable" && key !== "reason")
-                                    .slice(0, 4)
-                                    .map(([key, value]) => (
-                                      <div key={key}>
-                                        <span className="text-slate-500 capitalize">
-                                          {key.replace(/([A-Z])/g, " $1").trim()}:
-                                        </span>
-                                        <span className="text-slate-300 ml-1">
-                                          {typeof value === "number"
-                                            ? value.toLocaleString()
-                                            : String(value)}
-                                        </span>
-                                      </div>
-                                    ))}
-                                </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <p className="text-xl font-bold text-red-400">
+                        {formatCurrency(leak.monthlyLoss)}/mo
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        {formatCurrency(leak.annualLoss)}/yr
+                      </p>
+                    </div>
+                    {expandedLeaks.has(leak.type) ? (
+                      <ChevronUp className="h-5 w-5 text-slate-400" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-slate-400" />
+                    )}
+                  </div>
+                </button>
+                <AnimatePresence>
+                  {expandedLeaks.has(leak.type) && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-6 pt-2 border-t border-slate-700">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {/* Problem Analysis */}
+                          <div>
+                            <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                              Why This Hurts
+                            </h4>
+                            <ul className="space-y-2">
+                              {LEAK_PROBLEMS[leak.type]?.map((problem, i) => (
+                                <li key={i} className="flex items-start gap-2 text-slate-300 text-sm">
+                                  <AlertTriangle className="h-4 w-4 text-orange-400 mt-0.5 flex-shrink-0" />
+                                  {problem}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          {/* Fix & ROI */}
+                          <div>
+                            <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                              The Fix
+                            </h4>
+                            <p className="text-slate-300 text-sm mb-4">
+                              {LEAK_FIXES[leak.type]?.fix}
+                            </p>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                                <p className="text-xs text-emerald-400 font-medium">Expected ROI</p>
+                                <p className="text-sm text-slate-200 mt-1">
+                                  {LEAK_FIXES[leak.type]?.roi}
+                                </p>
                               </div>
-                            </div>
-
-                            {/* The Fix */}
-                            <div>
-                              <h4 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <Zap className="h-4 w-4" />
-                                The Fix
-                              </h4>
-                              <p className="text-slate-300 text-sm mb-4">
-                                {LEAK_FIXES[leak.type]?.fix || leak.recommendation}
-                              </p>
-
-                              <div className="space-y-3">
-                                <div className="flex items-center gap-3 p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                                  <DollarSign className="h-5 w-5 text-emerald-400" />
-                                  <div>
-                                    <p className="text-xs text-emerald-400 font-medium uppercase">
-                                      Estimated ROI
-                                    </p>
-                                    <p className="text-sm text-slate-300">
-                                      {LEAK_FIXES[leak.type]?.roi || "Varies based on implementation"}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-3 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                                  <Clock className="h-5 w-5 text-blue-400" />
-                                  <div>
-                                    <p className="text-xs text-blue-400 font-medium uppercase">
-                                      Implementation Time
-                                    </p>
-                                    <p className="text-sm text-slate-300">
-                                      {LEAK_FIXES[leak.type]?.time || "1-2 weeks"}
-                                    </p>
-                                  </div>
-                                </div>
+                              <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                                <p className="text-xs text-blue-400 font-medium">Time to Fix</p>
+                                <p className="text-sm text-slate-200 mt-1">
+                                  {LEAK_FIXES[leak.type]?.time}
+                                </p>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </CardContent>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </Card>
             </motion.div>
           ))}
         </div>
       </motion.section>
 
-      {/* Action Plan */}
+      {/* Value Proposition Card - What Happens On Your Call */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -732,18 +713,86 @@ export default function Results() {
         className="py-8 px-4"
       >
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700">
+          <div className="p-8 rounded-2xl bg-gradient-to-br from-violet-500/10 to-indigo-500/10 border border-violet-500/20">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-violet-400" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  What Happens On Your Strategy Call
+                </h3>
+                <p className="text-slate-400">
+                  I'll personally walk you through your results and show you exactly how to fix your biggest leaks.
+                </p>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                <div>
+                  <div className="font-semibold text-white">Deep-dive into your top 3 leaks</div>
+                  <div className="text-sm text-slate-400">Which ones to fix first for maximum ROI</div>
+                </div>
+              </div>
+              
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                <div>
+                  <div className="font-semibold text-white">Custom implementation roadmap</div>
+                  <div className="text-sm text-slate-400">Timeline, systems, and exact steps to recover this revenue</div>
+                </div>
+              </div>
+              
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                <div>
+                  <div className="font-semibold text-white">ROI projections for each fix</div>
+                  <div className="text-sm text-slate-400">See exactly what to expect in 30/60/90 days</div>
+                </div>
+              </div>
+              
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                <div>
+                  <div className="font-semibold text-white">Decide if we're a fit to work together</div>
+                  <div className="text-sm text-slate-400">Zero pressure - just a conversation about your business</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-6 pt-6 border-t border-violet-500/20">
+              <Button 
+                size="lg"
+                onClick={() => setIsCalendlyOpen(true)}
+                className="w-full px-6 py-4 h-auto bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+              >
+                Book My 15-Minute Call
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Action Plan Section */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+        className="py-8 px-4"
+      >
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-slate-800/50 border-slate-700">
             <CardHeader>
               <CardTitle className="text-xl text-slate-200 flex items-center gap-2">
-                <Zap className="h-5 w-5 text-yellow-500" />
-                AI-Powered Action Plan
+                <Target className="h-5 w-5 text-emerald-400" />
+                Recommended Action Plan
               </CardTitle>
-              <p className="text-slate-400 text-sm">
-                Prioritized fixes based on impact and implementation effort
-              </p>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* Phase 1 */}
                 {criticalLeaks.length > 0 && (
                   <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
@@ -834,7 +883,7 @@ export default function Results() {
         </div>
       </motion.section>
 
-      {/* CTA Section */}
+      {/* Final CTA Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -842,10 +891,10 @@ export default function Results() {
         className="py-12 px-4"
       >
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-gradient-to-br from-emerald-900/50 to-slate-900 border-emerald-500/30">
+          <Card className="bg-gradient-to-br from-violet-900/50 to-slate-900 border-violet-500/30">
             <CardContent className="p-8 md:p-12 text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-slate-200 mb-4">
-                Want to fix these leaks?
+                Ready to fix these leaks?
               </h2>
               <p className="text-slate-400 mb-8 max-w-lg mx-auto">
                 Get a personalized implementation plan and learn how to recover{" "}
@@ -857,7 +906,8 @@ export default function Results() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   size="lg"
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white text-lg px-8"
+                  className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:shadow-lg hover:shadow-violet-500/50 text-white text-lg px-8 py-6 h-auto"
+                  onClick={() => setIsCalendlyOpen(true)}
                 >
                   <Phone className="h-5 w-5 mr-2" />
                   Book 15-Minute Strategy Call
@@ -865,7 +915,7 @@ export default function Results() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-slate-600 text-slate-300 hover:bg-slate-800 text-lg px-8"
+                  className="border-slate-600 text-slate-300 hover:bg-slate-800 text-lg px-8 py-6 h-auto"
                   onClick={handleDownloadPDF}
                 >
                   <Download className="h-5 w-5 mr-2" />
@@ -882,11 +932,46 @@ export default function Results() {
         <Button
           variant="ghost"
           className="text-slate-500 hover:text-slate-400"
-          onClick={() => navigate("/calculator")}
+          onClick={() => navigate("/")}
         >
-          ← Back to Calculator
+          ← Back to Home
         </Button>
       </div>
+
+      {/* Sticky CTA Bar */}
+      <AnimatePresence>
+        {showStickyBar && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800"
+          >
+            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-white">
+                  Ready to recover {formatCurrency(results.totalMonthlyLoss)}/month?
+                </div>
+                <div className="text-xs text-slate-400">
+                  Book your free strategy call to get started
+                </div>
+              </div>
+              <Button 
+                onClick={() => setIsCalendlyOpen(true)}
+                className="flex-shrink-0 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+              >
+                Book Free Call
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Calendly Modal */}
+      <CalendlyModal 
+        isOpen={isCalendlyOpen} 
+        onClose={() => setIsCalendlyOpen(false)} 
+      />
     </div>
   );
 }
