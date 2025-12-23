@@ -227,13 +227,8 @@ export const useCalculatorForm = () => {
         );
       case 4:
         return (
-          values.businessHoursStart.length > 0 &&
-          values.businessHoursEnd.length > 0 &&
-          values.answersAfterHours !== null &&
-          values.answersWeekends !== null &&
           values.missedCallRate.length > 0 &&
-          values.avgHoldTime >= 0 &&
-          values.avgHoldTime <= 30
+          values.answersAfterHours !== null
         );
       case 5:
         if (values.requiresAppointments === null) return false;

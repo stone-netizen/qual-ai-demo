@@ -1,5 +1,4 @@
 import { UseFormReturn } from "react-hook-form";
-import { Input } from "@/components/ui/input";
 import { FormField } from "./FormField";
 import { CalculatorFormData, MISSED_CALL_RATES } from "@/hooks/useCalculatorForm";
 import { cn } from "@/lib/utils";
@@ -10,168 +9,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Clock, CheckCircle2, XCircle, Info } from "lucide-react";
+import { CheckCircle2, XCircle, Info, Phone, PhoneOff } from "lucide-react";
 
 interface StepProps {
   form: UseFormReturn<CalculatorFormData>;
 }
 
 export const Step4Operations = ({ form }: StepProps) => {
-  const { register, formState: { errors }, watch, setValue } = form;
+  const { formState: { errors }, watch, setValue } = form;
   
-  const businessHoursStart = watch("businessHoursStart");
-  const businessHoursEnd = watch("businessHoursEnd");
-  const openSaturday = watch("openSaturday");
-  const openSunday = watch("openSunday");
   const answersAfterHours = watch("answersAfterHours");
-  const answersWeekends = watch("answersWeekends");
   const missedCallRate = watch("missedCallRate");
 
   return (
     <div className="space-y-6">
-      {/* Business Hours */}
-      <div className="space-y-4">
-        <label className="block text-sm font-medium text-slate-700">
-          Business Hours <span className="text-red-500">*</span>
-        </label>
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            label="Opens at"
-            error={errors.businessHoursStart?.message}
-          >
-            <div className="relative">
-              <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <Input
-                type="time"
-                value={businessHoursStart}
-                onChange={(e) => setValue("businessHoursStart", e.target.value)}
-                className={cn(
-                  "h-12 pl-12 bg-slate-50 border-slate-200 text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500",
-                  errors.businessHoursStart && "border-red-500"
-                )}
-              />
-            </div>
-          </FormField>
-          <FormField
-            label="Closes at"
-            error={errors.businessHoursEnd?.message}
-          >
-            <div className="relative">
-              <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <Input
-                type="time"
-                value={businessHoursEnd}
-                onChange={(e) => setValue("businessHoursEnd", e.target.value)}
-                className={cn(
-                  "h-12 pl-12 bg-slate-50 border-slate-200 text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500",
-                  errors.businessHoursEnd && "border-red-500"
-                )}
-              />
-            </div>
-          </FormField>
-        </div>
-      </div>
-
-      {/* Weekend Hours */}
-      <div className="p-4 bg-slate-50 rounded-xl space-y-3">
-        <p className="text-sm font-medium text-slate-700">Weekend Availability</p>
-        <div className="flex gap-6">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <Checkbox
-              checked={openSaturday}
-              onCheckedChange={(checked) => setValue("openSaturday", checked === true)}
-            />
-            <span className="text-sm text-slate-600">Open Saturday</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <Checkbox
-              checked={openSunday}
-              onCheckedChange={(checked) => setValue("openSunday", checked === true)}
-            />
-            <span className="text-sm text-slate-600">Open Sunday</span>
-          </label>
-        </div>
-      </div>
-
-      {/* After Hours Response */}
-      <FormField
-        label="Do you answer calls after hours?"
-        required
-        error={errors.answersAfterHours?.message}
-        helpText="Via answering service, voicemail callback, etc."
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setValue("answersAfterHours", true)}
-            className={cn(
-              "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
-              answersAfterHours === true
-                ? "border-emerald-500 bg-emerald-50"
-                : "border-slate-200 hover:border-slate-300 bg-white"
-            )}
-          >
-            <CheckCircle2 className={cn("w-5 h-5", answersAfterHours === true ? "text-emerald-500" : "text-slate-300")} />
-            <span className={cn("font-medium", answersAfterHours === true ? "text-emerald-700" : "text-slate-600")}>Yes</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setValue("answersAfterHours", false)}
-            className={cn(
-              "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
-              answersAfterHours === false
-                ? "border-emerald-500 bg-emerald-50"
-                : "border-slate-200 hover:border-slate-300 bg-white"
-            )}
-          >
-            <XCircle className={cn("w-5 h-5", answersAfterHours === false ? "text-emerald-500" : "text-slate-300")} />
-            <span className={cn("font-medium", answersAfterHours === false ? "text-emerald-700" : "text-slate-600")}>No</span>
-          </button>
-        </div>
-      </FormField>
-
-      {/* Weekend Response */}
-      <FormField
-        label="Do you answer calls on weekends?"
-        required
-        error={errors.answersWeekends?.message}
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => setValue("answersWeekends", true)}
-            className={cn(
-              "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
-              answersWeekends === true
-                ? "border-emerald-500 bg-emerald-50"
-                : "border-slate-200 hover:border-slate-300 bg-white"
-            )}
-          >
-            <CheckCircle2 className={cn("w-5 h-5", answersWeekends === true ? "text-emerald-500" : "text-slate-300")} />
-            <span className={cn("font-medium", answersWeekends === true ? "text-emerald-700" : "text-slate-600")}>Yes</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setValue("answersWeekends", false)}
-            className={cn(
-              "flex items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
-              answersWeekends === false
-                ? "border-emerald-500 bg-emerald-50"
-                : "border-slate-200 hover:border-slate-300 bg-white"
-            )}
-          >
-            <XCircle className={cn("w-5 h-5", answersWeekends === false ? "text-emerald-500" : "text-slate-300")} />
-            <span className={cn("font-medium", answersWeekends === false ? "text-emerald-700" : "text-slate-600")}>No</span>
-          </button>
-        </div>
-      </FormField>
-
-      {/* Missed Call Rate */}
+      {/* Missed Call Rate - Primary Question */}
       <FormField
         label="How often do you miss incoming calls?"
         required
         error={errors.missedCallRate?.message}
+        helpText="During business hours when you're busy"
       >
         <Select value={missedCallRate} onValueChange={(value) => setValue("missedCallRate", value)}>
           <SelectTrigger
@@ -180,7 +37,8 @@ export const Step4Operations = ({ form }: StepProps) => {
               errors.missedCallRate && "border-red-500"
             )}
           >
-            <SelectValue placeholder="Select missed call rate" />
+            <PhoneOff className="w-5 h-5 text-slate-400 mr-2" />
+            <SelectValue placeholder="Select how often" />
           </SelectTrigger>
           <SelectContent className="bg-white border-slate-200 shadow-lg z-50">
             {MISSED_CALL_RATES.map((rate) => (
@@ -198,28 +56,77 @@ export const Step4Operations = ({ form }: StepProps) => {
         )}
       </FormField>
 
-      {/* Average Hold Time */}
+      {/* After Hours & Weekend Call Handling */}
       <FormField
-        label="Average Hold Time"
+        label="Do you have a system to handle calls after hours and on weekends?"
         required
-        error={errors.avgHoldTime?.message}
-        helpText="In minutes before someone answers"
+        error={errors.answersAfterHours?.message}
+        helpText="Answering service, voicemail callback system, or staff on-call"
       >
-        <div className="relative">
-          <Input
-            type="number"
-            placeholder="2"
-            min={0}
-            max={30}
-            {...register("avgHoldTime", { valueAsNumber: true })}
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            type="button"
+            onClick={() => {
+              setValue("answersAfterHours", true);
+              setValue("answersWeekends", true);
+            }}
             className={cn(
-              "h-12 bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 pr-20",
-              errors.avgHoldTime && "border-red-500"
+              "flex flex-col items-center gap-3 p-5 rounded-xl border-2 transition-all duration-200",
+              answersAfterHours === true
+                ? "border-emerald-500 bg-emerald-50"
+                : "border-slate-200 hover:border-slate-300 bg-white"
             )}
-          />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">minutes</span>
+          >
+            <Phone className={cn("w-8 h-8", answersAfterHours === true ? "text-emerald-500" : "text-slate-300")} />
+            <div className="text-center">
+              <span className={cn("font-medium block", answersAfterHours === true ? "text-emerald-700" : "text-slate-600")}>
+                Yes
+              </span>
+              <span className="text-xs text-slate-500">Calls get handled</span>
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setValue("answersAfterHours", false);
+              setValue("answersWeekends", false);
+            }}
+            className={cn(
+              "flex flex-col items-center gap-3 p-5 rounded-xl border-2 transition-all duration-200",
+              answersAfterHours === false
+                ? "border-emerald-500 bg-emerald-50"
+                : "border-slate-200 hover:border-slate-300 bg-white"
+            )}
+          >
+            <PhoneOff className={cn("w-8 h-8", answersAfterHours === false ? "text-emerald-500" : "text-slate-300")} />
+            <div className="text-center">
+              <span className={cn("font-medium block", answersAfterHours === false ? "text-emerald-700" : "text-slate-600")}>
+                No
+              </span>
+              <span className="text-xs text-slate-500">Calls go unanswered</span>
+            </div>
+          </button>
         </div>
       </FormField>
+
+      {/* Contextual info based on selection */}
+      {answersAfterHours === false && (
+        <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
+          <p className="text-sm text-amber-800 font-medium">Potential Revenue Leak</p>
+          <p className="text-sm text-amber-700 mt-1">
+            Research shows 78% of customers buy from whoever responds first. Calls outside business hours often go to competitors.
+          </p>
+        </div>
+      )}
+
+      {answersAfterHours === true && (
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+          <p className="text-sm text-emerald-800 font-medium">Great!</p>
+          <p className="text-sm text-emerald-700 mt-1">
+            Having a system to capture after-hours leads gives you a competitive advantage.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
