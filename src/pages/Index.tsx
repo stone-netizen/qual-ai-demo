@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { motion } from "framer-motion";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { KPICard } from "@/components/dashboard/KPICard";
@@ -20,14 +21,26 @@ export default function Index() {
   const { data: settings } = useSettings();
   const { mutate: updateSettings } = useUpdateSettings();
 
-  const handleSettingsChange = (projectValue: number, missedCalls: number) => {
-    if (settings && (settings.avg_project_value !== projectValue || settings.missed_calls_per_month !== missedCalls)) {
-      updateSettings({
-        avg_project_value: projectValue,
-        missed_calls_per_month: missedCalls,
-      });
-    }
-  };
+  const handleSettingsChange = useCallback(
+    (projectValue: number, missedCalls: number) => {
+      if (!settings) return;
+      if (
+        settings.avg_project_value !== projectValue ||
+        settings.missed_calls_per_month !== missedCalls
+      ) {
+        updateSettings({
+          avg_project_value: projectValue,
+          missed_calls_per_month: missedCalls,
+        });
+      }
+    },
+    [
+      settings?.avg_project_value,
+      settings?.missed_calls_per_month,
+      updateSettings,
+      settings,
+    ]
+  );
 
   // Get top 5 leads for "Top Opportunities" preview
   const topOpportunities = [...leads]
