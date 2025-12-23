@@ -47,7 +47,6 @@ export const Step7Reactivation = ({ form }: StepProps) => {
   const everRecontactedDormant = watch("everRecontactedDormant");
   const hasPastCustomers = watch("hasPastCustomers");
   const sendsReengagementCampaigns = watch("sendsReengagementCampaigns");
-  const repeatCustomers = watch("repeatCustomers");
   const avgPurchasesPerCustomer = watch("avgPurchasesPerCustomer") || 1;
   const avgTransactionValue = watch("avgTransactionValue") || 0;
   
@@ -501,83 +500,63 @@ export const Step7Reactivation = ({ form }: StepProps) => {
         </div>
 
         <FormField
-          label="Do customers typically make repeat purchases?"
+          label="Average Purchases Per Customer (Lifetime)"
           required
-          error={errors.repeatCustomers?.message}
-          helpText="Multiple visits, ongoing services, subscriptions, etc."
+          error={errors.avgPurchasesPerCustomer?.message}
+          helpText="How many times does a typical customer buy from you? (Enter 1 for one-time purchases)"
         >
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              type="button"
-              onClick={() => setValue("repeatCustomers", true)}
-              className={cn(
-                "flex flex-col items-center gap-3 p-5 rounded-xl border-2 transition-all duration-200",
-                repeatCustomers === true
-                  ? "border-emerald-500 bg-emerald-50"
-                  : "border-slate-200 hover:border-slate-300 bg-white"
-              )}
-            >
-              <Repeat className={cn("w-7 h-7", repeatCustomers === true ? "text-emerald-500" : "text-slate-300")} />
-              <span className={cn("font-medium", repeatCustomers === true ? "text-emerald-700" : "text-slate-600")}>Yes</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setValue("repeatCustomers", false)}
-              className={cn(
-                "flex flex-col items-center gap-3 p-5 rounded-xl border-2 transition-all duration-200",
-                repeatCustomers === false
-                  ? "border-emerald-500 bg-emerald-50"
-                  : "border-slate-200 hover:border-slate-300 bg-white"
-              )}
-            >
-              <XCircle className={cn("w-7 h-7", repeatCustomers === false ? "text-emerald-500" : "text-slate-300")} />
-              <span className={cn("font-medium", repeatCustomers === false ? "text-emerald-700" : "text-slate-600")}>No</span>
-            </button>
-          </div>
+          <Input
+            type="number"
+            placeholder="1"
+            min={1}
+            max={50}
+            {...register("avgPurchasesPerCustomer", { valueAsNumber: true })}
+            className={cn(
+              "h-12 bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500",
+              errors.avgPurchasesPerCustomer && "border-red-500"
+            )}
+          />
         </FormField>
 
+        {/* Contextual messaging based on value */}
         <AnimatePresence mode="wait">
-          {repeatCustomers === true && (
+          {avgPurchasesPerCustomer === 1 && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-6 overflow-hidden"
+              className="overflow-hidden"
             >
-              <FormField
-                label="Average Purchases Per Customer (Lifetime)"
-                required
-                error={errors.avgPurchasesPerCustomer?.message}
-                helpText="How many times does a typical customer buy from you?"
-              >
-                <Input
-                  type="number"
-                  placeholder="3"
-                  min={1}
-                  max={50}
-                  {...register("avgPurchasesPerCustomer", { valueAsNumber: true })}
-                  className={cn(
-                    "h-12 bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500",
-                    errors.avgPurchasesPerCustomer && "border-red-500"
-                  )}
-                />
-              </FormField>
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <p className="text-sm text-slate-600">
+                  <span className="font-medium text-slate-700">Single transaction business</span> — Each new customer represents one sale.
+                </p>
+              </div>
+            </motion.div>
+          )}
 
-              {/* LTV Display */}
-              {avgTransactionValue > 0 && (
-                <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center">
-                      <DollarSign className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-emerald-700">Customer Lifetime Value</p>
-                      <p className="text-xl font-bold text-emerald-900">{formatCurrency(ltv)}</p>
-                    </div>
+          {avgPurchasesPerCustomer > 1 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center">
+                    <Repeat className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-emerald-700">Repeat customers multiply every lead's value</p>
+                    {avgTransactionValue > 0 && (
+                      <p className="text-lg font-bold text-emerald-900">LTV: {formatCurrency(ltv)}</p>
+                    )}
                   </div>
                 </div>
-              )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

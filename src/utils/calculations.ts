@@ -98,7 +98,7 @@ const MISSED_CALL_RATES: Record<string, number> = {
 // Helper function to get LTV (for LOST LEADS - new business never closed)
 function getLTV(data: CalculatorFormData): number {
   const avgTransaction = data.avgTransactionValue || 0;
-  const repeatPurchases = data.repeatCustomers ? (data.avgPurchasesPerCustomer || 1) : 1;
+  const repeatPurchases = data.avgPurchasesPerCustomer || 1;
   return avgTransaction * repeatPurchases;
 }
 
