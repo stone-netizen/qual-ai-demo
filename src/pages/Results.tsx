@@ -11,6 +11,7 @@ import { HeroSection } from "@/components/results/HeroSection";
 import { ConstraintSummaryCard } from "@/components/results/ConstraintSummaryCard";
 import { QuickWinCard } from "@/components/results/QuickWinCard";
 import { LeakBreakdownGrid } from "@/components/results/LeakBreakdownGrid";
+import { DoNothingCost } from "@/components/results/DoNothingCost";
 import { StrategyCallTimeline } from "@/components/results/StrategyCallTimeline";
 import { MethodologyDrawer } from "@/components/results/MethodologyDrawer";
 
@@ -141,6 +142,13 @@ export default function Results() {
           totalLoss={results.totalMonthlyLoss}
           onViewSolution={handleViewSolution}
         />
+
+        {/* Do Nothing Cost Section */}
+        <section className="py-8 lg:py-12 px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto">
+            <DoNothingCost monthlyLoss={results.totalMonthlyLoss} />
+          </div>
+        </section>
 
         {/* Strategy Call Timeline */}
         <StrategyCallTimeline onBookCall={() => setIsCalendlyOpen(true)} />
