@@ -141,6 +141,10 @@ export default {
         "scale-in": "scale-in 0.3s ease-out",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
       },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
       boxShadow: {
         "glow-sm": "0 0 20px -5px hsl(var(--primary) / 0.3)",
         "glow-md": "0 0 40px -10px hsl(var(--primary) / 0.4)",

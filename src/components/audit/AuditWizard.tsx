@@ -54,7 +54,7 @@ export function AuditWizard({ trigger }: AuditWizardProps) {
       });
       setOpen(false);
       reset();
-      // TODO: Trigger Live Scan Mode here
+      // Future: Trigger Live Scan Mode here
     } catch (error) {
       console.error("Failed to create lead:", error);
     } finally {
@@ -96,7 +96,7 @@ export function AuditWizard({ trigger }: AuditWizardProps) {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto glass-strong border-primary/20">
+      <DialogContent className="max-w-2xl max-h-[90dvh] overflow-y-auto glass-strong border-primary/20">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-bold text-foreground">

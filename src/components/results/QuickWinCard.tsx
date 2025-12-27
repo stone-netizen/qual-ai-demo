@@ -1,119 +1,112 @@
 import { motion } from "framer-motion";
-import { Zap, Users, DollarSign, Clock, ArrowRight, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { formatCurrencyRangeCompact, ReactivationLeak } from "@/utils/calculations";
+import { formatCurrency, ReactivationLeak } from "@/utils/calculations";
 
 interface QuickWinCardProps {
   reactivation: ReactivationLeak;
   onViewPlan: () => void;
+  compact?: boolean;
 }
 
-export function QuickWinCard({ reactivation, onViewPlan }: QuickWinCardProps) {
+export function QuickWinCard({ reactivation, onViewPlan, compact = false }: QuickWinCardProps) {
   const dormantCount = reactivation.dormantLeads?.viableLeads || 0;
   const pastCount = reactivation.pastCustomers?.winnableCustomers || 0;
   const totalContacts = dormantCount + pastCount;
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-card via-card to-emerald-950/20 border border-success/20"
-    >
-      {/* Corner accent */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-success/20 to-transparent" />
-      
-      {/* Grid pattern */}
-      <div className="absolute inset-0 pattern-dots opacity-30" />
 
-      <div className="relative p-6 lg:p-8">
-        {/* Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-success/10 border border-success/20 flex items-center justify-center">
-                <Zap className="w-6 h-6 text-success" />
+  if (compact) {
+    return (
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-amber-500/10 border border-amber-500/20 p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
               </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-success flex items-center justify-center">
-                <Sparkles className="w-2.5 h-2.5 text-success-foreground" />
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-bold text-amber-300 uppercase tracking-widest">
+                    Fastest Win (Optional)
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white">Dormant Lead Reactivation</h3>
+                <p className="text-xs text-amber-200/50 mt-0.5">Estimated {formatCurrency(reactivation.monthlyLoss)}/mo in warm-lead recovery</p>
               </div>
             </div>
-            
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success border border-success/20">
-                  Quick Win
-                </span>
-              </div>
-              <h3 className="text-lg font-semibold text-foreground">
-                Dormant Lead Reactivation
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Fastest path to recovered revenue
-              </p>
-            </div>
+            <button
+              onClick={onViewPlan}
+              className="px-6 py-2.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest rounded-lg transition-all"
+            >
+              Preview Plan
+            </button>
           </div>
         </div>
-
-        {/* Stats grid */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="p-4 rounded-xl bg-secondary/50 border border-border">
-            <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <Users className="w-4 h-4" />
-              <span className="text-xs font-medium">Contacts</span>
-            </div>
-            <p className="text-2xl font-bold text-foreground font-numeric">{totalContacts}</p>
-            <p className="text-xs text-muted-foreground">Dormant leads</p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-secondary/50 border border-border">
-            <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <DollarSign className="w-4 h-4" />
-              <span className="text-xs font-medium">Monthly</span>
-            </div>
-            <p className="text-xl font-bold text-success font-numeric">
-              {formatCurrencyRangeCompact(reactivation.monthlyLossRange)}
-            </p>
-            <p className="text-xs text-muted-foreground">Projected recovery</p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-secondary/50 border border-border">
-            <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <Clock className="w-4 h-4" />
-              <span className="text-xs font-medium">Timeline</span>
-            </div>
-            <p className="text-2xl font-bold text-foreground font-numeric">7d</p>
-            <p className="text-xs text-muted-foreground">To first result</p>
-          </div>
-        </div>
-
-        {/* Info box */}
-        <div className="p-4 rounded-xl bg-success/5 border border-success/10 mb-6">
-          <div className="flex gap-3">
-            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-success" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-foreground mb-1">
-                These are warm leads who already know you
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Industry data: 22% reactivation rate with personalized outreach. No ad spend required.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <Button
-          onClick={onViewPlan}
-          className="w-full h-12 bg-success hover:bg-success/90 text-success-foreground font-semibold rounded-xl"
-        >
-          Let's Build Your Reactivation Campaign
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
       </div>
-    </motion.div>
+    );
+  }
+
+  return (
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-20">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-amber-500/10 border border-amber-500/20 backdrop-blur-xl"
+      >
+        {/* Glow effect */}
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-amber-500/20 rounded-full blur-3xl" />
+
+        <div className="relative p-6 sm:p-10 space-y-6">
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center animate-pulse">
+              <svg className="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <div className="inline-block px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-xs font-bold text-amber-300 uppercase tracking-wide mb-2">
+                Quick Win
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Dormant Lead Reactivation</h3>
+              <p className="text-sm text-amber-200/70 mt-1">Fastest money to recover • No ad spend needed</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div className="p-5 sm:p-6 rounded-2xl bg-black/30 border border-amber-500/10">
+              <div className="text-xs text-amber-200/50 uppercase tracking-wider mb-2">Recovery</div>
+              <div className="text-3xl sm:text-4xl font-black text-white tabular-nums mb-1">{formatCurrency(reactivation.monthlyLoss)}</div>
+              <div className="text-sm text-amber-200/60">per month</div>
+            </div>
+            <div className="p-5 sm:p-6 rounded-2xl bg-black/30 border border-amber-500/10">
+              <div className="text-xs text-amber-200/50 uppercase tracking-wider mb-2">Contacts</div>
+              <div className="text-3xl sm:text-4xl font-black text-white tabular-nums mb-1">{totalContacts}</div>
+              <div className="text-sm text-amber-200/60">warm leads</div>
+            </div>
+            <div className="p-5 sm:p-6 rounded-2xl bg-amber-500/20 border border-amber-500/30">
+              <div className="text-xs text-amber-200/70 uppercase tracking-wider mb-2">Timeline</div>
+              <div className="text-4xl sm:text-5xl font-black text-amber-400 tabular-nums mb-1">7d</div>
+              <div className="text-sm sm:text-base font-semibold text-amber-200">to first results</div>
+            </div>
+          </div>
+
+          <div className="p-4 sm:p-5 rounded-xl bg-amber-500/5 border border-amber-500/10">
+            <p className="text-sm text-slate-200 leading-relaxed">
+              You have <span className="font-semibold text-white">{dormantCount} dormant contacts</span> and{" "}
+              <span className="font-semibold text-white">{pastCount} past customers</span> who haven&apos;t bought in 6-12 months.
+              Industry data shows <span className="font-semibold text-amber-400">22% reactivation rate</span> with proper outreach.
+            </p>
+          </div>
+
+          <button
+            onClick={onViewPlan}
+            className="w-full px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold rounded-xl transition-all hover:scale-[1.02]"
+          >
+            See what reactivation would look like →
+          </button>
+        </div>
+      </motion.div>
+    </div>
   );
 }

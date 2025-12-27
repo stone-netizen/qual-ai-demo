@@ -13,6 +13,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Leads from "./pages/Leads";
 import BulkUpload from "./pages/BulkUpload";
+import VSL from "./pages/VSL";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/results" element={<Results />} />
+            <Route path="/vsl" element={<VSL />} />
             <Route path="/leak-dashboard" element={<LeakDashboard />} />
             <Route path="/auth" element={<Auth />} />
             <Route

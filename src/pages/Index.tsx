@@ -127,7 +127,7 @@ export default function Index() {
                       <span className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">
                         {index + 1}
                       </span>
-                      <span className="text-sm font-medium text-foreground truncate max-w-[180px]">
+                      <span className="text-sm font-medium text-foreground truncate max-w-[120px] sm:max-w-[180px]">
                         {lead.business_name}
                       </span>
                     </div>

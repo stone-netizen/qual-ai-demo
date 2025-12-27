@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Clock, Wrench, Zap } from "lucide-react";
-import { formatCurrencyRangeCompact, Leak } from "@/utils/calculations";
+import { formatCurrency, Leak } from "@/utils/calculations";
 
 interface ConstraintSummaryCardProps {
   primaryConstraint: Leak;
@@ -84,7 +84,7 @@ export function ConstraintSummaryCard({ primaryConstraint }: ConstraintSummaryCa
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1">Estimated Impact</p>
               <p className="text-xl font-bold text-foreground font-numeric">
-                {formatCurrencyRangeCompact(primaryConstraint.monthlyLossRange)}/month
+                {formatCurrency(primaryConstraint.monthlyLoss)}/month
               </p>
             </div>
           </div>

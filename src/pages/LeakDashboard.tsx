@@ -69,7 +69,7 @@ export default function LeakDashboard() {
   const [sortColumn, setSortColumn] = useState<"rank" | "monthlyLoss" | "severity">("rank");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [filter, setFilter] = useState<"all" | "critical" | "quickwin">("all");
-  
+
 
   useEffect(() => {
     const saved = localStorage.getItem(RESULTS_STORAGE_KEY);
@@ -157,7 +157,7 @@ export default function LeakDashboard() {
   const reactivationValue = results.reactivationOpportunity?.monthlyLoss || 0;
   const operationalLeaks = results.operationalLeaks || results.leaks || [];
   const operationalValue = operationalLeaks.reduce((sum: number, l: any) => sum + (l.monthlyLoss || 0), 0);
-  const quickWinROI = results.reactivationOpportunity?.expectedROI ? 
+  const quickWinROI = results.reactivationOpportunity?.expectedROI ?
     parseFloat(results.reactivationOpportunity.expectedROI.split("-")[0]) : 0;
 
   // Implementation progress (mock data - would come from database in real app)
@@ -174,11 +174,11 @@ export default function LeakDashboard() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <div className="text-lg font-bold bg-gradient-to-r from-violet-400 to-indigo-400 text-transparent bg-clip-text">
-                  LeakDetector
+                  Maverick Growth Systems
                 </div>
               </div>
               <p className="text-slate-400 text-sm">
-                Business: <span className="text-slate-200">{formData.businessName}</span> | 
+                Business: <span className="text-slate-200">{formData.businessName}</span> |
                 Industry: <span className="text-slate-200">{formData.industry}</span>
               </p>
             </div>
@@ -319,8 +319,8 @@ export default function LeakDashboard() {
                       dataFreshness === "Fresh"
                         ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
                         : dataFreshness === "Recent"
-                        ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
-                        : "bg-red-500/20 text-red-400 border-red-500/30"
+                          ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                          : "bg-red-500/20 text-red-400 border-red-500/30"
                     }
                   >
                     {dataFreshness}
@@ -553,9 +553,9 @@ export default function LeakDashboard() {
       </footer>
 
       {/* Calendly Modal */}
-      <CalendlyModal 
-        isOpen={isCalendlyOpen} 
-        onClose={() => setIsCalendlyOpen(false)} 
+      <CalendlyModal
+        isOpen={isCalendlyOpen}
+        onClose={() => setIsCalendlyOpen(false)}
       />
     </div>
   );

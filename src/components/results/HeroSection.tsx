@@ -1,168 +1,110 @@
 import { motion } from "framer-motion";
-import { AlertTriangle, ArrowRight, TrendingDown, Calendar } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { formatCurrencyRangeCompact, ValueRange } from "@/utils/calculations";
+import { formatCurrency } from "@/utils/calculations";
 
 interface HeroSectionProps {
   businessName: string;
   industry?: string;
   monthlyLoss: number;
   annualLoss: number;
-  monthlyLossRange: ValueRange;
-  annualLossRange: ValueRange;
+  percentOfRevenue: number;
+  leakCount: number;
+  totalRange: { low: number; mid: number; high: number };
   onBookCall: () => void;
 }
 
-export function HeroSection({
+export const HeroSection = ({
   businessName,
-  industry,
   monthlyLoss,
-  annualLoss,
-  monthlyLossRange,
-  annualLossRange,
+  percentOfRevenue,
+  leakCount,
+  totalRange,
   onBookCall,
-}: HeroSectionProps) {
-  // Calculate percentage (assuming ~$100k monthly revenue for context)
-  const estimatedPercentage = Math.min(Math.round((monthlyLoss / 85000) * 100), 45);
-
+}: HeroSectionProps) => {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Animated grid background */}
-      <div className="absolute inset-0 pattern-grid opacity-40" />
-      
-      {/* Gradient orbs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-destructive/20 via-destructive/5 to-transparent blur-3xl animate-pulse-slow" />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-gradient-radial from-primary/10 via-primary/5 to-transparent blur-2xl" />
-      
-      {/* Noise overlay */}
-      <div className="absolute inset-0 noise" />
+    <section className="relative pt-12 pb-16 px-4 sm:px-6 overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-emerald-500/5 via-transparent to-transparent opacity-50 pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-24">
+      <div className="max-w-4xl mx-auto relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
+          className="space-y-8"
         >
-          {/* Business badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-secondary/80 border border-border mb-8"
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
-              <span className="text-sm font-medium text-foreground">{businessName}</span>
-            </div>
-            {industry && (
-              <>
-                <div className="w-px h-4 bg-border" />
-                <span className="text-sm text-muted-foreground">{industry}</span>
-              </>
-            )}
-          </motion.div>
+          {/* Top Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Verified Operational Diagnosis
+          </div>
 
-          {/* Alert banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive mb-8"
-          >
-            <AlertTriangle className="w-4 h-4" />
-            <span className="text-sm font-medium">Critical Revenue Leaks Detected</span>
-          </motion.div>
+          {/* Title */}
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white uppercase leading-[0.9]">
+            {businessName}&apos;s <span className="text-emerald-500">Revenue Leak</span>
+          </h1>
 
-          {/* The big reveal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="mb-8"
-          >
-            <p className="text-lg sm:text-xl text-muted-foreground mb-4">
-              Estimated recoverable revenue
-            </p>
-            
-            {/* HERO NUMBER - Now a range */}
-            <div className="relative inline-block">
-              <span className="hero-number text-gradient-destructive font-numeric">
-                {formatCurrencyRangeCompact(monthlyLossRange)}
-              </span>
-              
-              {/* Glow effect behind number */}
-              <div className="absolute inset-0 blur-3xl bg-destructive/30 -z-10 scale-150" />
+          {/* Centered Large Box */}
+          <div className="relative py-12 px-8 rounded-[2.5rem] bg-black border border-white/5 backdrop-blur-sm overflow-hidden group shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
+
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Estimated Monthly Loss</p>
+            <div className="flex items-center justify-center gap-2 text-6xl md:text-8xl font-black text-white tracking-tighter tabular-nums mb-4">
+              <span>{formatCurrency(totalRange.low)}</span>
+              <span className="text-slate-500 opacity-50">–</span>
+              <span>{formatCurrency(totalRange.high)}</span>
             </div>
 
-            <div className="mt-4 space-y-2">
-              <p className="text-xl sm:text-2xl text-muted-foreground">
-                per month in fixable leaks
-              </p>
-              <p className="text-2xl sm:text-3xl font-bold text-foreground font-numeric">
-                {formatCurrencyRangeCompact(annualLossRange)} annually
-              </p>
-              <p className="text-xs text-muted-foreground mt-2">
-                (confidence-adjusted range)
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20">
+                <AlertTriangle className="w-5 h-5 text-emerald-500" />
+                <span>{percentOfRevenue}% of Revenue Leaking</span>
+              </div>
+
+              <div className="w-full max-w-sm space-y-4 relative z-20">
+                <Link
+                  to="/vsl"
+                  className="w-full h-16 bg-emerald-500 hover:bg-emerald-400 text-black text-xl font-black uppercase italic rounded-2xl shadow-[0_20px_40px_rgba(16,185,129,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center no-underline"
+                >
+                  Confirm Technical Review
+                </Link>
+                <div className="flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                  <span>Technical Verification</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-700" />
+                  <span>15 Minutes</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-700" />
+                  <span>No Sales Pitch</span>
+                </div>
+              </div>
+
+              <p className="text-slate-400 font-medium text-sm max-w-md">
+                "This report identifies directional leakage based on your trailing performance data."
               </p>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Comparison badge */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-destructive/5 border border-destructive/10 mb-10"
-          >
-            <TrendingDown className="w-4 h-4 text-destructive" />
-            <span className="text-sm text-muted-foreground">
-              Losing approximately <span className="text-destructive font-medium">{estimatedPercentage}%</span> of potential revenue
-            </span>
-          </motion.div>
-
-          {/* Primary CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-col items-center gap-4"
-          >
-            <Button
-              size="lg"
-              onClick={onBookCall}
-              className="h-14 px-8 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-glow-md btn-shine"
-            >
-              Book Your Free Strategy Call
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Calendar className="w-4 h-4" />
-              <span>15 minutes • Zero pressure • Free action plan</span>
+          {/* Secondary Stats Row */}
+          <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+            <div className="p-6 rounded-2xl bg-black border border-white/5">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Annual Exposure</div>
+              <div className="text-xl font-bold text-white tracking-tight">
+                {formatCurrency(totalRange.low * 12)}–{formatCurrency(totalRange.high * 12)}
+              </div>
             </div>
-          </motion.div>
+            <div className="p-6 rounded-2xl bg-black border border-white/5">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">Priority Gaps</div>
+              <div className="text-xl font-bold text-white tracking-tight">
+                {leakCount} Critical Point{leakCount !== 1 ? 's' : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+            Benchmarked against 200+ service operations
+          </div>
         </motion.div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <div className="flex flex-col items-center gap-2 text-muted-foreground">
-          <span className="text-xs">Scroll to see breakdown</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="w-6 h-10 rounded-full border-2 border-border flex items-start justify-center p-2"
-          >
-            <div className="w-1 h-2 rounded-full bg-muted-foreground" />
-          </motion.div>
-        </div>
-      </motion.div>
     </section>
   );
-}
+};

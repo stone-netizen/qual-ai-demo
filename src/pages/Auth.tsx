@@ -50,8 +50,8 @@ export default function Auth() {
       if (error) {
         toast({
           title: "Login Failed",
-          description: error.message === "Invalid login credentials" 
-            ? "Invalid email or password. Please try again." 
+          description: error.message === "Invalid login credentials"
+            ? "Invalid email or password. Please try again."
             : error.message,
           variant: "destructive",
         });
@@ -76,7 +76,7 @@ export default function Auth() {
       } else {
         toast({
           title: "Account Created!",
-          description: "Welcome to ProfitGuard AI.",
+          description: "Welcome to Maverick Growth Systems.",
         });
         navigate("/");
       }
@@ -95,16 +95,8 @@ export default function Auth() {
         >
           {/* Logo and Branding */}
           <div className="text-center mb-8">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/20 border border-primary/30 mb-4 glow-primary"
-            >
-              <Shield className="w-8 h-8 text-primary" />
-            </motion.div>
             <h1 className="text-3xl font-bold text-foreground tracking-tight">
-              ProfitGuard AI
+              Maverick Growth Systems
             </h1>
             <p className="text-muted-foreground mt-2">
               Revenue Leak Diagnostic Platform
@@ -197,7 +189,7 @@ export default function Auth() {
               <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 mb-2">
                 <Shield className="w-5 h-5 text-primary" />
               </div>
-              <p className="text-xs text-muted-foreground">GBP Analysis</p>
+              <p className="text-xs text-muted-foreground">Systems Audit</p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-success/10 border border-success/20 mb-2">

@@ -37,9 +37,8 @@ function ReviewItem({
       </div>
       {isBoolean ? (
         <span
-          className={`flex items-center gap-1 text-sm font-medium ${
-            value ? "text-green-400" : "text-red-400"
-          }`}
+          className={`flex items-center gap-1 text-sm font-medium ${value ? "text-green-400" : "text-red-400"
+            }`}
         >
           {value ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
           {value ? "Yes" : "No"}

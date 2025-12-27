@@ -200,7 +200,7 @@ export const useCalculatorForm = () => {
           setCurrentStep(parsed.currentStep);
         }
       } catch (e) {
-        console.error("Failed to parse saved form data");
+        // console.error("Failed to parse saved form data");
       }
     }
   }, [form]);
@@ -273,36 +273,36 @@ export const useCalculatorForm = () => {
       case 7: {
         // At least ONE of hasDormantLeads OR hasPastCustomers must be answered
         if (values.hasDormantLeads === null && values.hasPastCustomers === null) return false;
-        
+
         // If hasDormantLeads is true, need more fields
         if (values.hasDormantLeads === true) {
           if (!values.totalDormantLeads || values.totalDormantLeads < 1) return false;
           if (!values.databaseAge) return false;
           if (values.everRecontactedDormant === null || values.everRecontactedDormant === undefined) return false;
-          
+
           // If they have recontacted, need more fields
           if (values.everRecontactedDormant === true) {
             if (values.percentageRecontactedDormant === undefined) return false;
             if (values.dormantResponseCount === undefined) return false;
           }
         }
-        
+
         // If hasPastCustomers is true, need more fields
         if (values.hasPastCustomers === true) {
           if (!values.numPastCustomers || values.numPastCustomers < 1) return false;
           if (!values.avgTimeSinceLastPurchase) return false;
           if (values.sendsReengagementCampaigns === null || values.sendsReengagementCampaigns === undefined) return false;
-          
+
           // If they send reengagement campaigns, need more fields
           if (values.sendsReengagementCampaigns === true) {
             if (!values.reengagementFrequency) return false;
             if (values.reengagementResponseRate === undefined) return false;
           }
         }
-        
+
         // Customer value validation (simplified - just need avgPurchasesPerCustomer >= 1)
         if (!values.avgPurchasesPerCustomer || values.avgPurchasesPerCustomer < 1) return false;
-        
+
         return true;
       }
       default:

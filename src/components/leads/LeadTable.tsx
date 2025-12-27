@@ -81,7 +81,7 @@ export function LeadTable({
   }
 
   return (
-    <div className="glass rounded-xl border border-border overflow-hidden">
+    <div className="glass rounded-xl border border-border overflow-hidden overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow className="border-border hover:bg-transparent">
@@ -150,8 +150,8 @@ export function LeadTable({
                       latestAudit?.leak_amount && latestAudit.leak_amount > 50000
                         ? "text-leak-critical"
                         : latestAudit?.leak_amount && latestAudit.leak_amount > 20000
-                        ? "text-leak-warning"
-                        : "text-foreground"
+                          ? "text-leak-warning"
+                          : "text-foreground"
                     )}
                   >
                     {formatCurrency(latestAudit?.leak_amount ? Number(latestAudit.leak_amount) : null)}

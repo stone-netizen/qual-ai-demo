@@ -1,201 +1,166 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Zap, Phone, Clock, TrendingUp, Calendar, Target, AlertCircle } from "lucide-react";
-import { formatCurrencyRangeCompact, Leak } from "@/utils/calculations";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
+import { AlertTriangle, ChevronDown, ChevronUp, ChevronRight } from "lucide-react";
+import { formatCurrency, Leak } from "@/utils/calculations";
 
 interface LeakCardProps {
   leak: Leak;
+  industry: string;
+  isOpen: boolean;
+  onToggle: (isOpen: boolean) => void;
+  onBookCall: () => void;
   rank: number;
-  totalLoss: number;
-  onViewSolution: () => void;
 }
 
-// Rank-based styling: #1 = red, #2 = yellow, rest = muted gray
-const getRankConfig = (rank: number) => {
-  if (rank === 1) {
-    return {
-      bg: "bg-destructive/10",
-      border: "border-destructive/30",
-      text: "text-destructive",
-      badge: "bg-destructive text-destructive-foreground",
-      glow: "shadow-[0_0_40px_-15px_hsl(var(--destructive))]",
-    };
-  }
-  if (rank === 2) {
-    return {
-      bg: "bg-warning/10",
-      border: "border-warning/30",
-      text: "text-warning",
-      badge: "bg-warning text-warning-foreground",
-      glow: "shadow-[0_0_30px_-15px_hsl(var(--warning))]",
-    };
-  }
-  // Everything else is muted gray
-  return {
-    bg: "bg-muted/30",
-    border: "border-border",
-    text: "text-muted-foreground",
-    badge: "bg-muted text-muted-foreground",
-    glow: "",
-  };
-};
+export const LeakCard = ({ leak, industry, isOpen = false, onToggle, onBookCall, rank }: LeakCardProps) => {
+  const [showWhy, setShowWhy] = useState(false);
+  const [showCalculation, setShowCalculation] = useState(false);
 
-const LEAK_ICONS: Record<string, typeof Phone> = {
-  missedCalls: Phone,
-  slowResponse: Clock,
-  noFollowUp: TrendingUp,
-  noShow: Calendar,
-  unqualifiedLeads: Target,
-  afterHours: Clock,
-  holdTime: Phone,
-  reactivation: Zap,
-};
+  const severityColor = {
+    critical: "text-red-500",
+    high: "text-red-400",
+    medium: "text-amber-500",
+    low: "text-emerald-500",
+  }[leak.severity];
 
-const LEAK_PROBLEMS: Record<string, string[]> = {
-  missedCalls: [
-    "Missing 35% of inbound calls during business hours",
-    "78% of callers won't leave voicemail",
-    "Lost to competitors who answer first",
-  ],
-  slowResponse: [
-    "5-minute response = 100x higher contact rate",
-    "Speed signals reliability to prospects",
-    "Competitors respond in minutes, not hours",
-  ],
-  noFollowUp: [
-    "80% of sales need 5+ follow-up attempts",
-    "Most give up after just 2 attempts",
-    "Every unfollowed lead = wasted ad spend",
-  ],
-  noShow: [
-    "Empty slots cost time and revenue",
-    "Staff idle, can't serve others",
-    "Weak confirmation = weak commitment",
-  ],
-  unqualifiedLeads: [
-    "Hours wasted on poor-fit prospects",
-    "Drains team energy and morale",
-    "Every hour has opportunity cost",
-  ],
-  afterHours: [
-    "30%+ of calls come after hours",
-    "After-hours = high-intent buyers",
-    "Competitors with 24/7 capture these",
-  ],
-  holdTime: [
-    "Every hold minute = 10% hang-up rate",
-    "First impression made during wait",
-    "Frustration before you even speak",
-  ],
-};
-
-const LEAK_FIXES: Record<string, { time: string; roi: string }> = {
-  missedCalls: { time: "14d", roi: "12x" },
-  slowResponse: { time: "7d", roi: "8x" },
-  noFollowUp: { time: "21d", roi: "6x" },
-  noShow: { time: "7d", roi: "5x" },
-  unqualifiedLeads: { time: "14d", roi: "4x" },
-  afterHours: { time: "7d", roi: "10x" },
-  holdTime: { time: "21d", roi: "7x" },
-};
-
-export function LeakCard({ leak, rank, totalLoss, onViewSolution }: LeakCardProps) {
-  // Use rank-based coloring instead of severity
-  const rankConfig = getRankConfig(rank);
-  const Icon = LEAK_ICONS[leak.type] || AlertCircle;
-  const problems = LEAK_PROBLEMS[leak.type] || [];
-  const fix = LEAK_FIXES[leak.type] || { time: "14d", roi: "5x" };
-  const percentage = totalLoss > 0 ? Math.round((leak.monthlyLoss / totalLoss) * 100) : 0;
+  const severityBg = {
+    critical: "bg-red-500/10 border-red-500/20",
+    high: "bg-red-500/5 border-red-500/10",
+    medium: "bg-amber-500/5 border-amber-500/10",
+    low: "bg-emerald-500/5 border-emerald-500/10",
+  }[leak.severity];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3 }}
-      className={`relative overflow-hidden rounded-2xl bg-card border ${rankConfig.border} ${rankConfig.glow} transition-all duration-300`}
-    >
-      {/* Constraint label badge - top right */}
-      <div className="absolute top-4 right-4">
-        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${rankConfig.badge}`}>
-          {leak.constraintLabel || (leak.severity.charAt(0).toUpperCase() + leak.severity.slice(1))}
-        </span>
-      </div>
-
-      {/* Rank badge - top left */}
-      <div className="absolute top-4 left-4">
-        <div className="w-8 h-8 rounded-lg bg-secondary/80 border border-border flex items-center justify-center">
-          <span className="text-sm font-bold text-muted-foreground">#{rank}</span>
-        </div>
-      </div>
-
-      <div className="pt-16 p-6">
-        {/* Icon */}
-        <div className={`w-12 h-12 rounded-xl ${rankConfig.bg} border ${rankConfig.border} flex items-center justify-center mb-4`}>
-          <Icon className={`w-6 h-6 ${rankConfig.text}`} />
-        </div>
-
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-foreground mb-4">
-          {leak.label}
-        </h3>
-
-        {/* Loss amount - Now a range */}
-        <div className="mb-4">
-          <div className="flex items-baseline gap-1">
-            <span className={`text-2xl font-bold font-numeric ${rankConfig.text}`}>
-              {formatCurrencyRangeCompact(leak.monthlyLossRange)}
-            </span>
-            <span className="text-sm text-muted-foreground">/mo</span>
+    <div className={`rounded-2xl border transition-all duration-300 ${isOpen ? "bg-black border-emerald-500/20 shadow-xl" : "bg-black border-white/5 hover:border-white/10"
+      }`}>
+      {/* Header - Compact */}
+      <div
+        className="p-4 cursor-pointer flex items-center justify-between gap-4"
+        onClick={() => onToggle(!isOpen)}
+      >
+        <div className="flex items-center gap-3">
+          <div className={`p-2 rounded-xl ${severityBg}`}>
+            <AlertTriangle className={`w-5 h-5 ${severityColor}`} />
           </div>
-          <p className="text-sm text-muted-foreground">
-            {formatCurrencyRangeCompact(leak.annualLossRange)}/year
-          </p>
-        </div>
-
-        {/* Quick stats */}
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="text-center p-2 rounded-lg bg-secondary/50">
-            <p className="text-lg font-bold text-foreground font-numeric">{percentage}%</p>
-            <p className="text-xs text-muted-foreground">Of loss</p>
-          </div>
-          <div className="text-center p-2 rounded-lg bg-secondary/50">
-            <p className="text-lg font-bold text-foreground font-numeric">{fix.time}</p>
-            <p className="text-xs text-muted-foreground">Fix time</p>
-          </div>
-          <div className="text-center p-2 rounded-lg bg-secondary/50">
-            <p className="text-lg font-bold text-success font-numeric">{fix.roi}</p>
-            <p className="text-xs text-muted-foreground">ROI</p>
-          </div>
-        </div>
-
-        {/* Problems - concise bullets */}
-        <div className="space-y-2 mb-6">
-          {problems.slice(0, 3).map((problem, i) => (
-            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-              <div className={`w-1 h-1 rounded-full ${rankConfig.text.replace('text-', 'bg-')} mt-2 flex-shrink-0`} />
-              <span>{problem}</span>
+          <div>
+            <h3 className="font-bold text-white text-sm">{leak.label}</h3>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className={`text-[10px] uppercase font-black tracking-widest ${severityColor}`}>
+                {leak.severity} Impact
+              </span>
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* Quick win badge */}
-        {leak.quickWin && (
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-success/10 border border-success/20 mb-4">
-            <Zap className="w-4 h-4 text-success" />
-            <span className="text-sm font-medium text-success">Quick Win</span>
+        <div className="text-right flex items-center gap-4">
+          <div className="hidden sm:block">
+            <div className="text-lg font-black text-white tabular-nums">
+              {formatCurrency(leak.monthlyLoss)}
+            </div>
+            <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest text-right">
+              Per Month
+            </div>
           </div>
-        )}
-
-        {/* CTA */}
-        <button
-          onClick={onViewSolution}
-          className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl ${rankConfig.bg} ${rankConfig.text} font-medium text-sm hover:opacity-80 transition-opacity`}
-        >
-          View Solution
-          <ArrowRight className="w-4 h-4" />
-        </button>
+          <ChevronRight className={`w-5 h-5 text-slate-600 transition-transform duration-300 ${isOpen ? "rotate-90 text-white" : ""}`} />
+        </div>
       </div>
-    </motion.div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden border-t border-white/10"
+          >
+            <div className="p-6 space-y-6">
+              <div className="sm:hidden block p-4 bg-white/5 rounded-xl mb-4">
+                <div className="text-2xl font-black text-white tabular-nums">
+                  {formatCurrency(leak.monthlyLoss)}
+                </div>
+                <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">
+                  Estimated Monthly Leakage
+                </div>
+              </div>
+
+              <div className="text-sm text-slate-400 leading-relaxed italic">
+                {leak.recommendation}
+              </div>
+
+              {/* Action Links */}
+              <div className="flex flex-wrap gap-6 pt-2">
+                <button
+                  onClick={() => setShowWhy(!showWhy)}
+                  className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+                >
+                  {showWhy ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                  Show why this happens
+                </button>
+                <button
+                  onClick={() => setShowCalculation(!showCalculation)}
+                  className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+                >
+                  {showCalculation ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                  View calculation
+                </button>
+              </div>
+
+              <AnimatePresence>
+                {showWhy && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 bg-slate-900/50 rounded-xl border border-white/5 space-y-3">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Root Cause Analysis</h4>
+                      <p className="text-xs text-slate-400 leading-relaxed">
+                        This system gap represents a significant portion of your operational revenue leakage. In the {industry} industry, this is typically caused by {leak.label.toLowerCase()} inefficiencies and lack of automation.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {showCalculation && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 bg-emerald-500/5 rounded-xl border border-emerald-500/10 space-y-3">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500/50">Calculation Input Basis</h4>
+                      <div className="space-y-2">
+                        {Object.entries(leak.details).map(([key, value]) => (
+                          <div key={key} className="flex justify-between items-center text-xs">
+                            <span className="text-slate-500 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                            <span className="text-slate-300 font-mono tracking-tight">{String(value)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Primary Card CTA */}
+              <div className="pt-4 mt-2 border-t border-white/5">
+                <Link
+                  to="/vsl"
+                  className="w-full h-14 bg-white hover:bg-slate-100 text-black text-sm font-black uppercase tracking-wider rounded-xl transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2 no-underline"
+                >
+                  Confirm This Leak
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
-}
+};
