@@ -60,9 +60,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setLoading(false);
       }
+    }).catch((err) => {
+      console.error("Auth session check failed:", err);
+      setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    // Safety timeout: If auth takes longer than 5 seconds, force loading to false
+    const safetyTimeout = setTimeout(() => {
+      setLoading((current) => {
+        if (current) {
+          console.warn("Auth check timed out, forcing loading false");
+          return false;
+        }
+        return current;
+      });
+    }, 5000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(safetyTimeout);
+    };
   }, []);
 
   const signUp = async (email: string, password: string) => {
