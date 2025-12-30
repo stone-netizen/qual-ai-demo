@@ -37,8 +37,12 @@ export default function Settings() {
         .from("profiles")
         .select("agency_name")
         .eq("user_id", user.id)
-        .single()
-        .then(({ data }) => {
+        .maybeSingle()
+        .then(({ data, error }) => {
+          if (error) {
+            console.error("Error fetching settings profile:", error);
+            // Don't toast here just for initial load, maybe silent fail
+          }
           if (data?.agency_name) {
             setAgencyName(data.agency_name);
           }
