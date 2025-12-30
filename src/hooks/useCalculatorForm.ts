@@ -48,6 +48,7 @@ export const calculatorFormSchema = z.object({
   inquiresPerWeek: z.number().default(0),
   percentageRatio: z.number().min(0).max(10).default(0),
   avgTicket: z.number().default(0),
+  closeRate: z.number().min(0).max(100).default(25), // New field for accuracy
   afterHoursHandling: z.string().default(""),
 
   // Phase 2: Booking Gate (Mandatory)
@@ -90,6 +91,7 @@ const initialState: CalculatorFormData = {
   inquiresPerWeek: 0,
   percentageRatio: 0,
   avgTicket: 0,
+  closeRate: 25,
   afterHoursHandling: "",
   email: "",
   phone: "",

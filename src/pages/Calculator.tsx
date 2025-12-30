@@ -2,9 +2,8 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Copy, RotateCcw, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Info, BookOpen, ExternalLink, GraduationCap, Gavel, HelpCircle, Lock, ArrowRight, ClipboardCheck, Download, Search, Globe, UserCheck, ShieldCheck, Zap, Calendar, Clock, User, Phone, MessageSquare, AlertTriangle } from "lucide-react";
 import { useCalculatorForm, INDUSTRIES, ROLES, LEAD_SOURCES, AFTER_HOURS_OPTIONS, CLOSERS } from "@/hooks/useCalculatorForm";
-import { useAuth } from "@/hooks/useAuth";
-import { useSaveBrief } from "@/hooks/useBriefs";
-import { calculateCockpitResult, formatCurrency } from "@/utils/calculations";
+import { calculateCockpitResult, formatCurrency, formatCurrencyCompact } from "@/utils/calculations";
+import { ExposureExplanation } from "@/components/ExposureExplanation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,9 +30,9 @@ const OBJECTIONS = [
 
 export default function Calculator() {
   const { formData, setFormData, resetForm } = useCalculatorForm();
-  const { signOut, user } = useAuth();
-  const saveBrief = useSaveBrief();
   const [showPrompts, setShowPrompts] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [exposureMode, setExposureMode] = useState<"floor" | "full">("floor");
 
   const result = useMemo(() => {
     return calculateCockpitResult({
@@ -43,8 +42,43 @@ export default function Calculator() {
       dmConfirmed: formData.dmConfirmed,
       ownerAttending: formData.ownerAttending,
       isBooked: formData.isBooked,
+      exposureMode,
+      closeRate: formData.closeRate,
+      businessName: formData.businessName,
     });
-  }, [formData]);
+  }, [formData, exposureMode]);
+
+  const getCurrentScript = () => {
+    if (!formData.businessName) return { text: "“What’s the business name so I don’t mix you up with someone else?”", action: "Input Name" };
+    if (!formData.inquiresPerWeek) return { text: "“Roughly how many new inbound calls do you get in a normal week? Just ballpark — this isn’t exact.”", action: "Est. New Inquiries" };
+    if (formData.percentageRatio === 0 && !formData.avgTicket) return { text: "“Out of 10 new calls, how many would you say don’t get answered live? Not blaming anyone — this is just reality.”", action: "Click Missed Ratio" };
+    if (!formData.avgTicket) return { text: "“When one of those calls turns into a new client, what’s the low-end value of that client?”", action: "Input Ticket Value" };
+    if (formData.closeRate === 25 && !formData.afterHoursHandling) return { text: "“If you got a decent qualified person on the phone, how many out of 10 do you typically close?”", action: "Set Close Rate" };
+    if (!formData.afterHoursHandling) return { text: "“After hours, what happens to new callers? Voicemail, answering service, staff, something else?”", action: "Select Handling" };
+    if (!formData.industry) return { text: "“And just to benchmark correctly — what industry should I tag this under?”", action: "Select Industry" };
+
+    // Result Shown
+    if (result.status === "QUALIFIED" && !formData.dmConfirmed) {
+      if (exposureMode === 'floor') return { text: "“Okay — I’m using conservative assumptions here. This isn’t upside. This is the floor.”", action: "Anchor Floor" };
+      return { text: "“This is not a promise. This is simply what leaks compound into when nothing changes.”", action: "Explain Compounding" };
+    }
+
+    if (!formData.dmConfirmed) return { text: "“Just to be clear — are you the one who makes decisions around front desk systems and follow-up?”", action: "Confirm Authority" };
+    if (!formData.ownerAttending) return { text: "“For this to be useful, the owner needs to be on the call. Otherwise we don’t do it.”", action: "Mandate Attendance" };
+    if (formData.phone.length < 5) return { text: "“What’s the best direct number in case we need to reach you?”", action: "Get Direct Line" };
+    if (!formData.demoDate || !formData.demoTime) return { text: "“Does [Day] at [Time] work for a 15-minute verification?”", action: "Set Verification" };
+
+    // Phase 3: Intelligence (Post-Booking)
+    if (formData.isBooked) {
+      if (!formData.contactName) return { text: "“I just need to update the file — who should we list as the primary contact?”", action: "Get Name" };
+      if (!formData.mainPain) return { text: "“What’s the biggest thing breaking right now? I’ll write it exactly how you say it.”", action: "Dig Pain" };
+      if (!formData.consequence) return { text: "“If nothing changes over the next 6–12 months, what does that cost you?”", action: "Find Consequence" };
+      if (!formData.urgency) return { text: "“On a scale from 1 to 10 — how urgent does this feel right now?”", action: "Check Pulse" };
+      return { text: "“I’m sending this to the specialist so they’re prepared. Nothing else you need to do.”", action: "Export & Close" };
+    }
+
+    return { text: "“We don’t sell on this call — we just verify whether the leak is real.”", action: "Maintain Frame" };
+  };
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
@@ -73,8 +107,10 @@ export default function Calculator() {
     };
 
     const getExportStatus = (status: string) => {
-      if (status === "BOOKED" || status === "VERIFICATION WARRANTED") return status;
-      return "DISQUALIFIED";
+      if (status === "BOOKED") return "BOOKED";
+      if (status === "QUALIFIED") return "QUALIFIED";
+      if (status === "DISQUALIFIED") return "DISQUALIFIED";
+      return "INCOMPLETE";
     };
 
     const row = [
@@ -95,7 +131,7 @@ export default function Calculator() {
       formData.avgTicket,                 // 15
       escape(formData.afterHoursHandling),// 16
       result.monthlyExposure,             // 17
-      result.status === "BOOKED" || result.status === "VERIFICATION WARRANTED" ? "QUALIFIED" : "DISQUALIFIED", // 18
+      result.status === "BOOKED" || result.status === "QUALIFIED" ? "QUALIFIED" : "DISQUALIFIED", // 18
       formData.dmConfirmed ? "TRUE" : "FALSE",    // 19
       formData.ownerAttending ? "TRUE" : "FALSE", // 20
       formatDate(formData.demoDate),      // 21
@@ -119,10 +155,13 @@ export default function Calculator() {
     };
 
     const getExportStatus = (status: string) => {
-      if (status === "BOOKED" || status === "VERIFICATION WARRANTED") return status;
-      return "DISQUALIFIED";
+      if (status === "BOOKED") return "BOOKED";
+      if (status === "QUALIFIED") return "QUALIFIED";
+      if (status === "DISQUALIFIED") return "DISQUALIFIED";
+      return "INCOMPLETE";
     };
 
+    // Single row, strict order per "Setter Briefcase" spec
     const columns = [
       formData.businessName,      // 1
       formData.website,           // 2
@@ -141,7 +180,7 @@ export default function Calculator() {
       formData.avgTicket,         // 15
       formData.afterHoursHandling,// 16
       result.monthlyExposure,     // 17
-      result.status === "BOOKED" || result.status === "VERIFICATION WARRANTED" ? "QUALIFIED" : "DISQUALIFIED", // 18
+      getExportStatus(result.status), // 18
       formData.dmConfirmed ? "TRUE" : "FALSE",    // 19
       formData.ownerAttending ? "TRUE" : "FALSE", // 20
       formatDate(formData.demoDate),      // 21
@@ -151,22 +190,27 @@ export default function Calculator() {
       getExportStatus(result.status) // 25
     ];
 
+    // No headers, just the row content
     const csvContent = columns.map(escape).join(",");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
 
     link.setAttribute("href", url);
-    link.setAttribute("download", `${formData.businessName || 'qualified-booking'}.csv`);
+    // Filename = Business_Name.csv (Sanitized)
+    const safeName = formData.businessName ? formData.businessName.trim().replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'call_log';
+    const filename = `${safeName}.csv`;
+
+    link.setAttribute("download", filename);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success("Production CSV Downloaded");
+    toast.success("Setter Briefcase Exported");
   };
 
-  const isPhase1Complete = formData.inquiresPerWeek > 0 && formData.percentageRatio >= 0 && formData.avgTicket > 0 && formData.afterHoursHandling !== "" && formData.businessName !== "";
-  const isPhase2Active = result.status === "VERIFICATION WARRANTED" || result.status === "BOOKED" || result.status === "DISQUALIFIED - NO AUTHORITY";
+  const isPhase1Complete = result.status !== "INCOMPLETE";
+  const isPhase2Active = result.status === "QUALIFIED" || result.status === "BOOKED" || result.status === "DISQUALIFIED";
   const canBook = formData.dmConfirmed && formData.ownerAttending && formData.phone.length > 5 && formData.demoDate && formData.demoTime && formData.assignedCloser;
 
   const isDownloadReady = formData.isBooked &&
@@ -216,13 +260,6 @@ export default function Calculator() {
               <BookOpen className="w-3 h-3" />
               Objection Handler
             </Button>
-            <Button
-              variant="ghost"
-              onClick={signOut}
-              className="h-9 px-4 bg-white/[0.03] border border-white/5 text-[9px] font-black uppercase italic rounded-full text-slate-500 hover:text-red-500 transition-all gap-2"
-            >
-              Sign Out
-            </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="ghost" className="h-9 px-4 bg-white/[0.03] border border-white/5 text-[9px] font-black uppercase italic rounded-full text-slate-800 hover:text-red-500/50 transition-all gap-2">
@@ -237,7 +274,11 @@ export default function Calculator() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel className="bg-transparent border-white/10">Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => { resetForm(); }} className="bg-emerald-500 text-black font-black uppercase italic text-xs">Reset All</AlertDialogAction>
+                  <AlertDialogAction onClick={() => {
+                    resetForm();
+                    setExposureMode("floor");
+                    setShowPrompts(false);
+                  }} className="bg-emerald-500 text-black font-black uppercase italic text-xs">Reset All</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
@@ -257,8 +298,8 @@ export default function Calculator() {
 
               <div className="space-y-8">
                 <div className="space-y-3">
-                  <Label className="text-[12px] font-black text-white/90 leading-tight italic">
-                    “Which business are we looking at today?”
+                  <Label className="text-[12px] font-black text-white/90 leading-tight italic flex items-center gap-1">
+                    “Which business are we looking at today?” <span className="text-emerald-500">•</span>
                   </Label>
                   <Input
                     placeholder="Legal Business Name"
@@ -269,8 +310,8 @@ export default function Calculator() {
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-white/5">
-                  <Label className="text-[12px] font-black text-white/90 leading-tight italic">
-                    “How many new inquiries do you typically receive each week?”
+                  <Label className="text-[12px] font-black text-white/90 leading-tight italic flex items-center gap-1">
+                    “How many new inquiries do you typically receive each week?” <span className="text-emerald-500">•</span>
                   </Label>
                   <Input
                     type="number"
@@ -304,7 +345,7 @@ export default function Calculator() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/5">
                   <div className="space-y-3">
                     <Label className="text-[12px] font-black text-white/90 leading-tight italic">
-                      “Average revenue per new client?”
+                      “Average revenue per new client?” <span className="text-emerald-500">•</span>
                     </Label>
                     <Input
                       type="number"
@@ -313,6 +354,35 @@ export default function Calculator() {
                       onChange={(e) => setFormData({ avgTicket: Math.max(0, parseInt(e.target.value) || 0) })}
                       className="bg-zinc-900/50 border-white/5 h-14 text-lg font-medium focus:border-emerald-500/50 transition-all"
                     />
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-[12px] font-black text-white/90 leading-tight italic">
+                      “Close Rate on Qualified Leads?”
+                    </Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        type="number"
+                        placeholder="%"
+                        value={formData.closeRate || ""}
+                        onChange={(e) => setFormData({ closeRate: Math.min(100, Math.max(0, parseInt(e.target.value) || 0)) })}
+                        className="bg-zinc-900/50 border-white/5 h-14 text-lg font-medium focus:border-emerald-500/50 transition-all w-24 text-center"
+                      />
+                      <div className="flex-1 space-y-2">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={formData.closeRate}
+                          onChange={(e) => setFormData({ closeRate: parseInt(e.target.value) })}
+                          className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                          <span>0%</span>
+                          <span>Conservative (25%)</span>
+                          <span>100%</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-3">
@@ -332,7 +402,14 @@ export default function Calculator() {
                       <Label className="text-[12px] font-black text-white/90 leading-tight italic">
                         Industry?
                       </Label>
-                      <Select value={formData.industry} onValueChange={(v) => setFormData({ industry: v })}>
+                      <Select value={formData.industry} onValueChange={(v) => {
+                        // Industry Default Logic for Close Rate
+                        let defaultRate = 25;
+                        if (v === "Dentist") defaultRate = 30;
+                        if (v === "HVAC") defaultRate = 25;
+                        if (v === "Med Spa") defaultRate = 20;
+                        setFormData({ industry: v, closeRate: defaultRate });
+                      }}>
                         <SelectTrigger className="bg-zinc-900/50 border-white/5 h-14">
                           <SelectValue placeholder="Select Industry" />
                         </SelectTrigger>
@@ -421,18 +498,15 @@ export default function Calculator() {
                     </div>
 
                     <Button
-                      disabled={!canBook || saveBrief.isPending}
-                      onClick={async () => {
+                      disabled={!canBook}
+                      onClick={() => {
                         setFormData({ isBooked: true, currentPhase: 3 });
-                        const result = await saveBrief.mutateAsync(formData) as any;
-                        if (result?.id) {
-                          setFormData({ currentBriefId: result.id });
-                        }
+                        toast.success("Booking Confirmed Locally");
                       }}
                       className={`w-full h-14 font-black uppercase italic text-xs rounded-xl gap-2 mt-4 transition-all ${canBook ? 'bg-white text-black hover:bg-slate-200 shadow-xl shadow-white/5' : 'bg-zinc-900 text-slate-700 cursor-not-allowed border border-white/5'
                         }`}
                     >
-                      {saveBrief.isPending ? 'Syncing to Database...' : (formData.isBooked ? 'Booking Confirmed ✓' : 'Confirm Booking & Unlock Intelligence')}
+                      {formData.isBooked ? 'Booking Confirmed ✓' : 'Confirm Booking & Unlock Intelligence'}
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </div>
@@ -572,56 +646,97 @@ export default function Calculator() {
           {/* Right Panel */}
           <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-8">
             <section className={`p-10 rounded-[2.5rem] border transition-all flex flex-col items-center justify-center text-center space-y-10 min-h-[600px] shadow-2xl relative overflow-hidden bg-black ${result.status === 'BOOKED' ? 'border-emerald-500 border-2 shadow-emerald-500/10' :
-              result.status === 'VERIFICATION WARRANTED' ? 'border-emerald-500/50 shadow-emerald-500/5' :
-                result.status === 'DISQUALIFIED - NO AUTHORITY' ? 'border-red-500/30' : 'border-white/5'
+              result.status === 'QUALIFIED' ? 'border-emerald-500/50 shadow-emerald-500/5' :
+                result.status === 'DISQUALIFIED' ? 'border-red-500/30' : 'border-white/5'
               }`}>
+              {/* Glassmorphism Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-black to-black opacity-50 pointer-events-none" />
 
-              <div className="space-y-6 w-full">
+              <div className="space-y-6 w-full relative z-10">
+                {/* SETTER PROMPT BOX (Sticky) */}
+                <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl text-left space-y-2 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-2 opacity-50"><MessageSquare className="w-4 h-4 text-emerald-500" /></div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500/80">Setter Script:</p>
+                  <p className="text-sm font-medium text-emerald-100 italic">"{getCurrentScript().text}"</p>
+                  <div className="flex items-center gap-2 pt-2">
+                    <div className="h-px bg-emerald-500/20 flex-1" />
+                    <span className="text-[9px] font-black uppercase text-emerald-500">{getCurrentScript().action}</span>
+                  </div>
+                </div>
+
                 <div className={`px-5 py-2 rounded-full font-black uppercase italic tracking-widest text-[9px] inline-flex items-center gap-2 ${result.status === 'BOOKED' ? 'bg-emerald-500 text-black' :
-                  result.status === 'VERIFICATION WARRANTED' ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' :
+                  result.status === 'QUALIFIED' ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' :
                     result.status === 'INCOMPLETE' ? 'bg-zinc-900 text-slate-500' :
                       'bg-red-500/10 text-red-500/80 border border-red-500/20'
                   }`}>
                   {result.status === 'BOOKED' ? <CheckCircle2 className="w-3.5 h-3.5" /> :
-                    result.status === 'VERIFICATION WARRANTED' ? <ShieldCheck className="w-3.5 h-3.5" /> :
+                    result.status === 'QUALIFIED' ? <ShieldCheck className="w-3.5 h-3.5" /> :
                       <AlertCircle className="w-3.5 h-3.5" />}
                   {result.status.replace(/-/g, ' ')}
                 </div>
 
-                <div className="space-y-1">
-                  <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-700 italic">Phase 1 Result</p>
-                  <p className="text-[8px] text-slate-800 font-bold uppercase tracking-widest leading-none">Directional Monthly Intake Gap</p>
+                {/* VISUALIZER TOGGLE */}
+                <div className="flex justify-center">
+                  <div className="bg-black/40 border border-white/10 p-1 rounded-lg flex items-center gap-1">
+                    <button
+                      onClick={() => setExposureMode('floor')}
+                      className={`px-3 py-1.5 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${exposureMode === 'floor' ? 'bg-white text-black' : 'text-slate-500 hover:text-white'}`}
+                    >
+                      ● Conservative
+                    </button>
+                    <button
+                      onClick={() => setExposureMode('full')}
+                      className={`px-3 py-1.5 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${exposureMode === 'full' ? 'bg-emerald-500 text-black' : 'text-slate-500 hover:text-white'}`}
+                    >
+                      ○ Full Exposure
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-1 relative">
+                  <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-700 italic flex items-center justify-center gap-2">
+                    {exposureMode === 'floor' ? 'Confirmed Floor Exposure' : 'Est. Full Revenue Leak'}
+                    <button
+                      onClick={() => setShowExplanation(true)}
+                      className="text-slate-600 hover:text-emerald-500 transition-colors"
+                    >
+                      <Info className="w-3.5 h-3.5" />
+                    </button>
+                  </p>
                 </div>
 
                 <div className={`text-7xl font-black italic tracking-tighter tabular-nums transition-all ${result.status === 'INCOMPLETE' ? 'text-slate-800' : 'text-white'
                   }`}>
-                  {result.status === 'INCOMPLETE' ? "$0" : formatCurrency(result.lowEndImpact)}
+                  {result.status === 'INCOMPLETE' ? "$0" : formatCurrency(result.monthlyExposure)}
                 </div>
+
+                {/* DAILY / YEARLY CONTEXT */}
+                {result.monthlyExposure > 0 && (
+                  <div className="flex justify-center gap-4 text-slate-500">
+                    <div className="flex flex-col items-center">
+                      <span className="text-[9px] font-black uppercase tracking-widest">Daily</span>
+                      <span className="text-xs font-bold text-slate-300">{formatCurrency(result.dailyExposure)}</span>
+                    </div>
+                    <div className="w-px bg-white/10" />
+                    <div className="flex flex-col items-center">
+                      <span className="text-[9px] font-black uppercase tracking-widest">Yearly</span>
+                      <span className="text-xs font-bold text-slate-300">{formatCurrencyCompact(result.yearlyExposure)}</span>
+                    </div>
+                  </div>
+                )}
+
 
                 <div className="pt-8 w-full border-t border-white/5 space-y-4">
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700 italic">Operational Directive:</p>
-                  <p className={`text-lg font-black italic leading-tight text-center ${result.status === 'BOOKED' || result.status === 'VERIFICATION WARRANTED' ? 'text-emerald-500' :
-                    result.status === 'DISQUALIFIED - NO AUTHORITY' ? 'text-red-500' : 'text-slate-600'
+                  <p className={`text-lg font-black italic leading-tight text-center ${result.status === 'BOOKED' || result.status === 'QUALIFIED' ? 'text-emerald-500' :
+                    result.status === 'DISQUALIFIED' ? 'text-red-500' : 'text-slate-600'
                     }`}>
                     {result.status === 'INCOMPLETE' ? "Awaiting conviction data..." : result.nextStep}
                   </p>
                 </div>
               </div>
 
-              {/* SYSTEM STATUS BOX */}
-              <div className="w-full grid grid-cols-2 gap-2">
-                <div className="p-4 rounded-xl bg-zinc-900/30 border border-white/5 space-y-1">
-                  <p className="text-[8px] text-slate-600 uppercase font-black">Qualified</p>
-                  <p className="text-[10px] text-white font-black italic">
-                    {result.status === 'INCOMPLETE' ? '...' :
-                      (result.status === 'NOT WARRANTED' || result.status === 'DISQUALIFIED - NO AUTHORITY' ? 'DISQUALIFIED' : 'QUALIFIED')}
-                  </p>
-                </div>
-                <div className="p-4 rounded-xl bg-zinc-900/30 border border-white/5 space-y-1">
-                  <p className="text-[8px] text-slate-600 uppercase font-black">Base Rev</p>
-                  <p className="text-[10px] text-white font-black italic">{formatCurrency(result.monthlyExposure)}</p>
-                </div>
-              </div>
+              {/* SYSTEM STATUS BOX - REMOVED (Redundant) */}
 
               {/* ACTION: GENERATE ROW */}
               <AnimatePresence>
@@ -641,15 +756,8 @@ export default function Calculator() {
                         <ExternalLink className="w-4 h-4" />
                       </Button>
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <Button
-                          onClick={() => saveBrief.mutate(formData)}
-                          disabled={saveBrief.isPending}
-                          className="h-14 bg-white/[0.03] border border-white/5 text-white hover:bg-white/[0.05] transition-all font-black uppercase italic text-[10px] rounded-2xl gap-2 shadow-xl"
-                        >
-                          {saveBrief.isPending ? 'Syncing...' : 'Sync Brief'}
-                          <RotateCcw className={`w-3.5 h-3.5 ${saveBrief.isPending ? 'animate-spin' : ''}`} />
-                        </Button>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {/* Sync Button Removed - Purely Local */}
                         <Button
                           disabled={!isDownloadReady}
                           onClick={handleDownloadCSV}
@@ -693,6 +801,22 @@ export default function Calculator() {
                 )}
               </AnimatePresence>
             </section>
+
+            {/* EXPLANATION MODAL */}
+            <AnimatePresence>
+              {showExplanation && (
+                <ExposureExplanation
+                  isOpen={showExplanation}
+                  onClose={() => setShowExplanation(false)}
+                  inputs={{
+                    inquiries: formData.inquiresPerWeek || 0,
+                    ratio: formData.percentageRatio,
+                    ticket: formData.avgTicket || 0,
+                    closeRate: formData.closeRate || 25
+                  }}
+                />
+              )}
+            </AnimatePresence>
           </div>
         </div>
 

@@ -1,18 +1,24 @@
 /**
- * SETTER QUALIFICATION COCKPIT - MATH ENGINE
+ * SETTER QUALIFICATION COCKPIT - MATH ENGINE (PRODUCTION)
  * 
- * Logic: Mirroring "Qualified Bookings Core" Sheet
- * - Monthly Exposure = Missed Calls / Week * Avg Ticket * 4
- * - Economic Qualification = Exposure >= $7,500
- * - Booking Readiness = Decision Maker Confirmed AND Owner Attending
+ * Logic: 4-Step Pipeline
+ * 1. Missed Calls = inquiries * (missedRatio / 10)
+ * 2. Clients Lost = Missed Calls * (Close Rate / 100)
+ * 3. Weekly Exposure = Clients Lost * Avg Ticket
+ * 4. Monthly Exposure = Weekly Exposure * 4
+ * 
+ * Multipliers:
+ * - Floor (Conservative) = 0.65
+ * - Full (Estimated) = 1.0
  */
 
-export type QualificationStatus = "BOOKED" | "VERIFICATION WARRANTED" | "DISQUALIFIED - NO AUTHORITY" | "NOT WARRANTED" | "INCOMPLETE";
+export type QualificationStatus = "BOOKED" | "QUALIFIED" | "DISQUALIFIED" | "INCOMPLETE";
 
 export interface CockpitResult {
   missedCalls: number;
   monthlyExposure: number;
-  lowEndImpact: number;
+  dailyExposure: number;
+  yearlyExposure: number;
   status: QualificationStatus;
   statusReason?: string;
   nextStep?: string;
@@ -32,68 +38,80 @@ export function calculateCockpitResult(data: {
   followUpBroken?: boolean;
   manualConstraintOverride?: boolean;
   customConstraint?: string;
+  exposureMode: "floor" | "full";
+  closeRate: number;
+  businessName: string;
 }): CockpitResult {
-  // 1. Initial State Check
-  if (data.inquiresPerWeek === 0 || data.percentageRatio === 0 || data.avgTicket === 0) {
-    return {
-      missedCalls: 0,
-      monthlyExposure: 0,
-      lowEndImpact: 0,
-      status: "INCOMPLETE",
-      statusReason: "Awaiting core volume data",
-      nextStep: "Enter the 3 fields to generate a directional estimate.",
-      certaintyLabel: "N/A",
-      primaryConstraint: "Incomplete Data"
-    };
+  // 1. Input Normalization (NaN Prevention)
+  const inputs = {
+    inquiries: Math.max(0, Number(data.inquiresPerWeek) || 0),
+    ratio: Math.min(10, Math.max(0, Number(data.percentageRatio) || 0)),
+    ticket: Math.max(0, Number(data.avgTicket) || 0),
+    closeRate: Math.min(100, Math.max(0, Number(data.closeRate) || 0)) / 100, // Normalized to 0-1
+  };
+
+  const isComplete = data.businessName && inputs.inquiries > 0 && inputs.ratio >= 0 && inputs.ticket > 0;
+
+  // 2. Math Engine (4-Step Formula)
+  const missedCallsPerWeek = Math.round(inputs.inquiries * (inputs.ratio / 10));
+  const clientsLostPerWeek = missedCallsPerWeek * inputs.closeRate;
+  const weeklyExposure = clientsLostPerWeek * inputs.ticket;
+  let monthlyExposure = weeklyExposure * 4;
+
+  // Multipliers
+  if (data.exposureMode === "floor") {
+    monthlyExposure = monthlyExposure * 0.65; // Conservative Floor
+  } else {
+    monthlyExposure = monthlyExposure * 1.0; // Full Estimate
   }
 
-  // 1. "Out of 10" Missed Calls Math
-  const missedCalls = Math.floor(data.inquiresPerWeek * (data.percentageRatio / 10));
-  const certaintyLabel = `Out of 10 (${data.percentageRatio})`;
+  const dailyExposure = monthlyExposure / 30;
+  const yearlyExposure = monthlyExposure * 12;
 
-  const monthlyExposure = missedCalls * data.avgTicket * 4;
-  const lowEndImpact = monthlyExposure * 0.20; // 20% conservative baseline
+  const certaintyLabel = `Out of 10 (${inputs.ratio})`;
 
-  // 2. Automated Constraint Identification
+  // 3. Automated Constraint Identification
   let primaryConstraint = "Lead Capture Failure";
-
   if (data.manualConstraintOverride && data.customConstraint) {
     primaryConstraint = data.customConstraint;
   } else {
-    // Priority sequence for single-constraint focus
     if (data.followUpBroken) primaryConstraint = "Follow-Up Breakdown";
     else if (data.afterHoursIssue) primaryConstraint = "After-Hours Coverage Gap";
     else if (data.slowResponse) primaryConstraint = "Slow Response Time";
-    else if (missedCalls > 0) primaryConstraint = "Lead Capture Failure";
+    else if (missedCallsPerWeek > 0) primaryConstraint = "Lead Capture Failure";
   }
 
-  // 3. Setter Decision Logic (Phase-Based)
-  let status: QualificationStatus = "NOT WARRANTED";
+  // 4. Deterministic State Machine
+  let status: QualificationStatus = "INCOMPLETE";
   let statusReason = "";
   let nextStep = "";
 
-  if (lowEndImpact < 1500) {
-    status = "NOT WARRANTED";
-    statusReason = "INSUFFICIENT IMPACT";
-    nextStep = "Surface consequence of inaction before proceeding.";
-  } else if (!data.dmConfirmed || !data.ownerAttending) {
-    status = "DISQUALIFIED - NO AUTHORITY";
-    statusReason = "NO AUTHORITY (Owner not attending)";
-    nextStep = "Do not book — owner must be present for verification.";
+  if (!isComplete) {
+    status = "INCOMPLETE";
+    statusReason = "Awaiting Core Data";
+    nextStep = "Enter volume + missed estimate to generate exposure.";
   } else if (data.isBooked) {
+    // Booking supercedes everything if logically valid state
     status = "BOOKED";
-    statusReason = "BOOKING CONFIRMED";
+    statusReason = "Booking Confirmed";
     nextStep = "Ready for Closer Briefing.";
+  } else if (!data.dmConfirmed || !data.ownerAttending) {
+    // Only reachable if Complete + Not Booked
+    status = "DISQUALIFIED";
+    statusReason = "No Authority / Owner Absent";
+    nextStep = "Do not book — owner must attend verification.";
   } else {
-    status = "VERIFICATION WARRANTED";
-    statusReason = "HIGH IMPACT DETECTED";
+    // Complete + Authority Confirmed + Not Booked
+    status = "QUALIFIED";
+    statusReason = "Verification Warranted";
     nextStep = "This is worth a 15-minute verification against actual call logs.";
   }
 
   return {
-    missedCalls,
-    monthlyExposure,
-    lowEndImpact,
+    missedCalls: missedCallsPerWeek,
+    monthlyExposure, // Can be 0 if inputs are 0, but never NaN
+    dailyExposure,
+    yearlyExposure,
     status,
     statusReason,
     nextStep,
@@ -103,14 +121,16 @@ export function calculateCockpitResult(data: {
 }
 
 export const formatCurrency = (value: number) => {
+  if (isNaN(value)) return "$0";
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    maximumFractionDigits: 0, // Default: no decimals
+    maximumFractionDigits: 0,
   }).format(value);
 };
 
 export const formatCurrencyCompact = (value: number) => {
+  if (isNaN(value)) return "$0";
   if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
   if (value >= 1000) return `$${(value / 1000).toFixed(1)}k`;
   return formatCurrency(value);
