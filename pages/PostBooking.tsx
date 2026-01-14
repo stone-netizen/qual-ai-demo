@@ -17,29 +17,30 @@ const PostBooking: React.FC = () => {
             Your Evaluation is Confirmed. <br />
             <span className="text-accent underline decoration-blue-100 underline-offset-8">Watch This Next.</span>
           </h1>
+
+          {/* Video Player Section - Cinematic Focus */}
+          <div className="relative mb-12 group w-full">
+            <div className="absolute -inset-1 bg-gradient-to-r from-accent to-blue-400 rounded-[2.5rem] blur opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative bg-navy-950 rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 aspect-video flex items-center justify-center">
+              <video
+                controls
+                className="w-full h-full object-cover rounded-[2rem]"
+                poster="/video-thumbnail.jpg"
+                ref={(video) => {
+                  if (video) {
+                    video.playbackRate = 1.25;
+                  }
+                }}
+              >
+                <source src="https://nsettu1cw1vbtxot.public.blob.vercel-storage.com/copy_8D75FEF7-1701-4148-9D6C-DC742D5A1034.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+
           <p className="text-xl text-gray-500 max-w-2xl mx-auto text-center leading-relaxed">
             Please watch this 5-minute briefing before our call. It explains exactly how we fulfill our <span className="text-navy-900 font-semibold">{BRAND.guarantee}</span> pilot guarantee.
           </p>
-        </div>
-
-        {/* Video Player Section - Cinematic Focus */}
-        <div className="relative mb-20 group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-accent to-blue-400 rounded-[2.5rem] blur opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
-          <div className="relative bg-navy-950 rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 aspect-video flex items-center justify-center">
-            <video
-              controls
-              className="w-full h-full object-cover rounded-[2rem]"
-              poster="/video-thumbnail.jpg"
-              ref={(video) => {
-                if (video) {
-                  video.playbackRate = 1.25;
-                }
-              }}
-            >
-              <source src="https://nsettu1cw1vbtxot.public.blob.vercel-storage.com/copy_8D75FEF7-1701-4148-9D6C-DC742D5A1034.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
         </div>
 
         {/* Content Below Video - High Authority */}
