@@ -7,7 +7,7 @@ export const BRAND = {
   supportPhone: "+1 949-382-4161",
   address: "338 S Western Ave STE C PMB 8019, Los Angeles, CA 90020, United States",
   domain: "qualai.co",
-  guarantee: "20 HVAC Diagnostics in 60 Days"
+  guarantee: "10 qualified $49 diagnostic appointments in 60 days"
 };
 
 export const ROUTES = {

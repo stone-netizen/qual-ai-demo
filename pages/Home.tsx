@@ -35,7 +35,7 @@ const Home: React.FC = () => {
               </div>
 
               <h1 className="text-4xl lg:text-6xl font-bold text-navy-950 leading-[1.1] mb-6 font-heading">
-                15-20 Qualified $49 Diagnostic Appointments <span className="text-accent">Every Month</span>
+                10 Qualified $49 Diagnostic Appointments <span className="text-accent">Every Month</span>
               </h1>
 
               <p className="text-xl text-gray-700 mb-8 leading-relaxed font-medium">
@@ -121,14 +121,14 @@ const Home: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-navy-900 mb-3">Can you handle 15-20 more appointments per month?</label>
+                    <label className="block text-sm font-bold text-navy-900 mb-3">Can you handle 10 more appointments per month?</label>
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, canHandle: 'yes' })}
                         className={`py-3 px-4 rounded-xl font-bold transition-all ${formData.canHandle === 'yes'
-                            ? 'bg-accent text-white shadow-lg'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          ? 'bg-accent text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                           }`}
                       >
                         Yes
@@ -137,8 +137,8 @@ const Home: React.FC = () => {
                         type="button"
                         onClick={() => setFormData({ ...formData, canHandle: 'no' })}
                         className={`py-3 px-4 rounded-xl font-bold transition-all ${formData.canHandle === 'no'
-                            ? 'bg-accent text-white shadow-lg'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          ? 'bg-accent text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                           }`}
                       >
                         No
@@ -172,7 +172,7 @@ const Home: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center p-6 bg-gray-50 rounded-2xl">
-              <div className="text-4xl font-bold text-accent mb-2">15-20</div>
+              <div className="text-4xl font-bold text-accent mb-2">10</div>
               <div className="text-sm text-gray-600 font-medium">Qualified Appointments/Month</div>
             </div>
             <div className="text-center p-6 bg-gray-50 rounded-2xl">
@@ -200,7 +200,7 @@ const Home: React.FC = () => {
               <div className="absolute -top-4 -left-4 w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg">1</div>
               <h3 className="text-xl font-bold text-navy-950 mb-4 font-heading mt-4">You Get Qualified Leads</h3>
               <p className="text-gray-600 leading-relaxed">
-                We deliver 15-20 qualified $49 diagnostic appointments per month. Every lead is pre-qualified via AI voice and SMS before it hits your calendar.
+                We deliver 10 qualified $49 diagnostic appointments per month. Every lead is pre-qualified via AI voice and SMS before it hits your calendar.
               </p>
             </div>
 
@@ -326,7 +326,7 @@ const Home: React.FC = () => {
           </h2>
 
           <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto">
-            We limit how many companies we work with per market to ensure quality and prevent saturation. If you're ready to add 15-20 qualified appointments per month with zero risk, let's talk.
+            We limit how many companies we work with per market to ensure quality and prevent saturation. If you're ready to add 10 qualified appointments per month with zero risk, let's talk.
           </p>
 
           <button

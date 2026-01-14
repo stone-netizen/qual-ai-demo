@@ -59,7 +59,7 @@ const PostBooking: React.FC = () => {
                   "Qualified Diagnostic Leads Only",
                   "Direct FieldEdge/ServiceTitan Sync",
                   "Automated Text & Voice Follow-up",
-                  "20 Guaranteed Appointments"
+                  "10 Qualified $49 Diagnostic Appointments"
                 ].map((item, idx) => (
                   <li key={idx} className="flex gap-3 items-center text-sm font-medium text-navy-900">
                     <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>

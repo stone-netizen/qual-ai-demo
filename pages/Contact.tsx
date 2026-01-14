@@ -11,7 +11,7 @@ const Contact: React.FC = () => {
           <div className="text-center mb-16">
             <h1 className="text-4xl lg:text-5xl font-bold text-navy-950 mb-6 font-heading tracking-tight">Schedule Your Qualification Call</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              See if you qualify for 15-20 qualified diagnostic appointments per month—with zero upfront cost and no retainer.
+              See if you qualify for 10 qualified diagnostic appointments per month—with zero upfront cost and no retainer.
             </p>
           </div>
 
@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
             <div className="p-8 bg-blue-50 border border-blue-100 rounded-3xl">
               <h3 className="text-2xl font-bold text-blue-900 mb-4 font-heading">Who This Is For</h3>
               <p className="text-blue-800 leading-relaxed mb-6">
-                We work with HVAC companies who can handle 15-20 additional diagnostic appointments per month and want to grow without the risk of traditional marketing agencies.
+                We work with HVAC companies who can handle 10 additional diagnostic appointments per month and want to grow without the risk of traditional marketing agencies.
               </p>
               <ul className="space-y-3">
                 {["Pay only when jobs close", "Zero upfront cost", "Cancel anytime with 30 days notice"].map((item, i) => (
