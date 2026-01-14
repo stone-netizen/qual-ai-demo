@@ -36,7 +36,7 @@ const PostBooking: React.FC = () => {
                 }
               }}
             >
-              <source src="/post-booking-vsl.mp4" type="video/mp4" />
+              <source src="https://nsettu1cw1vbtxot.public.blob.vercel-storage.com/copy_8D75FEF7-1701-4148-9D6C-DC742D5A1034.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
