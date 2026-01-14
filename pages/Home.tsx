@@ -1,22 +1,10 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    company: '',
-    canHandle: ''
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Navigate to calendar booking page
-    navigate(ROUTES.CONTACT);
-  };
 
   return (
     <div className="animate-in fade-in duration-700">
@@ -75,89 +63,24 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            {/* Right: Simplified Form */}
+            {/* Right: Simplified CTA */}
             <div className="lg:sticky lg:top-24">
-              <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-8">
-                <div className="text-center mb-6">
-                  <h2 className="text-2xl font-bold text-navy-950 mb-2 font-heading">See If You Qualify</h2>
-                  <p className="text-gray-600 text-sm">Takes 30 seconds. No credit card required.</p>
-                </div>
+              <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-8 text-center">
+                <h2 className="text-2xl font-bold text-navy-950 mb-4 font-heading">Schedule Your Qualification Call</h2>
+                <p className="text-gray-600 text-sm mb-8 leading-relaxed">
+                  See if your territory is available and if you qualify for our 10 diagnostic/month guarantee.
+                </p>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-bold text-navy-900 mb-2">Your Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
-                      placeholder="John Smith"
-                    />
-                  </div>
+                <button
+                  onClick={() => navigate(ROUTES.CONTACT)}
+                  className="w-full bg-navy-900 text-white py-4 rounded-xl font-bold hover:bg-navy-800 transition-all shadow-xl text-lg mb-4"
+                >
+                  Get Your Qualification Call →
+                </button>
 
-                  <div>
-                    <label className="block text-sm font-bold text-navy-900 mb-2">Phone Number</label>
-                    <input
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
-                      placeholder="(555) 123-4567"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-bold text-navy-900 mb-2">Company Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
-                      placeholder="ABC HVAC Services"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-bold text-navy-900 mb-3">Can you handle 10 more appointments per month?</label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setFormData({ ...formData, canHandle: 'yes' })}
-                        className={`py-3 px-4 rounded-xl font-bold transition-all ${formData.canHandle === 'yes'
-                          ? 'bg-accent text-white shadow-lg'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
-                      >
-                        Yes
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setFormData({ ...formData, canHandle: 'no' })}
-                        className={`py-3 px-4 rounded-xl font-bold transition-all ${formData.canHandle === 'no'
-                          ? 'bg-accent text-white shadow-lg'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
-                      >
-                        No
-                      </button>
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={!formData.canHandle}
-                    className="w-full bg-navy-900 text-white py-4 rounded-xl font-bold hover:bg-navy-800 transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-                  >
-                    Get Your Qualification Call →
-                  </button>
-
-                  <p className="text-xs text-gray-500 text-center leading-relaxed">
-                    By submitting, you agree to receive automated messages. Reply STOP to opt out.
-                  </p>
-                </form>
+                <p className="text-xs text-gray-500">
+                  No credit card required • Zero obligation
+                </p>
               </div>
             </div>
           </div>
