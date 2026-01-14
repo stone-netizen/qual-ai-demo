@@ -9,9 +9,9 @@ const Contact: React.FC = () => {
       <section className="bg-gray-50 py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="text-4xl lg:text-5xl font-bold text-navy-950 mb-6 font-heading tracking-tight">Evaluate Your Pilot Eligibility</h1>
+            <h1 className="text-4xl lg:text-5xl font-bold text-navy-950 mb-6 font-heading tracking-tight">Schedule Your Qualification Call</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our evaluation process is built to be direct, transparent, and respectful of your time.
+              See if you qualify for 15-20 qualified diagnostic appointments per month—with zero upfront cost and no retainer.
             </p>
           </div>
 
@@ -21,14 +21,14 @@ const Contact: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start max-w-5xl mx-auto">
             <div className="p-8 bg-blue-50 border border-blue-100 rounded-3xl">
-              <h3 className="text-2xl font-bold text-blue-900 mb-4 font-heading">Operator Context</h3>
+              <h3 className="text-2xl font-bold text-blue-900 mb-4 font-heading">Who This Is For</h3>
               <p className="text-blue-800 leading-relaxed mb-6">
-                We only accept HVAC companies that are ready for a systematic shift in how they handle inbound demand. Our pilot is not for everyone—it's for growth-minded operators who are tired of manual follow-up.
+                We work with HVAC companies who can handle 15-20 additional diagnostic appointments per month and want to grow without the risk of traditional marketing agencies.
               </p>
               <ul className="space-y-3">
-                {["System-led qualification", "Context-based response", "Operator-first scheduling"].map((item, i) => (
+                {["Pay only when jobs close", "Zero upfront cost", "Cancel anytime with 30 days notice"].map((item, i) => (
                   <li key={i} className="flex items-center gap-2 text-blue-700 font-medium text-sm">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
                     {item}
                   </li>
                 ))}

@@ -1,165 +1,344 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
-import VSLSection from '../components/VSLSection';
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    company: '',
+    canHandle: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Navigate to calendar booking page
+    navigate(ROUTES.CONTACT);
+  };
+
   return (
     <div className="animate-in fade-in duration-700">
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-24 lg:pt-32 lg:pb-40 overflow-hidden">
+      {/* Hero Section with Inline Form */}
+      <section className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-accent rounded-full text-xs font-bold uppercase tracking-wider mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            {/* Left: Headline + Value Prop */}
+            <div className="lg:pt-12">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-600"></span>
                 </span>
-                Pilot Program Evaluation Open
+                Taking on 3 more companies this month
               </div>
-              <h1 className="text-5xl lg:text-7xl font-bold text-navy-950 leading-[1.1] mb-8 font-heading">
-                Automated Booking Systems for <span className="text-accent">HVAC Companies</span>
+
+              <h1 className="text-4xl lg:text-6xl font-bold text-navy-950 leading-[1.1] mb-6 font-heading">
+                15-20 Qualified $49 Diagnostic Appointments <span className="text-accent">Every Month</span>
               </h1>
-              <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-xl font-medium">
-                Not an agency. A booking system.
+
+              <p className="text-xl text-gray-700 mb-8 leading-relaxed font-medium">
+                You only pay when appointments convert to closed, profitable jobs—<span className="text-navy-950 font-bold">zero upfront cost, no retainer, no contract.</span>
               </p>
-              <p className="text-lg text-gray-500 mb-10 leading-relaxed max-w-xl">
-                We build and manage a direct-to-calendar booking system that captures, qualifies, and schedules leads before your team even picks up the phone.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link to={ROUTES.CONTACT} className="bg-navy-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-navy-800 transition-all text-center shadow-xl shadow-navy-900/10">
-                  Book Pilot Evaluation
-                </Link>
-                <Link to={ROUTES.HOW_IT_WORKS} className="bg-white border border-gray-200 text-navy-900 px-8 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all text-center">
-                  How it Works
-                </Link>
-              </div>
-              <div className="mt-12 flex items-center gap-6 text-sm font-medium text-gray-500">
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-                  Built for Operators
+
+              {/* Risk Reversal Badges */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                  <svg className="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                  <div>
+                    <div className="font-bold text-navy-950 text-sm">$0 Upfront</div>
+                    <div className="text-xs text-gray-500">No setup fees</div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-                  Opt-out Anytime
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                  <svg className="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                  <div>
+                    <div className="font-bold text-navy-950 text-sm">$0 Retainer</div>
+                    <div className="text-xs text-gray-500">No monthly fees</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                  <svg className="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                  <div>
+                    <div className="font-bold text-navy-950 text-sm">Pay on Results</div>
+                    <div className="text-xs text-gray-500">Only when jobs close</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+                  <svg className="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                  <div>
+                    <div className="font-bold text-navy-950 text-sm">Cancel Anytime</div>
+                    <div className="text-xs text-gray-500">30 days notice</div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute inset-0 bg-blue-100 rounded-[2.5rem] rotate-3 -z-10"></div>
-              <div className="bg-navy-900 rounded-[2.5rem] p-4 shadow-2xl overflow-hidden aspect-square flex items-center justify-center border-8 border-navy-800">
-                 <div className="text-center text-white p-8">
-                   <div className="text-4xl font-bold mb-4">5 Minute</div>
-                   <div className="text-xl text-blue-300 font-medium opacity-80 mb-8 uppercase tracking-widest">Average Speed to Booked</div>
-                   <div className="space-y-4">
-                     <div className="bg-navy-800/50 p-4 rounded-xl border border-navy-700/50 flex justify-between items-center">
-                       <span>Inbound Lead</span>
-                       <span className="text-xs text-blue-400">0:01s</span>
-                     </div>
-                     <div className="bg-accent p-4 rounded-xl shadow-lg flex justify-between items-center">
-                       <span>AI Qualification</span>
-                       <span className="text-xs text-white/80">0:45s</span>
-                     </div>
-                     <div className="bg-navy-800/50 p-4 rounded-xl border border-navy-700/50 flex justify-between items-center">
-                       <span>Booked Call</span>
-                       <span className="text-xs text-blue-400">3:12m</span>
-                     </div>
-                   </div>
-                 </div>
+
+            {/* Right: Simplified Form */}
+            <div className="lg:sticky lg:top-24">
+              <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-8">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-bold text-navy-950 mb-2 font-heading">See If You Qualify</h2>
+                  <p className="text-gray-600 text-sm">Takes 30 seconds. No credit card required.</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-navy-900 mb-2">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+                      placeholder="John Smith"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-navy-900 mb-2">Phone Number</label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-navy-900 mb-2">Company Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.company}
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+                      placeholder="ABC HVAC Services"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-navy-900 mb-3">Can you handle 15-20 more appointments per month?</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, canHandle: 'yes' })}
+                        className={`py-3 px-4 rounded-xl font-bold transition-all ${formData.canHandle === 'yes'
+                            ? 'bg-accent text-white shadow-lg'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, canHandle: 'no' })}
+                        className={`py-3 px-4 rounded-xl font-bold transition-all ${formData.canHandle === 'no'
+                            ? 'bg-accent text-white shadow-lg'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={!formData.canHandle}
+                    className="w-full bg-navy-900 text-white py-4 rounded-xl font-bold hover:bg-navy-800 transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                  >
+                    Get Your Qualification Call →
+                  </button>
+
+                  <p className="text-xs text-gray-500 text-center leading-relaxed">
+                    By submitting, you agree to receive automated messages. Reply STOP to opt out.
+                  </p>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Banner */}
-      <section className="bg-gray-50 py-12 border-y border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Transparent Communication. Built for Operators.</p>
-          <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale">
-            <span className="text-2xl font-bold text-navy-900">HVAC PROS</span>
-            <span className="text-2xl font-bold text-navy-900">TRUSTED AIR</span>
-            <span className="text-2xl font-bold text-navy-900">ELITE COOLING</span>
-            <span className="text-2xl font-bold text-navy-900">SERVICE FIRST</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Feature Section */}
-      <section className="py-24">
+      {/* Social Proof */}
+      <section className="py-16 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-navy-950 mb-6 font-heading">Stop Chasing Homeowners. <br/>Start Booking Services.</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Traditional marketing gets you names and numbers. Qual AI delivers confirmed appointments directly to your CRM.
-            </p>
+          <div className="text-center mb-12">
+            <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em]">Trusted by HVAC Companies Nationwide</p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all">
-              <div className="w-12 h-12 bg-blue-50 text-accent rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-navy-950 mb-4 font-heading">Instant AI Follow-up</h3>
-              <p className="text-gray-600 leading-relaxed">
-                As soon as a lead hits your system, our AI engages via SMS to qualify their needs and check availability.
-              </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center p-6 bg-gray-50 rounded-2xl">
+              <div className="text-4xl font-bold text-accent mb-2">15-20</div>
+              <div className="text-sm text-gray-600 font-medium">Qualified Appointments/Month</div>
             </div>
-            
-            <div className="p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all">
-              <div className="w-12 h-12 bg-blue-50 text-accent rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-navy-950 mb-4 font-heading">Voice-Assisted Booking</h3>
-              <p className="text-gray-600 leading-relaxed">
-                For high-value inquiries, our automated voice system calls the lead to finalize the appointment time.
-              </p>
+            <div className="text-center p-6 bg-gray-50 rounded-2xl">
+              <div className="text-4xl font-bold text-accent mb-2">40-60%</div>
+              <div className="text-sm text-gray-600 font-medium">Diagnostic-to-Job Conversion</div>
             </div>
-            
-            <div className="p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all">
-              <div className="w-12 h-12 bg-blue-50 text-accent rounded-xl flex items-center justify-center mb-6">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-navy-950 mb-4 font-heading">Direct Calendar Sync</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Zero manual entry. Appointments are synced to your existing field service software or dispatch calendar.
-              </p>
+            <div className="text-center p-6 bg-gray-50 rounded-2xl">
+              <div className="text-4xl font-bold text-accent mb-2">60 Sec</div>
+              <div className="text-sm text-gray-600 font-medium">Average Response Time</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* VSL Funnel Section */}
-      <section className="py-24 bg-gray-50 relative overflow-hidden">
+      {/* How It Works - 3 Steps */}
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-navy-950 mb-4 font-heading">Automated Booking Pilot</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Watch how we eliminate lead waste and then schedule your decision-based evaluation.</p>
+            <h2 className="text-4xl font-bold text-navy-950 mb-4 font-heading">How It Works</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Three simple steps. You focus on closing jobs, we handle everything else.</p>
           </div>
-          <VSLSection />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="relative p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
+              <div className="absolute -top-4 -left-4 w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg">1</div>
+              <h3 className="text-xl font-bold text-navy-950 mb-4 font-heading mt-4">You Get Qualified Leads</h3>
+              <p className="text-gray-600 leading-relaxed">
+                We deliver 15-20 qualified $49 diagnostic appointments per month. Every lead is pre-qualified via AI voice and SMS before it hits your calendar.
+              </p>
+            </div>
+
+            <div className="relative p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
+              <div className="absolute -top-4 -left-4 w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg">2</div>
+              <h3 className="text-xl font-bold text-navy-950 mb-4 font-heading mt-4">Your Techs Close Jobs</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Use our proven upselling resources to maximize conversion. We provide scripts, training materials, and best practices to help your team close more.
+              </p>
+            </div>
+
+            <div className="relative p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
+              <div className="absolute -top-4 -left-4 w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg">3</div>
+              <h3 className="text-xl font-bold text-navy-950 mb-4 font-heading mt-4">You Pay When Jobs Close</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Choose: 20% profit share (you pay ad spend) or 30% profit share (we pay ad spend). Either way, you only pay when appointments convert to profitable jobs.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-navy-950 mb-12 text-center font-heading">Common Questions</h2>
-          <div className="space-y-6">
-            <div className="p-6 rounded-xl border border-gray-100 bg-gray-50">
-              <h4 className="font-bold text-navy-900 mb-2">Is this a marketing agency?</h4>
-              <p className="text-gray-600">No. We don't just "run ads." We provide a full software and booking system that manages the entire conversion process from the first click to a booked appointment on your calendar.</p>
+      {/* Risk Reversal Section */}
+      <section className="py-24 bg-navy-950 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-navy-900 to-navy-950 opacity-50"></div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 font-heading">Zero Risk. All Upside.</h2>
+            <p className="text-xl text-blue-200">We eat our own cooking. If we don't deliver results, we don't get paid.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">$0 Upfront Cost</h3>
+                  <p className="text-blue-200 leading-relaxed">No setup fees, no onboarding costs, no hidden charges. We start delivering appointments immediately.</p>
+                </div>
+              </div>
             </div>
-            <div className="p-6 rounded-xl border border-gray-100 bg-gray-50">
-              <h4 className="font-bold text-navy-900 mb-2">What happens if a lead doesn't respond?</h4>
-              <p className="text-gray-600">Our system performs multi-channel follow-up across SMS, email, and voice over a 30-day period (unless they opt-out) to ensure no lead is left behind.</p>
+
+            <div className="p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">$0 Monthly Retainer</h3>
+                  <p className="text-blue-200 leading-relaxed">No monthly fees, no minimum commitment. You're not locked into paying us unless we deliver results.</p>
+                </div>
+              </div>
             </div>
-            <div className="p-6 rounded-xl border border-gray-100 bg-gray-50">
-              <h4 className="font-bold text-navy-900 mb-2">Can I opt-out of the pilot?</h4>
-              <p className="text-gray-600">Yes. The pilot is designed to be low-friction. If it's not a fit for your operations, you can cancel at any time with 30 days notice.</p>
+
+            <div className="p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Pay Only When Jobs Close</h3>
+                  <p className="text-blue-200 leading-relaxed">We share in your success. If the appointments don't convert to profitable jobs, you don't pay us a dime.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Cancel Anytime</h3>
+                  <p className="text-blue-200 leading-relaxed">Not happy? Give us 30 days notice and walk away. No penalties, no questions asked.</p>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ - Objection Handling */}
+      <section className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-navy-950 mb-12 text-center font-heading">Questions HVAC Owners Actually Ask</h2>
+          <div className="space-y-6">
+            <div className="p-8 rounded-2xl border border-gray-200 bg-gray-50">
+              <h4 className="font-bold text-navy-900 mb-3 text-lg">What if the appointments don't convert?</h4>
+              <p className="text-gray-600 leading-relaxed">
+                Then you don't pay us. We only get paid when appointments convert to closed, profitable jobs. If your techs can't close them, we share that risk with you. That's why we provide upselling resources and training to maximize your conversion rates.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-gray-200 bg-gray-50">
+              <h4 className="font-bold text-navy-900 mb-3 text-lg">How is this different from a marketing agency?</h4>
+              <p className="text-gray-600 leading-relaxed">
+                Marketing agencies charge you a retainer whether they deliver results or not. We don't. We're not just running ads—we're delivering qualified, booked appointments via AI voice and SMS. And we only get paid when those appointments turn into profitable jobs. We're incentivized to make you money, not just spend your budget.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl border border-gray-200 bg-gray-50">
+              <h4 className="font-bold text-navy-900 mb-3 text-lg">What if I can't handle the volume?</h4>
+              <p className="text-gray-600 leading-relaxed">
+                That's a good problem to have, but we'll work with you. We can throttle the volume up or down based on your capacity. The goal is sustainable growth, not overwhelming your team. If you need to scale up slowly, we'll adjust the appointment flow accordingly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-full text-sm font-bold uppercase tracking-wider mb-6">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" /></svg>
+            Limited Availability
+          </div>
+
+          <h2 className="text-4xl lg:text-5xl font-bold text-navy-950 mb-6 font-heading">
+            We're Taking On 3 More HVAC Companies This Month
+          </h2>
+
+          <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+            We limit how many companies we work with per market to ensure quality and prevent saturation. If you're ready to add 15-20 qualified appointments per month with zero risk, let's talk.
+          </p>
+
+          <button
+            onClick={() => navigate(ROUTES.CONTACT)}
+            className="inline-block bg-navy-900 text-white px-12 py-5 rounded-xl font-bold hover:bg-navy-800 transition-all shadow-2xl text-lg"
+          >
+            See If You Qualify →
+          </button>
+
+          <p className="text-sm text-gray-500 mt-6">
+            No credit card required • 30-second qualification • Zero obligation
+          </p>
         </div>
       </section>
     </div>
