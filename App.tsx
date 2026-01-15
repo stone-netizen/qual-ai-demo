@@ -11,6 +11,7 @@ import TermsOfService from './pages/TermsOfService';
 import SMSTerms from './pages/SMSTerms';
 import CookiePolicy from './pages/CookiePolicy';
 import Security from './pages/Security';
+import Demo from './pages/Demo';
 import { ROUTES } from './constants';
 
 const App: React.FC = () => {
@@ -34,6 +35,7 @@ const App: React.FC = () => {
         <Route path={ROUTES.SMS_TERMS} element={<SMSTerms />} />
         <Route path={ROUTES.COOKIE_POLICY} element={<CookiePolicy />} />
         <Route path={ROUTES.SECURITY} element={<Security />} />
+        <Route path={ROUTES.DEMO} element={<Demo />} />
       </Routes>
     </Layout>
   );

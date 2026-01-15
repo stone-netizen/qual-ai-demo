@@ -19,5 +19,6 @@ export const ROUTES = {
   TERMS: "/terms",
   SMS_TERMS: "/sms-terms",
   COOKIE_POLICY: "/cookie-policy",
-  SECURITY: "/security"
+  SECURITY: "/security",
+  DEMO: "/demo"
 };
