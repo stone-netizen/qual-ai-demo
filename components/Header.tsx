@@ -10,6 +10,7 @@ const Header: React.FC = () => {
   const navItems = [
     { label: 'Home', path: ROUTES.HOME },
     { label: 'How It Works', path: ROUTES.HOW_IT_WORKS },
+    { label: 'Voice Demo', path: ROUTES.DEMO },
     { label: 'Book a Call', path: ROUTES.CONTACT },
   ];
 
@@ -27,17 +28,16 @@ const Header: React.FC = () => {
               </span>
             </Link>
           </div>
-          
+
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`${
-                  location.pathname === item.path
+                className={`${location.pathname === item.path
                     ? 'text-accent font-semibold'
                     : 'text-navy-800 hover:text-accent font-medium'
-                } transition-colors duration-200`}
+                  } transition-colors duration-200`}
               >
                 {item.label}
               </Link>

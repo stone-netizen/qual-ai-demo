@@ -26,6 +26,7 @@ const Footer: React.FC = () => {
             <h4 className="text-white font-semibold mb-6">Platform</h4>
             <ul className="space-y-4 text-sm">
               <li><Link to={ROUTES.HOW_IT_WORKS} className="hover:text-white transition-colors">How It Works</Link></li>
+              <li><Link to={ROUTES.DEMO} className="text-accent font-bold hover:text-blue-400 transition-colors">Element Voice Demo</Link></li>
               <li><Link to={ROUTES.CONTACT} className="hover:text-white transition-colors">Book a Call</Link></li>
               <li><Link to={ROUTES.POST_BOOKING} className="hover:text-white transition-colors">Post-Booking VSL (Preview)</Link></li>
               <li><Link to={ROUTES.SECURITY} className="hover:text-white transition-colors">Data & Security</Link></li>
