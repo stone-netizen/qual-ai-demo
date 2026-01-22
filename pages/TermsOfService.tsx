@@ -16,8 +16,8 @@ const TermsOfService: React.FC = () => {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-navy-900 mb-4 font-heading">1. Message Frequency & Type</h2>
         <ul className="list-disc pl-6 text-gray-600 space-y-2">
-          <li>You will receive SMS messages, marketing communications, and service-related updates from QualAI</li>
-          <li>Frequency may vary depending on promotions and campaigns</li>
+          <li><strong>Marketing Messages:</strong> You will receive approximately 2-3 marketing messages per week from QualAI</li>
+          <li><strong>Transactional Messages:</strong> You may also receive transactional messages (account alerts, appointment confirmations) which are not subject to opt-out</li>
           <li>Message and data rates may apply depending on your mobile carrier</li>
         </ul>
       </section>
@@ -43,10 +43,10 @@ const TermsOfService: React.FC = () => {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-navy-900 mb-4 font-heading">4. Withdrawal of Consent</h2>
         <ul className="list-disc pl-6 text-gray-600 space-y-2">
-          <li>You can opt out at any time by replying STOP to any message</li>
-          <li>To unsubscribe from all messages, reply STOP to any SMS from QualAI</li>
-          <li>Your opt-out will be processed within one business day</li>
-          <li>After opting out, you will no longer receive promotional messages, but may continue to receive transactional messages (e.g., account alerts)</li>
+          <li>You can opt out of <strong>marketing messages</strong> at any time by replying STOP to any message</li>
+          <li>Your opt-out will be processed within <strong>24 hours</strong></li>
+          <li>After opting out, you will no longer receive promotional/marketing messages</li>
+          <li><strong>Transactional messages cannot be opted out of</strong> as they are necessary for service delivery (appointment confirmations, account alerts, security notifications)</li>
         </ul>
       </section>
 
@@ -60,11 +60,13 @@ const TermsOfService: React.FC = () => {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-navy-900 mb-4 font-heading">6. Compliance</h2>
+        <h2 className="text-2xl font-bold text-navy-900 mb-4 font-heading">6. TCPA Compliance & Automated Systems</h2>
         <ul className="list-disc pl-6 text-gray-600 space-y-2">
-          <li>All messages sent are in compliance with TCPA (Telephone Consumer Protection Act) regulations</li>
-          <li>QualAI uses secure channels for all communications</li>
-          <li>You may receive messages sent via automated dialing systems</li>
+          <li>All messages sent are in compliance with the <strong>Telephone Consumer Protection Act (TCPA), 47 U.S.C. § 227</strong></li>
+          <li>Messages may be sent using an <strong>Automatic Telephone Dialing System (ATDS)</strong> or prerecorded/artificial voice technology</li>
+          <li>By providing your phone number and consenting, you expressly agree to receive calls and texts using ATDS technology</li>
+          <li>Consent to receive ATDS calls/texts is not required as a condition of purchasing any goods or services</li>
+          <li>QualAI uses secure, encrypted channels for all communications</li>
         </ul>
       </section>
 
