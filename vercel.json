@@ -1,4 +1,21 @@
 {
+    "redirects": [
+        {
+            "source": "/Contact",
+            "destination": "/contact",
+            "permanent": true
+        },
+        {
+            "source": "/Privacy",
+            "destination": "/privacy",
+            "permanent": true
+        },
+        {
+            "source": "/Terms",
+            "destination": "/terms",
+            "permanent": true
+        }
+    ],
     "rewrites": [
         {
             "source": "/api/(.*)",
