@@ -4,50 +4,85 @@ import VSLSection from '../components/VSLSection';
 import { BRAND } from '../constants';
 
 const Contact: React.FC = () => {
+
+  React.useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://link.msgsndr.com/js/form_embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="animate-in fade-in duration-700">
       <section className="bg-gray-50 py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl lg:text-5xl font-bold text-navy-950 mb-6 font-heading tracking-tight">Schedule Your Qualification Call</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              See if you qualify for 10 qualified diagnostic appointments per month—with zero upfront cost and no retainer.
+          <div className="text-start mb-12">
+            <h1 className="text-4xl lg:text-5xl font-bold text-navy-950 mb-2 font-heading tracking-tight">Get Started with QualAI</h1>
+            <p className="text-xl text-gray-600">
+              Join thousands getting marketing insights via SMS
             </p>
           </div>
 
-          <div className="mb-24">
-            <VSLSection />
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            {/* Left Column - 40% */}
+            <div className="lg:col-span-5 p-8 bg-blue-50 border border-blue-100 rounded-3xl">
+              <h3 className="text-2xl font-bold text-blue-900 mb-8 font-heading">Contact QualAI</h3>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start max-w-5xl mx-auto">
-            <div className="p-8 bg-blue-50 border border-blue-100 rounded-3xl">
-              <h3 className="text-2xl font-bold text-blue-900 mb-4 font-heading">Who This Is For</h3>
-              <p className="text-blue-800 leading-relaxed mb-6">
-                We work with HVAC companies who can handle 10 additional diagnostic appointments per month and want to grow without the risk of traditional marketing agencies.
-              </p>
-              <ul className="space-y-3">
-                {["Pay only when jobs close", "Zero upfront cost", "Cancel anytime with 30 days notice"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-2 text-blue-700 font-medium text-sm">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <div className="space-y-8">
+                <div>
+                  <h4 className="text-sm font-bold text-blue-800 uppercase tracking-widest mb-1">Phone</h4>
+                  <p className="text-navy-900 font-bold text-lg">{BRAND.supportPhone}</p>
+                  <p className="text-blue-700 text-sm">Monday-Friday, 9 AM - 5 PM PST</p>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-bold text-blue-800 uppercase tracking-widest mb-1">Email</h4>
+                  <p className="text-navy-900 font-bold text-lg">{BRAND.supportEmail}</p>
+                  <p className="text-blue-700 text-sm">Response: 24-48 business hours</p>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-bold text-blue-800 uppercase tracking-widest mb-1">Address</h4>
+                  <p className="text-navy-900 font-medium text-lg leading-relaxed">{BRAND.address}</p>
+                  <p className="text-navy-900 font-medium text-lg leading-relaxed">United States</p>
+                </div>
+
+                <div className="pt-6 border-t border-blue-200">
+                  <h4 className="text-sm font-bold text-blue-800 uppercase tracking-widest mb-2">Questions about SMS?</h4>
+                  <p className="text-blue-900 font-medium">Reply HELP to any message for instant support</p>
+                  <p className="text-blue-900 font-medium">Reply STOP to unsubscribe at any time</p>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-navy-950 font-heading">Direct Channels</h3>
-              <div className="p-6 rounded-2xl border border-gray-100 shadow-sm bg-white">
-                <div className="text-accent font-bold text-xs uppercase tracking-widest mb-2">Support Email</div>
-                <div className="text-navy-950 font-bold">{BRAND.supportEmail}</div>
-              </div>
-              <div className="p-6 rounded-2xl border border-gray-100 shadow-sm bg-white">
-                <div className="text-accent font-bold text-xs uppercase tracking-widest mb-2">Direct Phone</div>
-                <div className="text-navy-950 font-bold">{BRAND.supportPhone}</div>
-              </div>
-              <div className="p-6 rounded-2xl border border-gray-100 shadow-sm bg-white">
-                <div className="text-accent font-bold text-xs uppercase tracking-widest mb-2">Office Headquarters</div>
-                <div className="text-navy-950 font-bold text-sm leading-relaxed">{BRAND.address}</div>
+            {/* Right Column - 60% */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="bg-white rounded-[2rem] shadow-lg p-8 border border-gray-100">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-navy-950 mb-2 font-heading">Opt-In for SMS Updates</h3>
+                  <p className="text-gray-500 text-sm">Sign up to receive exclusive marketing insights, special offers, and service updates via SMS. We respect your privacy and will never share your number.</p>
+                  <p className="text-gray-400 text-xs mt-2 italic">Message & data rates may apply. Reply STOP to opt out, HELP for help.</p>
+                </div>
+                <iframe
+                  src="https://api.leadconnectorhq.com/widget/form/02d8zYtPNibOOpOUKhSf"
+                  style={{ width: '100%', height: '100%', border: 'none', borderRadius: '3px' }}
+                  id="inline-02d8zYtPNibOOpOUKhSf"
+                  data-layout="{'id':'INLINE'}"
+                  data-trigger-type="alwaysShow"
+                  data-trigger-value=""
+                  data-activation-type="alwaysActivated"
+                  data-activation-value=""
+                  data-deactivation-type="neverDeactivate"
+                  data-deactivation-value=""
+                  data-form-name="Pilot Discovery"
+                  data-height="946"
+                  data-layout-iframe-id="inline-02d8zYtPNibOOpOUKhSf"
+                  data-form-id="02d8zYtPNibOOpOUKhSf"
+                  title="Pilot Discovery"
+                />
               </div>
             </div>
           </div>

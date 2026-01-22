@@ -1,11 +1,10 @@
-
 export const BRAND = {
-  name: "Qual AI",
+  name: "QualAI",
   tagline: "Automated Booking Systems for HVAC Companies",
-  legalName: "Qual AI Systems LLC",
-  supportEmail: "info@qualai.co",
-  supportPhone: "+1 949-382-4161",
-  address: "338 S Western Ave STE C PMB 8019, Los Angeles, CA 90020, United States",
+  legalName: "SNL Growth Systems LLC",
+  supportEmail: "stone@qualai.co",
+  supportPhone: "+1 949-439-8669",
+  address: "8605 Santa Monica Blvd, West Hollywood, CA 90069",
   domain: "qualai.co",
   guarantee: "10 qualified $49 diagnostic appointments in 60 days"
 };
