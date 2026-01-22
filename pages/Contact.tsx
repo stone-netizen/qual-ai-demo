@@ -29,6 +29,14 @@ const Contact: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             {/* Left Column - 40% */}
             <div className="lg:col-span-5 p-8 bg-blue-50 border border-blue-100 rounded-3xl">
+              <div className="flex items-center gap-2 mb-8">
+                <div className="w-10 h-10 bg-navy-900 rounded flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">Q</span>
+                </div>
+                <span className="text-2xl font-bold tracking-tight text-navy-950 font-heading">
+                  Qual <span className="text-[#2180E8] text-lg">AI</span>
+                </span>
+              </div>
               <h3 className="text-2xl font-bold text-blue-900 mb-8 font-heading">Contact QualAI</h3>
 
               <div className="space-y-8">
