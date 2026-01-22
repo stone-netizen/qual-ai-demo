@@ -49,7 +49,7 @@ const Contact: React.FC = () => {
                 <div>
                   <h4 className="text-sm font-bold text-blue-800 uppercase tracking-widest mb-1">Email</h4>
                   <p className="text-navy-900 font-bold text-lg">{BRAND.supportEmail}</p>
-                  <p className="text-blue-700 text-sm">Response: 24-48 business hours</p>
+                  <p className="text-blue-700 text-sm">Average response time: 24 hours</p>
                 </div>
 
                 <div>
@@ -91,6 +91,25 @@ const Contact: React.FC = () => {
                   data-form-id="02d8zYtPNibOOpOUKhSf"
                   title="Pilot Discovery"
                 />
+              </div>
+
+              {/* FAQ Section */}
+              <div className="bg-white rounded-[2rem] shadow-lg p-8 border border-gray-100">
+                <h3 className="text-2xl font-bold text-navy-950 mb-6 font-heading">Frequently Asked Questions</h3>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-bold text-navy-900 mb-2">Q: How often will I receive messages?</h4>
+                    <p className="text-gray-600">Frequency varies by promotions and campaigns. You'll only receive relevant updates and offers.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-navy-900 mb-2">Q: How do I unsubscribe?</h4>
+                    <p className="text-gray-600">Reply STOP to any message and you'll be unsubscribed within one business day.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-navy-900 mb-2">Q: Is my information secure?</h4>
+                    <p className="text-gray-600">Yes. All transmissions are encrypted and secure. We never sell your personal information.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
