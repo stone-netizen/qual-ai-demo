@@ -72,8 +72,21 @@ const Contact: React.FC = () => {
                 <div className="mb-6">
                   <h3 className="text-2xl font-bold text-navy-950 mb-2 font-heading">Opt-In for SMS Updates</h3>
                   <p className="text-gray-500 text-sm">Sign up to receive exclusive marketing insights, special offers, and service updates via SMS. We respect your privacy and will never share your number.</p>
-                  <p className="text-gray-400 text-xs mt-2 italic">Message & data rates may apply. Reply STOP to opt out, HELP for help.</p>
                 </div>
+
+                {/* Message & Data Rates Disclosure Box */}
+                <div className="bg-gray-100 border-2 border-gray-300 rounded-xl p-6 mb-6">
+                  <p className="text-navy-950 font-bold text-sm mb-3">
+                    📱 Message & Data Rates Disclosure
+                  </p>
+                  <p className="text-gray-700 text-sm leading-relaxed mb-3">
+                    By opting in below, you consent to receive recurring automated marketing text messages from QualAI at the phone number provided. Consent is not a condition of purchase. Message frequency varies. Message & data rates may apply. Reply HELP for help or STOP to cancel.
+                  </p>
+                  <p className="text-gray-600 text-xs italic">
+                    By opting in below, you acknowledge receipt of this disclosure and agree to our <a href="/terms" className="text-blue-600 underline">Terms of Service</a> and <a href="/privacy" className="text-blue-600 underline">Privacy Policy</a>.
+                  </p>
+                </div>
+
                 <iframe
                   src="https://api.leadconnectorhq.com/widget/form/02d8zYtPNibOOpOUKhSf"
                   style={{ width: '100%', height: '100%', border: 'none', borderRadius: '3px' }}
