@@ -7,15 +7,6 @@
 
 ### Low Priority
 
-- [ ] **Implement code-splitting to reduce bundle size**
-  - Current build has no code splitting (all routes loaded synchronously in `App.tsx`)
-  - Use `React.lazy()` and `Suspense` for route-based code splitting
-  - Candidate pages for lazy loading:
-    - Legal pages (Privacy, Terms, SMS Terms, Cookie, Security) - 5 pages
-    - Demo page (large Retell SDK dependency)
-    - How It Works page
-  - File: `App.tsx`
-
 - [ ] **Add testing infrastructure**
   - No tests currently exist for application code
   - Consider adding: Vitest (already using Vite), React Testing Library
@@ -27,6 +18,12 @@
 ---
 
 ## Completed
+
+- [x] **Implement code-splitting to reduce bundle size** (2026-01-30)
+  - Added React.lazy() for 7 pages: HowItWorks, Demo, PrivacyPolicy, TermsOfService, SMSTerms, CookiePolicy, Security
+  - Added Suspense with loading spinner fallback
+  - Main bundle reduced from 845KB to 378KB (55% reduction)
+  - Demo page (447KB with Retell SDK) now loads separately
 
 - [x] **Expand How It Works page to 5 steps** (2026-01-30)
   - Updated from 3 steps to 5 steps per spec: Lead Capture, AI Qualification, CRM Integration, Booking & Scheduling, Handoff
@@ -123,4 +120,4 @@
 - LeadConnector handles the redirect to confirmation page internally
 - CRM list is now consolidated in `constants.ts` with logo paths, used by `CRMLogos.tsx`
 - SVG logos added to `public/logos/` directory for all 8 CRM integrations
-- Vite config has no code splitting configured - all routes are bundled together
+- Code splitting implemented via React.lazy() - main bundle 378KB, Demo chunk 447KB
