@@ -82,3 +82,4 @@ All reusable components have been integrated into the application:
 - SVG logos added to `public/logos/` directory for all 8 CRM integrations
 - Code splitting implemented via React.lazy() - main bundle 392KB, Demo chunk 448KB
 - Tests located in `test/` directory with setup in `test/setup.ts`
+- Vitest configured with `isolate: true` and `pool: 'forks'` for proper test isolation with lazy-loaded modules
