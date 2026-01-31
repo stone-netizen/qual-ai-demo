@@ -33,4 +33,7 @@ Help prospects understand the technical integration and workflow.
 - [x] CRM logos displayed
 - [x] CTA to try demo or book consultation
 - [x] Mobile-friendly layout
+- [x] Steps use `@shadcn/card` components
+- [x] Step numbers use `@shadcn/badge` components
+- [x] CTAs use `@shadcn/button` components
 
