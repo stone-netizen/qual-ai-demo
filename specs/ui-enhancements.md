@@ -10,7 +10,10 @@ Document all visual polish enhancements, component APIs, mobile responsiveness r
 ### Logo.dev (CRM Logos)
 - **API Docs**: https://docs.logo.dev/introduction
 - **Environment Variable**: `VITE_LOGODEV_TOKEN`
-- **Usage Pattern**: `https://img.logo.dev/{domain}?token={TOKEN}`
+- **Usage Pattern**: `https://img.logo.dev/{domain}?token={TOKEN}&format=png&theme=dark`
+- **Parameters**:
+  - `format=png` - Returns logos with transparent backgrounds
+  - `theme=dark` - Inverts light-colored logos for dark backgrounds
 - **Purpose**: Fetch real CRM brand logos for the integrations section
 
 ### Retell AI (Voice Demo)

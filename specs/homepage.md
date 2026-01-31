@@ -26,7 +26,8 @@ Help HVAC business owners understand what Qual AI does and convert them to book 
 
 ### CRM Integrations
 - **Use Logo.dev API** to display real CRM logos (NOT local SVG files)
-- Logo.dev URL pattern: `https://img.logo.dev/{domain}?token={VITE_LOGODEV_TOKEN}`
+- Logo.dev URL pattern: `https://img.logo.dev/{domain}?token={TOKEN}&format=png&theme=dark`
+- `format=png` for transparent backgrounds, `theme=dark` for dark background compatibility
 - Supported CRMs: ServiceTitan, FieldEdge, Housecall Pro, Jobber, ServiceM8, Service Fusion, Workiz, GorillaDesk
 - Marquee/carousel animation with fade edges
 - **Logo containers should be circular** (rounded-full, equal width/height)
