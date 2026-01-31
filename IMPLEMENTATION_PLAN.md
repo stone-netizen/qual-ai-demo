@@ -10,7 +10,7 @@
 All core features and acceptance criteria have been implemented. The application is production-ready with:
 
 - **30 passing tests** covering Demo page behavior and all 10 routes
-- **Code splitting** reducing main bundle from 845KB to 392KB (54% reduction)
+- **Code splitting** reducing main bundle from 845KB to 390KB (54% reduction)
 - **Animation utilities** centralized in `lib/animations.ts`
 - **Trust badges** in footer (SSL, TCPA, SOC 2, Encryption)
 
