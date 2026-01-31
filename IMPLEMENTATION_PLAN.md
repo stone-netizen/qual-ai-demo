@@ -90,3 +90,4 @@ All reusable components have been integrated into the application:
 - Script loading improved in Contact.tsx (duplicate prevention, safer cleanup)
 - UI constants centralized: STICKY_CTA_SCROLL_THRESHOLD in constants.ts
 - Unused animation variants removed from lib/animations.ts (slideInLeft, slideInRight, staggerContainerFast, hoverScale, tapScale, cardHover, pageTransition, viewportEarly, waveformBar, toastSlide, particleFloat, counterAnimation)
+- Demo.test.tsx first test has 15s timeout to handle slow module initialization

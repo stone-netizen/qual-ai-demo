@@ -70,7 +70,7 @@ describe('Demo Page', () => {
   });
 
   describe('Initial State', () => {
-    it('renders the page title', () => {
+    it('renders the page title', { timeout: 15000 }, () => {
       renderDemo();
 
       const heading = screen.getByRole('heading', { level: 1 });
