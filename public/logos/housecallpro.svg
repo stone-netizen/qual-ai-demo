@@ -1,5 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
-  <text x="10" y="35" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#9CA3AF">
-    <tspan fill="#F97316">Housecall</tspan><tspan fill="#9CA3AF">Pro</tspan>
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <!-- Housecall Pro Logo - Blue accent -->
+  <g>
+    <!-- Icon: House with checkmark -->
+    <path d="M20 6L4 18v18h32V18L20 6z" fill="#3B82F6" opacity="0.9"/>
+    <path d="M20 6L4 18v18h32V18L20 6z" stroke="#3B82F6" stroke-width="1" fill="none"/>
+    <rect x="16" y="24" width="8" height="12" fill="#1E3A8A"/>
+    <polyline points="12,22 18,28 30,16" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Text -->
+    <text x="44" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#3B82F6">Housecall</text>
+    <text x="134" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="#9CA3AF">Pro</text>
+  </g>
 </svg>

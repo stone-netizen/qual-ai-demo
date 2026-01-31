@@ -1,5 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
-  <text x="10" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#9CA3AF">
-    <tspan fill="#34D399">Field</tspan><tspan fill="#9CA3AF">Edge</tspan>
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none">
+  <!-- FieldEdge Logo - Green accent -->
+  <g>
+    <!-- Icon: Lightning bolt in hexagon -->
+    <polygon points="20,4 34,12 34,28 20,36 6,28 6,12" fill="#10B981" opacity="0.9"/>
+    <path d="M22 10L16 22h6l-4 10 10-14h-6l4-8z" fill="#fff"/>
+    <!-- Text -->
+    <text x="44" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700" fill="#10B981">Field</text>
+    <text x="88" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700" fill="#9CA3AF">Edge</text>
+  </g>
 </svg>

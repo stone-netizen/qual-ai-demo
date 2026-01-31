@@ -1,3 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
-  <text x="10" y="35" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#38BDF8">Workiz</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 40" fill="none">
+  <!-- Workiz Logo - Blue accent -->
+  <g>
+    <!-- Icon: W in circle -->
+    <circle cx="20" cy="20" r="16" fill="#2563EB" opacity="0.9"/>
+    <path d="M10 14l4 12 6-9 6 9 4-12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Text -->
+    <text x="44" y="27" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#2563EB">workiz</text>
+  </g>
 </svg>

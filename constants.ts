@@ -84,3 +84,11 @@ export const ROUTES = {
   SECURITY: "/security",
   DEMO: "/demo"
 };
+
+export const SOCIAL_PROOF = [
+  { name: "Mike T.", location: "Austin, TX", service: "AC Repair", timeAgo: "2 min ago" },
+  { name: "Sarah L.", location: "Phoenix, AZ", service: "HVAC Install", timeAgo: "5 min ago" },
+  { name: "David R.", location: "Dallas, TX", service: "Maintenance", timeAgo: "8 min ago" },
+  { name: "Jennifer M.", location: "Houston, TX", service: "Duct Cleaning", timeAgo: "12 min ago" },
+  { name: "Robert K.", location: "San Antonio, TX", service: "Heat Pump", timeAgo: "15 min ago" },
+];

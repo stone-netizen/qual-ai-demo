@@ -1,5 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
-  <text x="10" y="35" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#9CA3AF">
-    <tspan fill="#FB923C">Service</tspan><tspan fill="#9CA3AF">Fusion</tspan>
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 40" fill="none">
+  <!-- Service Fusion Logo - Red/Orange accent -->
+  <g>
+    <!-- Icon: Fusion symbol (two curved shapes merging) -->
+    <path d="M10 20c0-8 6-14 14-14" stroke="#EF4444" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M34 20c0 8-6 14-14 14" stroke="#F97316" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <circle cx="22" cy="20" r="5" fill="#EF4444"/>
+    <!-- Text -->
+    <text x="48" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#EF4444">Service</text>
+    <text x="114" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#9CA3AF">Fusion</text>
+  </g>
 </svg>
