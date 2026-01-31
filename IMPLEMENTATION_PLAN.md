@@ -83,3 +83,4 @@ All reusable components have been integrated into the application:
 - Tests located in `test/` directory with setup in `test/setup.ts`
 - Vitest configured with `isolate: true` and `pool: 'forks'` for proper test isolation with lazy-loaded modules
 - SocialProofToast removed from homepage per spec requirements
+- `vite-env.d.ts` provides TypeScript types for `import.meta.env` (Vite environment variables)
