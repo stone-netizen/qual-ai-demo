@@ -1,26 +1,59 @@
 # Implementation Plan
 
 > Last updated: 2026-01-30
-> Status: Core features complete
+> Status: Core features complete, polish items remaining
 
-## Current Milestone: Polish & Optimization
+## Current Milestone: Polish & Alignment
+
+### Medium Priority
+
+- [ ] **Expand How It Works page to match 5-step spec**
+  - Spec (`specs/how-it-works.md`) defines 5 steps:
+    1. Lead Capture
+    2. AI Qualification
+    3. CRM Integration
+    4. Booking & Scheduling
+    5. Handoff
+  - Current implementation only has 3 steps (lines 16-79 of `pages/HowItWorks.tsx`):
+    1. Lead Capture
+    2. AI Qualification
+    3. Direct Booking
+  - Missing: Step 3 (CRM Integration), Step 5 (Handoff)
+  - Step 4 exists as "Direct Booking" but description doesn't cover full scheduling flow
+  - File: `pages/HowItWorks.tsx`
 
 ### Low Priority
 
 - [ ] **Implement code-splitting to reduce bundle size**
-  - Current build: ~845KB (warning threshold: 500KB)
-  - Use dynamic imports for route-based code splitting
-  - Consider lazy loading legal pages and Demo page
+  - Current build has no code splitting (all routes loaded synchronously in `App.tsx`)
+  - Use `React.lazy()` and `Suspense` for route-based code splitting
+  - Candidate pages for lazy loading:
+    - Legal pages (Privacy, Terms, SMS Terms, Cookie, Security) - 5 pages
+    - Demo page (large Retell SDK dependency)
+    - How It Works page
+  - File: `App.tsx`
 
-- [x] **Video thumbnail verified** - `/public/video-thumbnail.jpg` exists (54KB)
+- [ ] **Add testing infrastructure**
+  - No tests currently exist for application code
+  - Consider adding: Vitest (already using Vite), React Testing Library
+  - Priority test areas:
+    - Demo page Retell integration (error handling, call states)
+    - Navigation/routing (all routes accessible)
+    - Form/calendar embed loading
 
 ---
 
 ## Completed
 
+- [x] **Replace CRM text labels with actual logo images** (2026-01-30)
+  - Created `public/logos/` directory with SVG logos for all 8 CRMs
+  - Updated `constants.ts` CRM_INTEGRATIONS to include logo paths
+  - Updated `CRMLogos.tsx` to use image logos from constants (consolidated single source of truth)
+  - Installed missing `clsx` and `tailwind-merge` dependencies for TypeScript build
+
 - [x] **Integrate booking calendar on Contact page** (2026-01-30)
-  - Added LeadConnector calendar embed from VSLSection
-  - Added SMS compliance disclosure
+  - Added LeadConnector calendar embed
+  - Added A2P 10DLC SMS compliance disclosure
   - Moved contact info cards to secondary section below calendar
 
 - [x] **Add CRM Logos to How It Works page** (2026-01-30)
@@ -48,12 +81,50 @@
 - [x] Demo page with Retell voice integration
 - [x] API endpoint for creating web calls
 - [x] PostBooking confirmation page with video
+- [x] Video thumbnail verified - `/public/video-thumbnail.jpg` exists (54KB)
 - [x] All 5 legal pages (Privacy, Terms, SMS Terms, Cookie Policy, Security)
-- [x] Footer with all legal links
-- [x] Header with navigation
+- [x] Footer with all legal links and Demo link
+- [x] Header with navigation including Voice Demo link
 - [x] CRMLogos component with marquee animation
+- [x] CRM logos using actual SVG images (not text placeholders)
 - [x] Mobile-responsive layout throughout
 - [x] Routing for all pages configured in App.tsx
+- [x] Shared animation utilities in lib/animations.ts
+
+---
+
+## Acceptance Criteria Status
+
+### Homepage (`specs/homepage.md`)
+- [x] Hero loads above the fold
+- [x] CTA buttons navigate to /contact
+- [x] Stats animate on scroll
+- [x] All sections responsive
+- [x] CRM section displays real logo images (not text placeholders)
+
+### Booking Flow (`specs/booking-flow.md`)
+- [x] User can book a demo from the contact page
+- [x] Post-booking page confirms the booking
+- [x] Flow works on mobile devices
+- [N/A] Form validates required fields (LeadConnector handles validation)
+
+### Demo Call (`specs/demo-call.md`)
+- [x] User can start a voice call with one click
+- [x] Visual feedback shows when AI is speaking vs listening
+- [x] Call can be ended cleanly
+- [x] Errors display user-friendly messages
+
+### How It Works (`specs/how-it-works.md`)
+- [x] CRM logos displayed
+- [x] CTA to try demo or book consultation
+- [x] Mobile-friendly layout
+- [ ] Clear step-by-step explanation (5 steps) ← **INCOMPLETE** (only 3 steps implemented)
+
+### Legal Pages (`specs/legal-pages.md`)
+- [x] All 5 legal pages render correctly
+- [x] Footer links navigate to each page
+- [x] Pages follow consistent styling
+- [x] Mobile-responsive layout
 
 ---
 
@@ -63,3 +134,6 @@
 - Run `./loop.sh` to implement tasks
 - The booking flow is now: Homepage CTA → /contact (calendar) → user books via LeadConnector
 - LeadConnector handles the redirect to confirmation page internally
+- CRM list is now consolidated in `constants.ts` with logo paths, used by `CRMLogos.tsx`
+- SVG logos added to `public/logos/` directory for all 8 CRM integrations
+- Vite config has no code splitting configured - all routes are bundled together

@@ -10,15 +10,18 @@
   },
   "dependencies": {
     "@vercel/node": "^5.5.20",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.26.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router-dom": "^7.12.0",
-    "retell-client-js-sdk": "^2.0.7"
+    "retell-client-js-sdk": "^2.0.7",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "shadcn": "^3.7.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
