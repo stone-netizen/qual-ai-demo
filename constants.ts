@@ -74,6 +74,11 @@ export const CRM_INTEGRATIONS = [
   { name: "GorillaDesk", domain: "gorilladesk.com" },
 ];
 
+// UI configuration constants
+export const UI_CONFIG = {
+  STICKY_CTA_SCROLL_THRESHOLD: 600, // px scroll before showing sticky CTA
+};
+
 export const ROUTES = {
   HOME: "/",
   HOW_IT_WORKS: "/how-it-works",

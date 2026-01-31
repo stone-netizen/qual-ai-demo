@@ -10,13 +10,19 @@ import {
 
 const Contact: React.FC = () => {
   useEffect(() => {
+    // Check if script already exists to avoid duplicates
+    const existingScript = document.querySelector('script[src*="form_embed.js"]');
+    if (existingScript) return;
+
     const script = document.createElement('script');
     script.src = 'https://link.msgsndr.com/js/form_embed.js';
     script.async = true;
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
     };
   }, []);
 

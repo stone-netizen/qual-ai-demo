@@ -33,9 +33,14 @@ export default async function handler(
         }
 
         const data = await apiResponse.json();
+
+        // Validate that access_token is present in the response
+        if (!data.access_token) {
+            return response.status(500).json({ error: 'Invalid response from voice service' });
+        }
+
         return response.status(200).json(data);
-    } catch (error) {
-        console.error('Error creating web call:', error);
+    } catch {
         return response.status(500).json({ error: 'Failed to create web call' });
     }
 }

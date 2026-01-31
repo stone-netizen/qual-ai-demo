@@ -25,22 +25,18 @@ const Demo: React.FC = () => {
         // Setup event listeners
         retellClientRef.current.on('agent_start_talking', () => {
             setIsAgentSpeaking(true);
-            console.log('Agent started talking');
         });
 
         retellClientRef.current.on('agent_stop_talking', () => {
             setIsAgentSpeaking(false);
-            console.log('Agent stopped talking');
         });
 
         retellClientRef.current.on('call_ended', () => {
             setIsCalling(false);
             setIsAgentSpeaking(false);
-            console.log('Call ended');
         });
 
-        retellClientRef.current.on('error', (err) => {
-            console.error('Retell error:', err);
+        retellClientRef.current.on('error', () => {
             setError('Connection error. Please refresh and try again.');
             setIsCalling(false);
         });
@@ -69,8 +65,7 @@ const Demo: React.FC = () => {
                     accessToken: data.access_token,
                 });
             }
-        } catch (err) {
-            console.error('Failed to start call:', err);
+        } catch {
             setError('Could not start the call. Please check your microphone permissions.');
             setIsCalling(false);
         }

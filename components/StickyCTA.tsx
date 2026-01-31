@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ROUTES, MESSAGING } from '../constants';
+import { ROUTES, MESSAGING, UI_CONFIG } from '../constants';
 import { stickyCtaVariants } from '../lib/animations';
 
 const StickyCTA: React.FC = () => {
@@ -15,7 +15,7 @@ const StickyCTA: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsVisible(scrollY > 600);
+      setIsVisible(scrollY > UI_CONFIG.STICKY_CTA_SCROLL_THRESHOLD);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
