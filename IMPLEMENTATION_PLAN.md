@@ -59,17 +59,20 @@ All core features and acceptance criteria have been implemented. The application
 
 ---
 
-## Available Reusable Components
+## Integrated Reusable Components
 
-These components are ready for integration if needed:
+All reusable components have been integrated into the application:
 
-- `AnimatedCounter` - Scroll-triggered number counter animation
-- `AudioWaveform` - Voice call visualizer with idle/listening/speaking states
-- `FAQAccordion` / `FAQItem` - Animated accordion for FAQ sections
-- `FloatingParticles` - Decorative background particle effect
-- `PhoneMockup` - 3D phone mockup showing app interface
+**Homepage (`pages/Home.tsx`)**:
+- `AnimatedCounter` - Stats section with scroll-triggered count animation
+- `FAQAccordion` / `FAQItem` - Interactive accordion for FAQ section
+- `FloatingParticles` - Decorative background in hero section
+- `PhoneMockup` - 3D phone mockup (desktop hero)
 - `SocialProofToast` - Rotating social proof notifications
-- `StickyCTA` - Floating CTA button that appears on scroll
+- `StickyCTA` - Floating CTA button after scroll
+
+**Demo Page (`pages/Demo.tsx`)**:
+- `AudioWaveform` - Voice call visualizer with idle/listening/speaking states
 
 ## Notes
 
