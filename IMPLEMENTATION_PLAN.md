@@ -12,9 +12,7 @@
   - Use dynamic imports for route-based code splitting
   - Consider lazy loading legal pages and Demo page
 
-- [ ] **Add video thumbnail fallback** (`pages/PostBooking.tsx`)
-  - Video uses `/video-thumbnail.jpg` as poster
-  - Verify thumbnail exists or add a placeholder
+- [x] **Video thumbnail verified** - `/public/video-thumbnail.jpg` exists (54KB)
 
 ---
 
