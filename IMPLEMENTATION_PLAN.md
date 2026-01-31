@@ -5,13 +5,6 @@
 
 ## Current Milestone: Polish & Optimization
 
-### Medium Priority
-
-- [ ] **Move Retell API key to environment variables** (`api/create-web-call.ts`)
-  - API key is currently hardcoded: `key_e1fdf402e8a43b7b6d8a729236c1`
-  - Move to Vercel environment variable (e.g., `RETELL_API_KEY`)
-  - Update code to use `process.env.RETELL_API_KEY`
-
 ### Low Priority
 
 - [ ] **Implement code-splitting to reduce bundle size**
@@ -45,6 +38,11 @@
 - [x] **Clean up deprecated components** (2026-01-30)
   - Removed ComplianceForm.tsx (was exporting null)
   - Removed VSLSection.tsx (content moved to Contact page)
+
+- [x] **Move Retell API key to environment variables** (2026-01-30)
+  - Updated api/create-web-call.ts to use RETELL_API_KEY and RETELL_AGENT_ID
+  - Added .env.example documenting required variables
+  - Must set these in Vercel dashboard for production
 
 - [x] Homepage with all sections (Hero, Stats, CRM Integrations, How It Works, FAQ, Final CTA)
 - [x] Framer Motion animations on Homepage
