@@ -38,4 +38,7 @@ Legal and compliance pages required for the Qual AI website.
 - [x] Footer links navigate to each page
 - [x] Pages follow consistent styling
 - [x] Mobile-responsive layout
+- [x] All pages use `@shadcn/card` as container
+- [x] Section dividers use `@shadcn/separator`
+- [x] Typography follows shadcn conventions
 

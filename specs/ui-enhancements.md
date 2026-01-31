@@ -237,6 +237,12 @@ See `.env.example` for template.
 - [x] CRM logos visible in marquee
 
 ### Build
-- [x] `npm run build` passes (main 390KB, Demo 448KB)
+- [x] `npm run build` passes (main 446KB, Demo 448KB)
 - [x] `npm run test` passes (30 tests)
 - [x] No console errors
+
+### Shadcn Components
+- [x] StickyCTA uses `@shadcn/button`
+- [x] FAQAccordion uses `@shadcn/accordion`
+- [x] Homepage uses `@shadcn/button`, `@shadcn/badge`, `@shadcn/card`
+- [x] Legal pages use `@shadcn/card`, `@shadcn/separator`
