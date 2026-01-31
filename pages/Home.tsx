@@ -7,7 +7,6 @@ import AnimatedCounter from '../components/AnimatedCounter';
 import FAQAccordion from '../components/FAQAccordion';
 import FloatingParticles from '../components/FloatingParticles';
 import PhoneMockup from '../components/PhoneMockup';
-import SocialProofToast from '../components/SocialProofToast';
 import StickyCTA from '../components/StickyCTA';
 import {
   fadeInUp,
@@ -27,9 +26,6 @@ const Home: React.FC = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Social Proof Toast */}
-      <SocialProofToast />
-
       {/* Sticky CTA */}
       <StickyCTA />
 

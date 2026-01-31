@@ -1,8 +1,19 @@
-
 import React from 'react';
 import { CRM_INTEGRATIONS } from '../constants';
 
+// Build Logo.dev URL for a domain
+const getLogoUrl = (domain: string): string => {
+  const token = import.meta.env.VITE_LOGODEV_TOKEN;
+  if (!token) {
+    // Fallback: show domain text if no token configured
+    return '';
+  }
+  return `https://img.logo.dev/${domain}?token=${token}`;
+};
+
 const CRMLogos: React.FC = () => {
+  const logodevToken = import.meta.env.VITE_LOGODEV_TOKEN;
+
   return (
     <section className="py-16 bg-navy-950 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,12 +23,12 @@ const CRMLogos: React.FC = () => {
           </p>
         </div>
 
-        {/* Marquee container with fade edges */}
+        {/* Marquee container with responsive fade edges */}
         <div className="relative">
-          {/* Left fade */}
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-navy-950 to-transparent z-10 pointer-events-none"></div>
-          {/* Right fade */}
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-navy-950 to-transparent z-10 pointer-events-none"></div>
+          {/* Left fade - responsive widths */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 md:w-24 bg-gradient-to-r from-navy-950 to-transparent z-10 pointer-events-none"></div>
+          {/* Right fade - responsive widths */}
+          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 md:w-24 bg-gradient-to-l from-navy-950 to-transparent z-10 pointer-events-none"></div>
 
           {/* Marquee track */}
           <div className="flex overflow-hidden">
@@ -25,13 +36,19 @@ const CRMLogos: React.FC = () => {
               {[...CRM_INTEGRATIONS, ...CRM_INTEGRATIONS].map((crm, idx) => (
                 <div
                   key={idx}
-                  className="mx-6 px-6 py-3 bg-navy-900/50 border border-navy-800 rounded-xl hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center"
+                  className="mx-2 sm:mx-4 md:mx-6 px-4 sm:px-5 md:px-6 py-2 sm:py-3 bg-navy-900/50 border border-navy-800 rounded-xl hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center min-w-[100px] sm:min-w-[120px]"
                 >
-                  <img
-                    src={crm.logo}
-                    alt={crm.name}
-                    className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
-                  />
+                  {logodevToken ? (
+                    <img
+                      src={getLogoUrl(crm.domain)}
+                      alt={crm.name}
+                      className="h-6 sm:h-7 md:h-8 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
+                    />
+                  ) : (
+                    <span className="text-gray-400 text-xs sm:text-sm font-medium">
+                      {crm.name}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
@@ -39,13 +56,19 @@ const CRMLogos: React.FC = () => {
               {[...CRM_INTEGRATIONS, ...CRM_INTEGRATIONS].map((crm, idx) => (
                 <div
                   key={idx}
-                  className="mx-6 px-6 py-3 bg-navy-900/50 border border-navy-800 rounded-xl hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center"
+                  className="mx-2 sm:mx-4 md:mx-6 px-4 sm:px-5 md:px-6 py-2 sm:py-3 bg-navy-900/50 border border-navy-800 rounded-xl hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center min-w-[100px] sm:min-w-[120px]"
                 >
-                  <img
-                    src={crm.logo}
-                    alt={crm.name}
-                    className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
-                  />
+                  {logodevToken ? (
+                    <img
+                      src={getLogoUrl(crm.domain)}
+                      alt={crm.name}
+                      className="h-6 sm:h-7 md:h-8 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
+                    />
+                  ) : (
+                    <span className="text-gray-400 text-xs sm:text-sm font-medium">
+                      {crm.name}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>

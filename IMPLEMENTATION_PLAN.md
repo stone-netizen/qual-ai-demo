@@ -68,7 +68,6 @@ All reusable components have been integrated into the application:
 - `FAQAccordion` / `FAQItem` - Interactive accordion for FAQ section
 - `FloatingParticles` - Decorative background in hero section
 - `PhoneMockup` - 3D phone mockup (desktop hero)
-- `SocialProofToast` - Rotating social proof notifications
 - `StickyCTA` - Floating CTA button after scroll
 
 **Demo Page (`pages/Demo.tsx`)**:
@@ -78,8 +77,9 @@ All reusable components have been integrated into the application:
 
 - The booking flow is now: Homepage CTA → /contact (calendar) → user books via LeadConnector
 - LeadConnector handles the redirect to confirmation page internally
-- CRM list is now consolidated in `constants.ts` with logo paths, used by `CRMLogos.tsx`
-- SVG logos added to `public/logos/` directory for all 8 CRM integrations
-- Code splitting implemented via React.lazy() - main bundle 392KB, Demo chunk 448KB
+- CRM logos now use Logo.dev API (`constants.ts` stores domains, `CRMLogos.tsx` constructs URLs)
+- Logo.dev token configured via `VITE_LOGODEV_TOKEN` environment variable
+- Code splitting implemented via React.lazy() - main bundle 390KB, Demo chunk 448KB
 - Tests located in `test/` directory with setup in `test/setup.ts`
 - Vitest configured with `isolate: true` and `pool: 'forks'` for proper test isolation with lazy-loaded modules
+- SocialProofToast removed from homepage per spec requirements

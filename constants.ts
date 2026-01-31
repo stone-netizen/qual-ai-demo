@@ -61,15 +61,17 @@ export const MESSAGING = {
   ],
 };
 
+// CRM integrations with Logo.dev domains
+// Logo URLs are constructed at runtime using VITE_LOGODEV_TOKEN
 export const CRM_INTEGRATIONS = [
-  { name: "ServiceTitan", logo: "/logos/servicetitan.svg" },
-  { name: "FieldEdge", logo: "/logos/fieldedge.svg" },
-  { name: "Housecall Pro", logo: "/logos/housecallpro.svg" },
-  { name: "Jobber", logo: "/logos/jobber.svg" },
-  { name: "ServiceM8", logo: "/logos/servicem8.svg" },
-  { name: "Service Fusion", logo: "/logos/servicefusion.svg" },
-  { name: "Workiz", logo: "/logos/workiz.svg" },
-  { name: "GorillaDesk", logo: "/logos/gorilladesk.svg" },
+  { name: "ServiceTitan", domain: "servicetitan.com" },
+  { name: "FieldEdge", domain: "fieldedge.com" },
+  { name: "Housecall Pro", domain: "housecallpro.com" },
+  { name: "Jobber", domain: "getjobber.com" },
+  { name: "ServiceM8", domain: "servicem8.com" },
+  { name: "Service Fusion", domain: "servicefusion.com" },
+  { name: "Workiz", domain: "workiz.com" },
+  { name: "GorillaDesk", domain: "gorilladesk.com" },
 ];
 
 export const ROUTES = {
