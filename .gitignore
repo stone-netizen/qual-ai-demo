@@ -27,3 +27,9 @@ dist-ssr
 public/*.mp4
 public/*.webm
 public/*.mov
+
+# Claude Code development workflow
+.claude/
+.mcp.json
+PROMPT_*.md
+loop.sh
