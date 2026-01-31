@@ -43,7 +43,7 @@ const CRMLogos: React.FC = () => {
                     <img
                       src={getLogoUrl(crm.domain)}
                       alt={crm.name}
-                      className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
+                      className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain opacity-70 hover:opacity-100 transition-opacity duration-300 rounded-xl"
                     />
                   ) : (
                     <span className="text-gray-400 text-[8px] sm:text-[9px] md:text-xs font-medium text-center leading-tight">
@@ -63,7 +63,7 @@ const CRMLogos: React.FC = () => {
                     <img
                       src={getLogoUrl(crm.domain)}
                       alt={crm.name}
-                      className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
+                      className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain opacity-70 hover:opacity-100 transition-opacity duration-300 rounded-xl"
                     />
                   ) : (
                     <span className="text-gray-400 text-[8px] sm:text-[9px] md:text-xs font-medium text-center leading-tight">
