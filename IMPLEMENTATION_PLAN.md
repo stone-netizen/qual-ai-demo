@@ -1,23 +1,19 @@
 # Implementation Plan
 
 > Last updated: 2026-01-30
-> Status: Core features complete, polish items remaining
-
-## Current Milestone: Polish & Alignment
-
-### Low Priority
-
-- [ ] **Add testing infrastructure**
-  - No tests currently exist for application code
-  - Consider adding: Vitest (already using Vite), React Testing Library
-  - Priority test areas:
-    - Demo page Retell integration (error handling, call states)
-    - Navigation/routing (all routes accessible)
-    - Form/calendar embed loading
+> Status: All features complete
 
 ---
 
 ## Completed
+
+- [x] **Add testing infrastructure** (2026-01-30)
+  - Added Vitest with React Testing Library
+  - Created test setup with mocks for matchMedia, IntersectionObserver, ResizeObserver, scrollTo
+  - Added 30 tests covering:
+    - Demo page: initial state, starting calls, error handling, ending calls, event listeners
+    - Routing: all 10 routes accessible, layout behavior (header/footer visibility)
+  - Run tests with `npm run test` (watch mode) or `npm run test:run` (single run)
 
 - [x] **Implement code-splitting to reduce bundle size** (2026-01-30)
   - Added React.lazy() for 7 pages: HowItWorks, Demo, PrivacyPolicy, TermsOfService, SMSTerms, CookiePolicy, Security
@@ -121,3 +117,4 @@
 - CRM list is now consolidated in `constants.ts` with logo paths, used by `CRMLogos.tsx`
 - SVG logos added to `public/logos/` directory for all 8 CRM integrations
 - Code splitting implemented via React.lazy() - main bundle 378KB, Demo chunk 447KB
+- Tests located in `test/` directory with setup in `test/setup.ts`

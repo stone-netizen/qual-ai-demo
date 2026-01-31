@@ -15,6 +15,8 @@ Run after implementing to get immediate feedback:
 ```bash
 npm run build              # TypeScript + Vite build (catches type errors)
 npx tsc --noEmit           # Type check only
+npm run test:run           # Run all tests once
+npm run test               # Run tests in watch mode
 ```
 
 ## Project Structure
@@ -24,6 +26,7 @@ npx tsc --noEmit           # Type check only
 - `lib/` - Utilities and helpers
 - `api/` - Vercel serverless functions
 - `specs/` - Feature specifications
+- `test/` - Vitest tests and setup
 
 ## Tech Stack
 
