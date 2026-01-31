@@ -1,12 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { RetellWebClient } from 'retell-client-js-sdk';
 import { motion } from 'framer-motion';
+import AudioWaveform from '../components/AudioWaveform';
+
+type CallState = 'idle' | 'listening' | 'speaking';
 
 const Demo: React.FC = () => {
     const [isCalling, setIsCalling] = useState(false);
     const [isAgentSpeaking, setIsAgentSpeaking] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const retellClientRef = useRef<RetellWebClient | null>(null);
+
+    // Determine the waveform state
+    const getWaveformState = (): CallState => {
+        if (!isCalling) return 'idle';
+        if (isAgentSpeaking) return 'speaking';
+        return 'listening';
+    };
 
     useEffect(() => {
         // Initialize the client only once
@@ -101,7 +111,7 @@ const Demo: React.FC = () => {
                 {/* Visualizer / Status */}
                 <div className="h-64 flex items-center justify-center mb-12 relative">
                     {isCalling ? (
-                        <div className="relative">
+                        <div className="relative flex flex-col items-center">
                             {/* Pulse Effect when Agent Speaks */}
                             {isAgentSpeaking && (
                                 <>
@@ -109,23 +119,31 @@ const Demo: React.FC = () => {
                                         className="absolute inset-0 bg-blue-500 rounded-full opacity-20"
                                         animate={{ scale: [1, 2], opacity: [0.2, 0] }}
                                         transition={{ duration: 1.5, repeat: Infinity }}
+                                        style={{ top: -16, left: -16, right: -16, bottom: 64 }}
                                     />
                                     <motion.div
                                         className="absolute inset-0 bg-blue-400 rounded-full opacity-20"
                                         animate={{ scale: [1, 1.5], opacity: [0.2, 0] }}
                                         transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                                        style={{ top: -16, left: -16, right: -16, bottom: 64 }}
                                     />
                                 </>
                             )}
 
-                            <div className={`w-32 h-32 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(37,99,235,0.3)] transition-all duration-500 ${isAgentSpeaking ? 'bg-gradient-to-tr from-blue-500 to-accent scale-110' : 'bg-navy-800 border-2 border-blue-500/30'}`}>
+                            {/* Microphone with Glow Effect */}
+                            <div className={`w-32 h-32 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(37,99,235,0.3)] transition-all duration-500 ${isAgentSpeaking ? 'bg-gradient-to-tr from-blue-500 to-accent scale-110' : 'bg-navy-800 border-2 border-blue-500/30'} ${!isAgentSpeaking && isCalling ? 'mic-glow-listening' : ''}`}>
                                 <svg className={`w-12 h-12 transition-all duration-300 ${isAgentSpeaking ? 'text-white' : 'text-blue-400'}`} fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
                                     <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                                 </svg>
                             </div>
 
-                            <p className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-blue-300 font-medium whitespace-nowrap animate-pulse">
+                            {/* Audio Waveform Visualizer */}
+                            <div className="mt-6">
+                                <AudioWaveform state={getWaveformState()} barCount={5} />
+                            </div>
+
+                            <p className="mt-4 text-blue-300 font-medium whitespace-nowrap animate-pulse">
                                 {isAgentSpeaking ? "AI is speaking..." : "Listening..."}
                             </p>
                         </div>
@@ -165,7 +183,7 @@ const Demo: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="text-red-400 bg-red-950/30 px-4 py-2 rounded-lg text-sm border border-red-500/20"
                         >
-                            ⚠️ {error}
+                            {error}
                         </motion.div>
                     )}
                 </div>

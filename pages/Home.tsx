@@ -3,11 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ROUTES, MESSAGING } from '../constants';
 import CRMLogos from '../components/CRMLogos';
+import AnimatedCounter from '../components/AnimatedCounter';
+import FAQAccordion from '../components/FAQAccordion';
+import FloatingParticles from '../components/FloatingParticles';
+import PhoneMockup from '../components/PhoneMockup';
+import SocialProofToast from '../components/SocialProofToast';
+import StickyCTA from '../components/StickyCTA';
 import {
   fadeInUp,
   fadeIn,
   staggerContainer,
-  scaleIn,
   defaultViewport,
   hoverLift,
   buttonVariants,
@@ -22,8 +27,17 @@ const Home: React.FC = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      {/* Social Proof Toast */}
+      <SocialProofToast />
+
+      {/* Sticky CTA */}
+      <StickyCTA />
+
       {/* Hero Section */}
       <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 bg-gradient-to-b from-white via-gray-50/30 to-gray-50 overflow-hidden">
+        {/* Floating Particles Background */}
+        <FloatingParticles />
+
         <div className="absolute inset-0 opacity-[0.02]">
           <div
             className="absolute inset-0"
@@ -36,34 +50,37 @@ const Home: React.FC = () => {
         </div>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          {/* Phone Mockup - Desktop Only */}
+          <PhoneMockup />
+
           <motion.div
-            className="text-center max-w-4xl mx-auto"
+            className="text-center max-w-4xl mx-auto lg:text-left lg:max-w-2xl lg:mx-0"
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
           >
-            {/* Badge */}
+            {/* Badge with Trust Signal */}
             <motion.div
               variants={fadeInUp}
               className="inline-flex items-center gap-2 px-4 py-2 bg-navy-950/5 text-navy-900 rounded-full text-xs font-semibold uppercase tracking-wider mb-8"
             >
-              <span className="w-2 h-2 bg-accent rounded-full" />
+              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
               {MESSAGING.hero.badge}
             </motion.div>
 
-            {/* Headline */}
+            {/* Headline with Animated Gradient */}
             <motion.h1
               variants={fadeInUp}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-navy-950 leading-[1.1] mb-6 font-heading"
             >
               {MESSAGING.hero.headline}{' '}
-              <span className="text-accent">{MESSAGING.hero.headlineAccent}</span>
+              <span className="gradient-text-animated">{MESSAGING.hero.headlineAccent}</span>
             </motion.h1>
 
             {/* Subheadline */}
             <motion.p
               variants={fadeInUp}
-              className="text-lg sm:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto"
+              className="text-lg sm:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0"
             >
               {MESSAGING.hero.subheadline}
             </motion.p>
@@ -72,7 +89,7 @@ const Home: React.FC = () => {
             <motion.div variants={fadeInUp} className="mb-12">
               <motion.button
                 onClick={() => navigate(ROUTES.CONTACT)}
-                className="inline-flex items-center gap-2 bg-navy-900 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-xl shadow-navy-900/20 hover:bg-navy-800 transition-colors"
+                className="inline-flex items-center gap-2 bg-navy-900 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-xl shadow-navy-900/20 hover:bg-navy-800 transition-colors cta-glow"
                 variants={buttonVariants}
                 initial="idle"
                 whileHover="hover"
@@ -98,7 +115,7 @@ const Home: React.FC = () => {
               </p>
             </motion.div>
 
-            {/* Value Props Grid */}
+            {/* Value Props Grid - Glass Cards */}
             <motion.div
               className="grid grid-cols-2 md:grid-cols-4 gap-4"
               variants={staggerContainer}
@@ -108,7 +125,7 @@ const Home: React.FC = () => {
                   key={i}
                   variants={fadeInUp}
                   whileHover={hoverLift}
-                  className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm"
+                  className="p-4 glass-card rounded-xl"
                 >
                   <div className="font-semibold text-navy-950 text-sm">
                     {prop.title}
@@ -123,31 +140,19 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Stats Section with Animated Counters */}
       <section className="py-16 bg-white border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={defaultViewport}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {MESSAGING.stats.map((stat, i) => (
-              <motion.div
+              <AnimatedCounter
                 key={i}
-                variants={scaleIn}
-                className="text-center p-6"
-              >
-                <div className="text-4xl font-bold text-accent mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-600 font-medium">
-                  {stat.label}
-                </div>
-              </motion.div>
+                value={stat.value}
+                label={stat.label}
+                duration={2}
+              />
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -184,7 +189,7 @@ const Home: React.FC = () => {
                 key={i}
                 variants={fadeInUp}
                 whileHover={hoverLift}
-                className="relative p-8 bg-white rounded-2xl border border-gray-100 shadow-sm"
+                className="relative p-8 glass-card rounded-2xl"
               >
                 <div className="absolute -top-4 left-8 w-8 h-8 bg-accent text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-lg">
                   {i + 1}
@@ -201,7 +206,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* FAQ Section with Accordion */}
       <section className="py-20 md:py-28 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -216,28 +221,7 @@ const Home: React.FC = () => {
             </h2>
           </motion.div>
 
-          <motion.div
-            className="space-y-4"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={defaultViewport}
-          >
-            {MESSAGING.faq.map((item, i) => (
-              <motion.div
-                key={i}
-                variants={fadeInUp}
-                className="p-6 rounded-xl border border-gray-100 bg-gray-50/50"
-              >
-                <h4 className="font-semibold text-navy-950 mb-2">
-                  {item.question}
-                </h4>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {item.answer}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
+          <FAQAccordion items={MESSAGING.faq} />
         </div>
       </section>
 
