@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { ROUTES, MESSAGING, UI_CONFIG } from '../constants';
 import { stickyCtaVariants } from '../lib/animations';
+import { Button } from '@/components/ui/button';
 
 const StickyCTA: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,25 +36,14 @@ const StickyCTA: React.FC = () => {
           animate="visible"
           exit="hidden"
         >
-          <button
+          <Button
+            size="lg"
             onClick={() => navigate(ROUTES.CONTACT)}
-            className="flex items-center gap-2 bg-accent hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold shadow-xl shadow-accent/25 hover:shadow-accent/40 transition-all duration-300"
+            className="bg-accent hover:bg-blue-600 text-white px-6 py-3 h-auto rounded-xl font-semibold shadow-xl shadow-accent/25 hover:shadow-accent/40 transition-all duration-300"
           >
             {MESSAGING.cta.primary}
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </button>
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
         </motion.div>
       )}
     </AnimatePresence>
