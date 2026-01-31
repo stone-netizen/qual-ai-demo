@@ -1,101 +1,131 @@
-# UI Enhancements Specification
+# UI Enhancements & Production Readiness Specification
 
 ## Overview
-Document all visual polish enhancements, component APIs, and animation behaviors.
+Document all visual polish enhancements, component APIs, mobile responsiveness requirements, and production readiness checklist.
+
+---
 
 ## External Services
 
-### Brandfetch (Logo Service)
-For sourcing official brand logos:
-- **API Key**: `L-EOAjS6ZGHoS62ijiBRri1aPhjaw4MLkLqywggw-cWv-f1D7LI9FGurz5-dNri_StFcLCHUB_TawIFapF9GhA`
-- **Access Key**: `brandfetch:1id23iYap-aNIVXQ5a-`
-- **URL**: https://brandfetch.com/
+### Logo.dev (CRM Logos)
+- **API Docs**: https://docs.logo.dev/introduction
+- **Environment Variable**: `VITE_LOGODEV_TOKEN`
+- **Usage Pattern**: `https://img.logo.dev/{domain}?token={TOKEN}`
+- **Purpose**: Fetch real CRM brand logos for the integrations section
 
-## New Components
+### Retell AI (Voice Demo)
+- **Environment Variables**: `RETELL_API_KEY`, `RETELL_AGENT_ID`
+- **Agent ID**: `agent_338cb38fefb80627b1de2817f8`
+- **Public Key**: `public_key_ffee8212ea583ca6ee344`
+
+---
+
+## Production Readiness Checklist
+
+### Environment Setup
+- [x] `.env` file template provided (`.env.example`)
+- [x] Keys are NOT committed to git (check .gitignore)
+- [x] Vercel/hosting environment variables documented
+
+### Mobile Responsiveness
+- [x] No horizontal scroll on any page at 375px width
+- [x] All touch targets minimum 44px × 44px
+- [x] Text readable without zooming
+- [x] Forms usable on mobile keyboards (LeadConnector embed)
+
+### Performance
+- [x] Images optimized (use Logo.dev CDN)
+- [x] Lazy loading for below-fold content (React.lazy code splitting)
+- [x] Bundle size reasonable: main 390KB, Demo chunk 448KB
+
+### Accessibility
+- [x] Color contrast meets WCAG AA
+- [x] Interactive elements have focus states
+- [x] Alt text on all images
+
+---
+
+## Component Specifications
 
 ### AnimatedCounter (`components/AnimatedCounter.tsx`)
-**Purpose**: Count-up animation for stats
+**Purpose**: Count-up animation for stats section
 
 **Props**:
-- `value: string` - Target value (e.g., "60s", "40-60%", "24/7")
-- `label: string` - Description text
-- `duration?: number` - Animation duration (default: 2s)
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | string | required | Target value (e.g., "60s", "40-60%") |
+| label | string | required | Description text |
+| duration | number | 2 | Animation duration in seconds |
 
 **Behavior**:
 - Uses `useInView` from framer-motion
 - Counts from 0 to numeric target
 - Easing: ease-out cubic
+- Triggers once when scrolled into view
+
+---
 
 ### AudioWaveform (`components/AudioWaveform.tsx`)
 **Purpose**: Voice demo visualizer
 
 **Props**:
-- `state: 'idle' | 'listening' | 'speaking'`
-- `barCount?: number` - Number of bars (default: 5)
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| state | 'idle' \| 'listening' \| 'speaking' | required | Current call state |
+| barCount | number | 5 | Number of bars |
 
 **Behavior**:
-- 5 vertical bars with gradient (blue-500 to purple)
-- Staggered 0.1s delays
+- Gradient from blue-500 to purple
+- Staggered 0.1s delays between bars
 - State-dependent animations
+
+---
 
 ### FAQAccordion (`components/FAQAccordion.tsx`)
 **Purpose**: Collapsible FAQ list
 
 **Props**:
-- `items: { question: string; answer: string }[]`
+| Prop | Type | Description |
+|------|------|-------------|
+| items | Array<{question, answer}> | FAQ entries |
 
 **Behavior**:
 - One item open at a time
-- Click to expand/collapse
 - 0.3s height animation
+- Chevron rotates 180° when open
 
-### FAQItem (`components/FAQItem.tsx`)
-**Purpose**: Single FAQ entry
-
-**Props**:
-- `question: string`
-- `answer: string`
-- `isOpen: boolean`
-- `onToggle: () => void`
-
-### FloatingParticles (`components/FloatingParticles.tsx`)
-**Purpose**: Background depth effect for hero
-
-**Behavior**:
-- 5 blurred orbs with blur-3xl
-- Slow translateY animation (4-8s duration)
-- Blue/purple gradients at low opacity
-- z-0 positioning
-
-### PhoneMockup (`components/PhoneMockup.tsx`)
-**Purpose**: Hero phone visualization
-
-**Behavior**:
-- Desktop only (hidden lg:block)
-- 3D perspective tilt (rotateY -15deg)
-- Shows simplified AI interface
-- Floating animation
-
-### SocialProofToast (`components/SocialProofToast.tsx`)
-**Purpose**: Conversion social proof
-
-**Behavior**:
-- Appears bottom-left after 5s delay
-- Shows partner signup messages
-- Cycles through 5 messages
-- Slide-in from left animation
-- Auto-dismiss after 5s
+---
 
 ### StickyCTA (`components/StickyCTA.tsx`)
-**Purpose**: Persistent call-to-action
+**Purpose**: Persistent call-to-action button
 
 **Behavior**:
-- Fixed bottom-right after 600px scroll
-- "Apply for Partnership" button
+- Appears fixed bottom-right after 600px scroll
+- "Apply for Partnership" with arrow icon
 - Hidden on /contact page
 - Scale-up appearance animation
 
-## CSS Enhancements
+---
+
+### SocialProofToast
+**Status**: ✅ REMOVED (per spec requirements)
+
+---
+
+### CRMLogos (`components/CRMLogos.tsx`)
+**Purpose**: Display CRM integration partners
+
+**Implementation**:
+- Uses Logo.dev CDN URLs for real CRM brand logos
+- Fallback to text name if token not configured
+- Responsive styling:
+  - Fade edges: `w-8 sm:w-12 md:w-24`
+  - Logo padding: `mx-2 sm:mx-4 md:mx-6`
+  - Logo height: `h-6 sm:h-7 md:h-8`
+
+---
+
+## CSS Classes Reference
 
 ### Glassmorphism Cards
 ```css
@@ -120,7 +150,7 @@ For sourcing official brand logos:
 }
 ```
 
-### Microphone Glow
+### Microphone Glow (Listening State)
 ```css
 .mic-glow-listening {
   box-shadow: 0 0 20px rgba(37,99,235,0.4), 0 0 40px rgba(37,99,235,0.2);
@@ -128,40 +158,83 @@ For sourcing official brand logos:
 }
 ```
 
-## Animation Variants (lib/animations.ts)
+### CTA Glow
+```css
+.cta-glow {
+  box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  animation: ctaGlow 2s ease-in-out infinite;
+}
+```
 
-### waveformBar
-State-based scaleY animations for audio bars
+---
 
-### accordionContent
-Height/opacity transitions for FAQ content
+## Responsive Design Patterns
 
-### chevronRotate
-180° rotation for accordion chevron
+### Breakpoints (Tailwind)
+| Name | Width | Usage |
+|------|-------|-------|
+| sm | 640px | Small tablets |
+| md | 768px | Tablets |
+| lg | 1024px | Desktop |
+| xl | 1280px | Large desktop |
 
-### toastSlide
-Slide-in from left with opacity
+### Section Padding Pattern
+```
+py-12 px-4           /* Mobile */
+md:py-16 sm:px-6     /* Tablet */
+lg:py-20 lg:px-8     /* Desktop */
+```
 
-### stickyCtaVariants
-Scale + opacity appearance
+### Typography Scaling
+```
+H1: text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+H2: text-2xl sm:text-3xl md:text-4xl
+H3: text-xl sm:text-2xl
+Body: text-sm sm:text-base
+Small: text-xs sm:text-sm
+```
 
-### floatAnimation
-Continuous translateY loop
+### Grid Patterns
+```
+2-col mobile:    grid-cols-1 sm:grid-cols-2
+4-col desktop:   grid-cols-1 sm:grid-cols-2 md:grid-cols-4
+3-col steps:     grid-cols-1 md:grid-cols-3
+```
 
-### particleFloat
-Continuous Y+X translation with custom durations
+---
 
-## Verification Checklist
-- [x] All 8 CRM logos are real brand images
-- [x] Stats count up when scrolling into view
-- [x] Audio waveform animates on Demo page
-- [x] FAQ accordion expands/collapses smoothly
-- [x] Cards have glassmorphism effect
-- [x] Hero text has animated gradient
-- [x] Floating particles visible in hero
-- [x] Mic glows when listening on Demo
-- [x] Phone mockup visible on desktop hero
-- [x] Social proof toast appears after 5s
-- [x] Sticky CTA shows after scrolling 600px
-- [x] Build passes
-- [x] Tests pass
+## Environment Variables Reference
+
+| Variable | Purpose | Location |
+|----------|---------|----------|
+| `RETELL_API_KEY` | Retell AI API key for voice demo | Server-side only |
+| `RETELL_AGENT_ID` | Retell agent identifier | Server-side only |
+| `VITE_LOGODEV_TOKEN` | Logo.dev token for CRM logos | Client-side (VITE_ prefix) |
+
+See `.env.example` for template.
+
+---
+
+## Testing Checklist
+
+### Desktop (1440px)
+- [x] All animations smooth
+- [x] PhoneMockup visible in hero
+- [x] Hover effects on cards/buttons
+- [x] CRM marquee animates smoothly
+
+### Tablet (768px)
+- [x] Navigation switches to hamburger menu
+- [x] Grids reflow appropriately
+- [x] Touch-friendly spacing
+
+### Mobile (375px)
+- [x] No horizontal scroll
+- [x] Text readable
+- [x] Forms usable
+- [x] CRM logos visible in marquee
+
+### Build
+- [x] `npm run build` passes (main 390KB, Demo 448KB)
+- [x] `npm run test` passes (30 tests)
+- [x] No console errors
