@@ -14,7 +14,7 @@ All core features and acceptance criteria have been implemented. The application
 - **Animation utilities** centralized in `lib/animations.ts`
 - **Trust badges** in footer (SSL, TCPA, SOC 2, Encryption)
 - **Shadcn components** integrated (button, badge, card, alert, separator, accordion)
-- **Security vulnerabilities** addressed via npm audit fix (diff, tar, @vercel packages updated)
+- **Security vulnerabilities** reviewed - remaining are in dev tooling transitive dependencies (@vercel/node, shadcn), not production runtime
 
 ## Key Architecture Decisions
 
