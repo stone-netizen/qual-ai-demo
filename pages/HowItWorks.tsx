@@ -58,7 +58,28 @@ const HowItWorks: React.FC = () => {
     },
     {
       number: '03',
-      title: 'Direct Booking',
+      title: 'CRM Integration',
+      description:
+        'Lead data syncs directly to your CRM—ServiceTitan, FieldEdge, Housecall Pro, and more. No manual entry, no duplicate records.',
+      icon: (
+        <svg
+          className="w-8 h-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+          />
+        </svg>
+      ),
+    },
+    {
+      number: '04',
+      title: 'Booking & Scheduling',
       description:
         'Qualified leads are presented with your real-time availability. They pick a slot, and it appears on your dispatch calendar automatically.',
       icon: (
@@ -73,6 +94,27 @@ const HowItWorks: React.FC = () => {
             strokeLinejoin="round"
             strokeWidth="2"
             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+      ),
+    },
+    {
+      number: '05',
+      title: 'Handoff',
+      description:
+        'Your team receives complete context—job type, customer notes, and booking details. Techs arrive prepared, customers stay impressed.',
+      icon: (
+        <svg
+          className="w-8 h-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
           />
         </svg>
       ),
@@ -113,7 +155,7 @@ const HowItWorks: React.FC = () => {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-3 gap-12"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"

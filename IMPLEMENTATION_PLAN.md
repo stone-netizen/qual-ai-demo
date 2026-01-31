@@ -5,23 +5,6 @@
 
 ## Current Milestone: Polish & Alignment
 
-### Medium Priority
-
-- [ ] **Expand How It Works page to match 5-step spec**
-  - Spec (`specs/how-it-works.md`) defines 5 steps:
-    1. Lead Capture
-    2. AI Qualification
-    3. CRM Integration
-    4. Booking & Scheduling
-    5. Handoff
-  - Current implementation only has 3 steps (lines 16-79 of `pages/HowItWorks.tsx`):
-    1. Lead Capture
-    2. AI Qualification
-    3. Direct Booking
-  - Missing: Step 3 (CRM Integration), Step 5 (Handoff)
-  - Step 4 exists as "Direct Booking" but description doesn't cover full scheduling flow
-  - File: `pages/HowItWorks.tsx`
-
 ### Low Priority
 
 - [ ] **Implement code-splitting to reduce bundle size**
@@ -44,6 +27,10 @@
 ---
 
 ## Completed
+
+- [x] **Expand How It Works page to 5 steps** (2026-01-30)
+  - Updated from 3 steps to 5 steps per spec: Lead Capture, AI Qualification, CRM Integration, Booking & Scheduling, Handoff
+  - Updated grid layout to handle 5 steps responsively
 
 - [x] **Replace CRM text labels with actual logo images** (2026-01-30)
   - Created `public/logos/` directory with SVG logos for all 8 CRMs
@@ -118,7 +105,7 @@
 - [x] CRM logos displayed
 - [x] CTA to try demo or book consultation
 - [x] Mobile-friendly layout
-- [ ] Clear step-by-step explanation (5 steps) ← **INCOMPLETE** (only 3 steps implemented)
+- [x] Clear step-by-step explanation (5 steps)
 
 ### Legal Pages (`specs/legal-pages.md`)
 - [x] All 5 legal pages render correctly
