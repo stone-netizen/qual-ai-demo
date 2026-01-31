@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { ROUTES, MESSAGING } from '../constants';
 import CRMLogos from '../components/CRMLogos';
 import AnimatedCounter from '../components/AnimatedCounter';
@@ -8,13 +9,15 @@ import FAQAccordion from '../components/FAQAccordion';
 import FloatingParticles from '../components/FloatingParticles';
 import PhoneMockup from '../components/PhoneMockup';
 import StickyCTA from '../components/StickyCTA';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   fadeInUp,
   fadeIn,
   staggerContainer,
   defaultViewport,
   hoverLift,
-  buttonVariants,
 } from '../lib/animations';
 
 const Home: React.FC = () => {
@@ -56,12 +59,14 @@ const Home: React.FC = () => {
             animate="visible"
           >
             {/* Badge with Trust Signal */}
-            <motion.div
-              variants={fadeInUp}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-navy-950/5 text-navy-900 rounded-full text-xs font-semibold uppercase tracking-wider mb-8"
-            >
-              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              {MESSAGING.hero.badge}
+            <motion.div variants={fadeInUp} className="mb-8">
+              <Badge
+                variant="secondary"
+                className="bg-navy-950/5 text-navy-900 px-4 py-2 text-xs font-semibold uppercase tracking-wider"
+              >
+                <span className="w-2 h-2 bg-accent rounded-full animate-pulse mr-2" />
+                {MESSAGING.hero.badge}
+              </Badge>
             </motion.div>
 
             {/* Headline with Animated Gradient */}
@@ -83,29 +88,14 @@ const Home: React.FC = () => {
 
             {/* CTA */}
             <motion.div variants={fadeInUp} className="mb-12">
-              <motion.button
+              <Button
+                size="lg"
                 onClick={() => navigate(ROUTES.CONTACT)}
-                className="inline-flex items-center gap-2 bg-navy-900 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-xl shadow-navy-900/20 hover:bg-navy-800 transition-colors cta-glow"
-                variants={buttonVariants}
-                initial="idle"
-                whileHover="hover"
-                whileTap="tap"
+                className="bg-navy-900 text-white px-8 py-4 h-auto rounded-xl font-semibold text-lg shadow-xl shadow-navy-900/20 hover:bg-navy-800 transition-colors cta-glow"
               >
                 {MESSAGING.cta.primary}
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </motion.button>
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
               <p className="text-sm text-gray-500 mt-4">
                 {MESSAGING.cta.subtext}
               </p>
@@ -121,14 +111,17 @@ const Home: React.FC = () => {
                   key={i}
                   variants={fadeInUp}
                   whileHover={hoverLift}
-                  className="p-4 glass-card rounded-xl"
                 >
-                  <div className="font-semibold text-navy-950 text-sm">
-                    {prop.title}
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    {prop.description}
-                  </div>
+                  <Card className="glass-card border-0 shadow-none">
+                    <CardContent className="p-4">
+                      <div className="font-semibold text-navy-950 text-sm">
+                        {prop.title}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {prop.description}
+                      </div>
+                    </CardContent>
+                  </Card>
                 </motion.div>
               ))}
             </motion.div>
@@ -185,17 +178,20 @@ const Home: React.FC = () => {
                 key={i}
                 variants={fadeInUp}
                 whileHover={hoverLift}
-                className="relative p-8 glass-card rounded-2xl"
               >
-                <div className="absolute -top-4 left-8 w-8 h-8 bg-accent text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-lg">
-                  {i + 1}
-                </div>
-                <h3 className="text-lg font-bold text-navy-950 mb-3 mt-2 font-heading">
-                  {step.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {step.description}
-                </p>
+                <Card className="relative glass-card border-0 shadow-none h-full">
+                  <Badge className="absolute -top-4 left-8 w-8 h-8 bg-accent text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-lg p-0">
+                    {i + 1}
+                  </Badge>
+                  <CardContent className="p-8 pt-10">
+                    <h3 className="text-lg font-bold text-navy-950 mb-3 font-heading">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {step.description}
+                    </p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </motion.div>
@@ -257,29 +253,14 @@ const Home: React.FC = () => {
           </motion.p>
 
           <motion.div variants={fadeIn}>
-            <motion.button
+            <Button
+              size="lg"
               onClick={() => navigate(ROUTES.CONTACT)}
-              className="inline-flex items-center gap-2 bg-white text-navy-950 px-8 py-4 rounded-xl font-semibold text-lg shadow-xl hover:bg-gray-100 transition-colors"
-              variants={buttonVariants}
-              initial="idle"
-              whileHover="hover"
-              whileTap="tap"
+              className="bg-white text-navy-950 px-8 py-4 h-auto rounded-xl font-semibold text-lg shadow-xl hover:bg-gray-100 transition-colors"
             >
               {MESSAGING.cta.primary}
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </motion.button>
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
           </motion.div>
         </motion.div>
       </section>

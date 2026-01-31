@@ -43,37 +43,10 @@ export const hoverLift = {
   transition: { duration: 0.2 },
 };
 
-// Button animations
-export const buttonVariants: Variants = {
-  idle: { scale: 1 },
-  hover: { scale: 1.02 },
-  tap: { scale: 0.98 },
-};
-
 // Viewport settings for scroll animations
 export const defaultViewport = {
   once: true,
   margin: '-50px',
-};
-
-// Accordion content expand/collapse
-export const accordionContent: Variants = {
-  collapsed: {
-    height: 0,
-    opacity: 0,
-    transition: { duration: 0.3, ease: 'easeInOut' },
-  },
-  expanded: {
-    height: 'auto',
-    opacity: 1,
-    transition: { duration: 0.3, ease: 'easeInOut' },
-  },
-};
-
-// Chevron rotation for accordion
-export const chevronRotate: Variants = {
-  collapsed: { rotate: 0 },
-  expanded: { rotate: 180 },
 };
 
 // Sticky CTA appearance

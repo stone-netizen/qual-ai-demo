@@ -1,15 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Mic } from 'lucide-react';
 import { ROUTES } from '../constants';
 import CRMLogos from '../components/CRMLogos';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   fadeInUp,
   fadeIn,
   staggerContainer,
   defaultViewport,
   hoverLift,
-  buttonVariants,
 } from '../lib/animations';
 
 const HowItWorks: React.FC = () => {
@@ -135,6 +138,11 @@ const HowItWorks: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
+          <motion.div variants={fadeInUp} className="mb-6">
+            <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
+              5-Step Process
+            </Badge>
+          </motion.div>
           <motion.h1
             variants={fadeInUp}
             className="text-4xl lg:text-6xl font-bold mb-6 font-heading"
@@ -171,17 +179,19 @@ const HowItWorks: React.FC = () => {
                 <div className="text-8xl font-black text-gray-100 absolute -top-10 -left-4 -z-10 group-hover:text-blue-50 transition-colors">
                   {step.number}
                 </div>
-                <div className="bg-white p-10 rounded-3xl border border-gray-100 shadow-xl group-hover:shadow-2xl transition-all h-full">
-                  <div className="w-16 h-16 bg-navy-900 text-white rounded-2xl flex items-center justify-center mb-8">
-                    {step.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-navy-950 mb-4 font-heading">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
+                <Card className="border border-gray-100 shadow-xl group-hover:shadow-2xl transition-all h-full">
+                  <CardContent className="p-10">
+                    <Badge className="w-16 h-16 bg-navy-900 text-white rounded-2xl flex items-center justify-center mb-8 p-0">
+                      {step.icon}
+                    </Badge>
+                    <h3 className="text-2xl font-bold text-navy-950 mb-4 font-heading">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {step.description}
+                    </p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </motion.div>
@@ -273,26 +283,17 @@ const HowItWorks: React.FC = () => {
                 </li>
               </ul>
               <div className="flex flex-wrap gap-4">
-                <Link
-                  to={ROUTES.CONTACT}
-                  className="inline-block bg-navy-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-navy-800 transition-all"
-                >
-                  Request Pilot Access
-                </Link>
-                <Link
-                  to={ROUTES.DEMO}
-                  className="inline-flex items-center gap-2 bg-accent/10 text-accent px-8 py-4 rounded-xl font-bold hover:bg-accent/20 transition-all"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
-                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                  </svg>
-                  Try Voice Demo
-                </Link>
+                <Button asChild size="lg" className="bg-navy-900 text-white hover:bg-navy-800 px-8 py-4 h-auto rounded-xl font-bold">
+                  <Link to={ROUTES.CONTACT}>
+                    Request Pilot Access
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="bg-accent/10 text-accent hover:bg-accent/20 border-0 px-8 py-4 h-auto rounded-xl font-bold">
+                  <Link to={ROUTES.DEMO}>
+                    <Mic className="w-5 h-5 mr-2" />
+                    Try Voice Demo
+                  </Link>
+                </Button>
               </div>
             </motion.div>
 

@@ -29,6 +29,7 @@ Help HVAC business owners understand what Qual AI does and convert them to book 
 - Logo.dev URL pattern: `https://img.logo.dev/{domain}?token={VITE_LOGODEV_TOKEN}`
 - Supported CRMs: ServiceTitan, FieldEdge, Housecall Pro, Jobber, ServiceM8, Service Fusion, Workiz, GorillaDesk
 - Marquee/carousel animation with fade edges
+- **Logo containers should be circular** (rounded-full, equal width/height)
 - **Responsive fade edges**: `w-8 sm:w-12 md:w-24`
 - **Responsive logo padding**: `mx-2 sm:mx-4 md:mx-6`
 
@@ -101,6 +102,7 @@ Help HVAC business owners understand what Qual AI does and convert them to book 
 - [x] Stats animate with count-up effect
 - [x] All sections responsive (no horizontal scroll on mobile)
 - [x] CRM section displays real logos from Logo.dev API
+- [x] CRM logo containers are circular (rounded-full with equal w/h)
 - [x] FAQ is interactive accordion
 - [x] Hero has animated gradient text
 - [x] Floating particles in hero background
@@ -110,3 +112,7 @@ Help HVAC business owners understand what Qual AI does and convert them to book 
 - [x] Phone mockup visible on desktop hero only
 - [x] Touch targets minimum 44px on mobile
 - [x] CRM fade edges responsive for mobile
+- [x] All CTAs use `@shadcn/button` component
+- [x] All badges use `@shadcn/badge` component
+- [x] FAQ uses `@shadcn/accordion` component
+- [x] Cards use `@shadcn/card` component

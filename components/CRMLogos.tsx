@@ -36,16 +36,16 @@ const CRMLogos: React.FC = () => {
               {[...CRM_INTEGRATIONS, ...CRM_INTEGRATIONS].map((crm, idx) => (
                 <div
                   key={idx}
-                  className="mx-2 sm:mx-4 md:mx-6 px-4 sm:px-5 md:px-6 py-2 sm:py-3 bg-navy-900/50 border border-navy-800 rounded-xl hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center min-w-[100px] sm:min-w-[120px]"
+                  className="mx-2 sm:mx-4 md:mx-6 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-navy-900/50 border border-navy-800 rounded-full hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center"
                 >
                   {logodevToken ? (
                     <img
                       src={getLogoUrl(crm.domain)}
                       alt={crm.name}
-                      className="h-6 sm:h-7 md:h-8 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
+                      className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
                     />
                   ) : (
-                    <span className="text-gray-400 text-xs sm:text-sm font-medium">
+                    <span className="text-gray-400 text-[8px] sm:text-[9px] md:text-xs font-medium text-center leading-tight">
                       {crm.name}
                     </span>
                   )}
@@ -56,16 +56,16 @@ const CRMLogos: React.FC = () => {
               {[...CRM_INTEGRATIONS, ...CRM_INTEGRATIONS].map((crm, idx) => (
                 <div
                   key={idx}
-                  className="mx-2 sm:mx-4 md:mx-6 px-4 sm:px-5 md:px-6 py-2 sm:py-3 bg-navy-900/50 border border-navy-800 rounded-xl hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center min-w-[100px] sm:min-w-[120px]"
+                  className="mx-2 sm:mx-4 md:mx-6 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-navy-900/50 border border-navy-800 rounded-full hover:border-navy-700 hover:bg-navy-800/50 transition-all duration-300 cursor-default flex items-center justify-center"
                 >
                   {logodevToken ? (
                     <img
                       src={getLogoUrl(crm.domain)}
                       alt={crm.name}
-                      className="h-6 sm:h-7 md:h-8 w-auto opacity-70 hover:opacity-100 transition-opacity duration-300"
+                      className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
                     />
                   ) : (
-                    <span className="text-gray-400 text-xs sm:text-sm font-medium">
+                    <span className="text-gray-400 text-[8px] sm:text-[9px] md:text-xs font-medium text-center leading-tight">
                       {crm.name}
                     </span>
                   )}

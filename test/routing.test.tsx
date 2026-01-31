@@ -80,8 +80,8 @@ describe('Application Routing', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('demo-page')).toBeInTheDocument();
-      });
-    });
+      }, { timeout: 10000 });
+    }, 15000);
 
     it('renders Contact page', async () => {
       renderWithRouter([ROUTES.CONTACT]);

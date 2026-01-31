@@ -118,6 +118,8 @@ Document all visual polish enhancements, component APIs, mobile responsiveness r
 **Implementation**:
 - Uses Logo.dev CDN URLs for real CRM brand logos
 - Fallback to text name if token not configured
+- **Logo containers should be circular** (use `rounded-full` instead of `rounded-xl`)
+- Equal width/height for circle shape (e.g., `w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20`)
 - Responsive styling:
   - Fade edges: `w-8 sm:w-12 md:w-24`
   - Logo padding: `mx-2 sm:mx-4 md:mx-6`

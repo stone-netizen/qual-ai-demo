@@ -13,7 +13,7 @@ All core features and acceptance criteria have been implemented. The application
 - **Code splitting** reducing main bundle from 845KB to 427KB (49% reduction)
 - **Animation utilities** centralized in `lib/animations.ts`
 - **Trust badges** in footer (SSL, TCPA, SOC 2, Encryption)
-- **Shadcn components** integrated (button, badge, card, alert, separator)
+- **Shadcn components** integrated (button, badge, card, alert, separator, accordion)
 
 ## Key Architecture Decisions
 
@@ -33,6 +33,7 @@ All core features and acceptance criteria have been implemented. The application
 - [x] Stats animate on scroll
 - [x] All sections responsive
 - [x] CRM section displays real logo images (not text placeholders)
+- [x] CRM logo containers are circular (rounded-full with equal w/h)
 
 ### Booking Flow (`specs/booking-flow.md`)
 - [x] User can book a demo from the contact page
@@ -66,10 +67,14 @@ All reusable components have been integrated into the application:
 
 **Homepage (`pages/Home.tsx`)**:
 - `AnimatedCounter` - Stats section with scroll-triggered count animation
-- `FAQAccordion` / `FAQItem` - Interactive accordion for FAQ section
+- `FAQAccordion` - Interactive accordion using shadcn Accordion component
 - `FloatingParticles` - Decorative background in hero section
 - `PhoneMockup` - 3D phone mockup (desktop hero)
 - `StickyCTA` - Floating CTA button after scroll
+- Shadcn: `Button`, `Badge`, `Card` components
+
+**HowItWorks (`pages/HowItWorks.tsx`)**:
+- Shadcn: `Button`, `Badge`, `Card` components
 
 **Demo Page (`pages/Demo.tsx`)**:
 - `AudioWaveform` - Voice call visualizer with idle/listening/speaking states
@@ -95,5 +100,7 @@ All reusable components have been integrated into the application:
 - API response validation added to create-web-call.ts
 - Script loading improved in Contact.tsx (duplicate prevention, safer cleanup)
 - UI constants centralized: STICKY_CTA_SCROLL_THRESHOLD in constants.ts
-- Unused animation variants removed from lib/animations.ts (slideInLeft, slideInRight, staggerContainerFast, hoverScale, tapScale, cardHover, pageTransition, viewportEarly, waveformBar, toastSlide, particleFloat, counterAnimation)
+- Unused animation variants removed from lib/animations.ts (slideInLeft, slideInRight, staggerContainerFast, hoverScale, tapScale, cardHover, pageTransition, viewportEarly, waveformBar, toastSlide, particleFloat, counterAnimation, buttonVariants)
 - Demo.test.tsx first test has 15s timeout to handle slow module initialization
+- routing.test.tsx Demo page test has 15s timeout for lazy loading consistency
+- FAQItem.tsx removed - FAQAccordion now uses shadcn Accordion component directly
