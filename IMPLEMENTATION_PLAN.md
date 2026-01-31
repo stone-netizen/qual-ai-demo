@@ -1,7 +1,7 @@
 # Implementation Plan
 
 > Last updated: 2026-01-31
-> Status: All features complete - Production ready (codebase cleanup completed)
+> Status: All features complete - Production ready (shadcn integration completed)
 
 ---
 
@@ -10,9 +10,10 @@
 All core features and acceptance criteria have been implemented. The application is production-ready with:
 
 - **30 passing tests** covering Demo page behavior and all 10 routes
-- **Code splitting** reducing main bundle from 845KB to 390KB (54% reduction)
+- **Code splitting** reducing main bundle from 845KB to 422KB (50% reduction)
 - **Animation utilities** centralized in `lib/animations.ts`
 - **Trust badges** in footer (SSL, TCPA, SOC 2, Encryption)
+- **Shadcn components** integrated (button, badge, card, alert, separator)
 
 ## Key Architecture Decisions
 
@@ -72,6 +73,10 @@ All reusable components have been integrated into the application:
 
 **Demo Page (`pages/Demo.tsx`)**:
 - `AudioWaveform` - Voice call visualizer with idle/listening/speaking states
+- Shadcn: `Button`, `Badge`, `Card`, `Alert` components
+
+**Contact Page (`pages/Contact.tsx`)**:
+- Shadcn: `Card`, `Alert`, `Separator` components
 
 ## Notes
 
@@ -84,7 +89,8 @@ All reusable components have been integrated into the application:
 - Vitest configured with `isolate: true` and `pool: 'forks'` for proper test isolation with lazy-loaded modules
 - SocialProofToast component and SOCIAL_PROOF data fully removed from codebase
 - `vite-env.d.ts` provides TypeScript types for `import.meta.env` (Vite environment variables)
-- Unused code removed: AnimatedSection.tsx component, lib/utils.ts (cn function)
+- Unused code removed: AnimatedSection.tsx component
+- `lib/utils.ts` restored for shadcn component cn() utility
 - Console.log statements removed from Demo.tsx for production
 - API response validation added to create-web-call.ts
 - Script loading improved in Contact.tsx (duplicate prevention, safer cleanup)

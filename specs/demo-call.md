@@ -115,6 +115,12 @@ RETELL_AGENT_ID=agent_338cb38fefb80627b1de2817f8
 - [x] Clear visual states (idle/listening/speaking)
 - [x] Pulse animations when agent speaks
 
+### Shadcn Integration
+- [x] Start/End buttons use `@shadcn/button`
+- [x] "Live Demo" uses `@shadcn/badge`
+- [x] Call container uses `@shadcn/card`
+- [x] Errors use `@shadcn/alert` variant="destructive"
+
 ### Mobile
 - [x] Full-screen experience works on mobile
 - [x] Touch targets are 44px minimum

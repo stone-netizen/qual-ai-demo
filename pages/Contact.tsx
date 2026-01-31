@@ -7,6 +7,9 @@ import {
   defaultViewport,
   hoverLift,
 } from '../lib/animations';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import { Alert, AlertTitle, AlertDescription } from '../components/ui/alert';
+import { Separator } from '../components/ui/separator';
 
 const Contact: React.FC = () => {
   useEffect(() => {
@@ -61,39 +64,50 @@ const Contact: React.FC = () => {
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
           >
-            <div className="w-full min-h-[600px] flex flex-col items-center justify-center bg-white overflow-hidden">
-              <iframe
-                src="https://api.leadconnectorhq.com/widget/booking/86t1nPwKPa3V1sqBmr8t"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  minHeight: '600px',
-                }}
-                scrolling="no"
-                id="booking-calendar-embed"
-                title="Booking Calendar"
-              />
-            </div>
+            <Card className="rounded-3xl shadow-xl overflow-hidden border-gray-100 py-0">
+              <CardHeader className="border-b pb-4">
+                <CardTitle className="text-2xl font-heading text-navy-950">Book Your Demo</CardTitle>
+                <CardDescription>Select a time that works for you</CardDescription>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="w-full min-h-[600px] flex flex-col items-center justify-center bg-white overflow-hidden">
+                  <iframe
+                    src="https://api.leadconnectorhq.com/widget/booking/86t1nPwKPa3V1sqBmr8t"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      minHeight: '600px',
+                    }}
+                    scrolling="no"
+                    id="booking-calendar-embed"
+                    title="Booking Calendar"
+                  />
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
+
+          <Separator className="my-8" />
 
           {/* Compliance Disclosure */}
           <motion.div
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="mt-8 max-w-2xl mx-auto px-6 py-5 bg-white/80 rounded-2xl border border-gray-100"
+            className="max-w-2xl mx-auto"
           >
-            <p className="text-[10px] leading-relaxed text-gray-400 text-center uppercase tracking-wider font-bold mb-2">
-              A2P 10DLC Compliance Disclosure
-            </p>
-            <p className="text-[11px] leading-relaxed text-gray-500 text-center">
-              By scheduling, you agree to receive automated messages from{' '}
-              {BRAND.name} regarding this inquiry. Msg/data rates apply. Reply
-              STOP to opt out.
-            </p>
+            <Alert className="bg-white/80 border-gray-100">
+              <AlertTitle className="text-[10px] leading-relaxed text-gray-400 text-center uppercase tracking-wider font-bold">
+                A2P 10DLC Compliance Disclosure
+              </AlertTitle>
+              <AlertDescription className="text-[11px] leading-relaxed text-gray-500 text-center">
+                By scheduling, you agree to receive automated messages from{' '}
+                {BRAND.name} regarding this inquiry. Msg/data rates apply. Reply
+                STOP to opt out.
+              </AlertDescription>
+            </Alert>
           </motion.div>
         </div>
       </section>

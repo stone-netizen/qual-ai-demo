@@ -34,3 +34,8 @@ Enable HVAC business owners to easily schedule a demo call or consultation.
 - [x] Post-booking page confirms the booking
 - [x] Flow works on mobile devices
 - [N/A] Form validates required fields (handled by LeadConnector)
+
+### Shadcn Integration
+- [x] Calendar container uses `@shadcn/card`
+- [x] Compliance disclosure uses `@shadcn/alert`
+- [x] Section divider uses `@shadcn/separator`
