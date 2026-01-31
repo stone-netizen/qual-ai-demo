@@ -1,14 +1,15 @@
 import React from 'react';
 import { CRM_INTEGRATIONS } from '../constants';
 
-// Build Logo.dev URL for a domain
+// Build Logo.dev URL for a domain with dark theme and transparency
 const getLogoUrl = (domain: string): string => {
   const token = import.meta.env.VITE_LOGODEV_TOKEN;
   if (!token) {
     // Fallback: show domain text if no token configured
     return '';
   }
-  return `https://img.logo.dev/${domain}?token=${token}`;
+  // Use PNG format for transparency, dark theme for light-colored logos on dark bg
+  return `https://img.logo.dev/${domain}?token=${token}&format=png&theme=dark`;
 };
 
 const CRMLogos: React.FC = () => {

@@ -10,7 +10,7 @@
 All core features and acceptance criteria have been implemented. The application is production-ready with:
 
 - **30 passing tests** covering Demo page behavior and all 10 routes
-- **Code splitting** reducing main bundle from 845KB to 427KB (49% reduction)
+- **Code splitting** reducing main bundle from 845KB to 446KB (47% reduction)
 - **Animation utilities** centralized in `lib/animations.ts`
 - **Trust badges** in footer (SSL, TCPA, SOC 2, Encryption)
 - **Shadcn components** integrated (button, badge, card, alert, separator, accordion)
@@ -83,13 +83,16 @@ All reusable components have been integrated into the application:
 **Contact Page (`pages/Contact.tsx`)**:
 - Shadcn: `Card`, `Alert`, `Separator` components
 
+**Legal Pages** (PrivacyPolicy, TermsOfService, SMSTerms, CookiePolicy, Security):
+- Shadcn: `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `Separator` components
+
 ## Notes
 
 - The booking flow is now: Homepage CTA → /contact (calendar) → user books via LeadConnector
 - LeadConnector handles the redirect to confirmation page internally
 - CRM logos now use Logo.dev API (`constants.ts` stores domains, `CRMLogos.tsx` constructs URLs)
 - Logo.dev token configured via `VITE_LOGODEV_TOKEN` environment variable
-- Code splitting implemented via React.lazy() - main bundle 390KB, Demo chunk 448KB
+- Code splitting implemented via React.lazy() - main bundle 446KB, Demo chunk 448KB
 - Tests located in `test/` directory with setup in `test/setup.ts`
 - Vitest configured with `isolate: true` and `pool: 'forks'` for proper test isolation with lazy-loaded modules
 - SocialProofToast component and SOCIAL_PROOF data fully removed from codebase
@@ -100,7 +103,7 @@ All reusable components have been integrated into the application:
 - API response validation added to create-web-call.ts
 - Script loading improved in Contact.tsx (duplicate prevention, safer cleanup)
 - UI constants centralized: STICKY_CTA_SCROLL_THRESHOLD in constants.ts
-- Unused animation variants removed from lib/animations.ts (slideInLeft, slideInRight, staggerContainerFast, hoverScale, tapScale, cardHover, pageTransition, viewportEarly, waveformBar, toastSlide, particleFloat, counterAnimation, buttonVariants)
+- Unused animation variants removed from lib/animations.ts (slideInLeft, slideInRight, staggerContainerFast, hoverScale, tapScale, cardHover, pageTransition, viewportEarly, waveformBar, toastSlide, particleFloat, counterAnimation, buttonVariants, accordionContent, chevronRotate)
 - Demo.test.tsx first test has 15s timeout to handle slow module initialization
 - routing.test.tsx Demo page test has 15s timeout for lazy loading consistency
 - FAQItem.tsx removed - FAQAccordion now uses shadcn Accordion component directly
