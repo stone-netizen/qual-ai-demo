@@ -59,10 +59,20 @@ All core features and acceptance criteria have been implemented. The application
 
 ---
 
+## Available Reusable Components
+
+These components are ready for integration if needed:
+
+- `AnimatedCounter` - Scroll-triggered number counter animation
+- `AudioWaveform` - Voice call visualizer with idle/listening/speaking states
+- `FAQAccordion` / `FAQItem` - Animated accordion for FAQ sections
+- `FloatingParticles` - Decorative background particle effect
+- `PhoneMockup` - 3D phone mockup showing app interface
+- `SocialProofToast` - Rotating social proof notifications
+- `StickyCTA` - Floating CTA button that appears on scroll
+
 ## Notes
 
-- Run `./loop.sh plan` to analyze specs and generate tasks
-- Run `./loop.sh` to implement tasks
 - The booking flow is now: Homepage CTA → /contact (calendar) → user books via LeadConnector
 - LeadConnector handles the redirect to confirmation page internally
 - CRM list is now consolidated in `constants.ts` with logo paths, used by `CRMLogos.tsx`
