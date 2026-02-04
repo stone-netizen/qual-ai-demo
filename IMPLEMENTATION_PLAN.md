@@ -31,10 +31,9 @@ The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is full
 
 ### Remaining Issues
 
-1. ~~**Design System**: Headings use `Lexend` font, but spec says single font (Inter)~~ ✅ Fixed
-2. **Tailwind**: CDN-based, not build-time
-3. **Cleanup**: Orphan files exist (SocialProofToast.tsx, zip file, alexhormoziimplementation, new_plan.md)
-4. **Cleanup**: Unused GEMINI_API_KEY in vite.config.ts
+1. **Tailwind**: CDN-based, not build-time (components.json has empty tailwind paths)
+2. **Cleanup**: Orphan files exist (SocialProofToast.tsx, zip file, alexhormoziimplementation, new_plan.md)
+3. **Cleanup**: Unused GEMINI_API_KEY in vite.config.ts
 
 ---
 
@@ -42,77 +41,75 @@ The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is full
 
 ### P2 — Tailwind Migration (CDN → Build-Time)
 
-Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipeline exists.
+Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipeline exists. The `components.json` file has empty paths for tailwind config and css.
 
 - [ ] **TW-001: Create build-time Tailwind infrastructure**
-  - **Files**: New files: `tailwind.config.ts`, `postcss.config.js`, `src/index.css`
+  - **Files**: New files: `tailwind.config.ts`, `postcss.config.js`, `src/index.css`; Update: `components.json`
   - **Changes**:
     - Install `tailwindcss`, `postcss`, `autoprefixer` as dev dependencies
-    - Create `tailwind.config.ts` with custom theme from `index.html` inline config
+    - Create `tailwind.config.ts` with custom theme from `index.html` inline config (colors, fontFamily)
     - Create `postcss.config.js`
-    - Create CSS file with Tailwind directives
-    - Migrate custom CSS animations from `index.html` (~280 lines)
+    - Create CSS file with Tailwind directives (`@tailwind base;`, etc.)
+    - Migrate custom CSS animations from `index.html` (~280 lines of keyframes)
     - Import CSS file in `index.tsx`
-    - Update `components.json` with correct tailwind paths
+    - Update `components.json` with correct tailwind paths (`tailwind.config.ts`, `src/index.css`)
   - **Acceptance criteria**:
-    - `tailwind.config.ts` exists with all custom theme values
+    - `tailwind.config.ts` exists with all custom theme values (navy colors, accent, Inter font)
     - `postcss.config.js` exists
     - CSS file imported in entry point
-    - `components.json` tailwind paths are valid
+    - `components.json` tailwind paths are valid and point to real files
 
 - [ ] **TW-002: Remove Tailwind CDN from index.html**
   - **Files**: `index.html`
   - **Changes**:
     - Remove `<script src="https://cdn.tailwindcss.com"></script>`
-    - Remove inline `tailwind.config` block
-    - Move remaining `<style>` content to CSS file
+    - Remove inline `tailwind.config` block (lines 22-41)
+    - Move remaining `<style>` content to CSS file (keyframes already migrated in TW-001)
+    - Keep only minimal head content (meta tags, font links, favicon)
   - **Acceptance criteria**:
     - No Tailwind CDN script in `index.html`
+    - No inline `tailwind.config` in `index.html`
+    - `<style>` block removed (all CSS in build-time file)
     - All pages render correctly with build-time Tailwind
     - Visual check at 375px, 768px, 1440px passes
 
 ---
 
-### P3 — Cleanup & Design System Fixes
+### P3 — Cleanup & Housekeeping
 
 - [ ] **CLEAN-001: Delete orphaned SocialProofToast.tsx**
   - **Files**: `components/SocialProofToast.tsx`
+  - **Reason**: Untracked file, not imported anywhere
   - **Acceptance criteria**:
     - File does not exist
     - No imports reference it
+    - App builds successfully
 
 - [ ] **CLEAN-002: Remove stale copy-of-qual-ai-lead-loss-audit.zip**
   - **Files**: `copy-of-qual-ai-lead-loss-audit.zip`
+  - **Reason**: Old artifact, 64KB zip file in root
   - **Acceptance criteria**:
     - File removed from working directory
+    - Not in git tracked files
 
 - [ ] **CLEAN-003: Remove alexhormoziimplementation file**
   - **Files**: `alexhormoziimplementation`
+  - **Reason**: Old notes file, not part of spec
   - **Acceptance criteria**:
     - File removed
 
 - [ ] **CLEAN-004: Remove stale new_plan.md file**
   - **Files**: `new_plan.md`
+  - **Reason**: Old planning doc, superseded by specs
   - **Acceptance criteria**:
     - File removed
 
 - [ ] **CLEAN-005: Remove unused GEMINI_API_KEY config**
   - **Files**: `vite.config.ts`
-  - **Change**: Remove unused `GEMINI_API_KEY` defines (lines 14-16)
+  - **Change**: Remove unused `GEMINI_API_KEY` defines (lines 14-17)
   - **Acceptance criteria**:
     - `vite.config.ts` does not reference unused API keys
-
-- [x] **DS-001: Unify heading font to Inter** ✅
-  - **Files**: `index.html`, all pages and components using `font-heading`
-  - **Changes made**:
-    - Removed Lexend from Google Fonts link
-    - Removed `font-heading` from Tailwind config
-    - Removed CSS rule setting h1-h4 to Lexend
-    - Removed all `font-heading` class usages from 12 files
-  - **Acceptance criteria**: ✅ All met
-    - Single font family (Inter) used throughout
-    - No `font-heading` class references in codebase
-    - Google Fonts link only loads Inter
+    - Build still works
 
 ---
 
@@ -177,6 +174,14 @@ All 25 tasks from Phases 0A-0E are complete.
   - `sitemap.xml` exists in `public/`
   - Contains main page URLs (/, /quiz, /how-it-works, /demo, /audit, /privacy, /terms)
   - Valid XML structure
+
+### P3 — Cleanup (PARTIAL)
+
+- [x] **DS-001: Unify heading font to Inter** ✅
+  - Removed Lexend from Google Fonts link
+  - Removed `font-heading` from Tailwind config
+  - Removed CSS rule setting h1-h4 to Lexend
+  - Removed all `font-heading` class usages from 12 files
 
 ---
 
