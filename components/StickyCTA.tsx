@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { ROUTES, MESSAGING, UI_CONFIG } from '../constants';
+import { ROUTES, MESSAGING } from '../constants';
 import { stickyCtaVariants } from '../lib/animations';
-import { Button } from '@/components/ui/button';
 
 const StickyCTA: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -17,7 +16,8 @@ const StickyCTA: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsVisible(scrollY > UI_CONFIG.STICKY_CTA_SCROLL_THRESHOLD);
+      // Show after minimal scroll (100px)
+      setIsVisible(scrollY > 100);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -30,20 +30,19 @@ const StickyCTA: React.FC = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed bottom-6 right-6 z-50"
+          className="fixed top-4 right-6 z-50"
           variants={stickyCtaVariants}
           initial="hidden"
           animate="visible"
           exit="hidden"
         >
-          <Button
-            size="lg"
+          <button
             onClick={() => navigate(ROUTES.CONTACT)}
-            className="bg-accent hover:bg-blue-600 text-white px-6 py-3 h-auto rounded-xl font-semibold shadow-xl shadow-accent/25 hover:shadow-accent/40 transition-all duration-300"
+            className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold text-sm shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           >
             {MESSAGING.cta.primary}
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </motion.div>
       )}
     </AnimatePresence>
