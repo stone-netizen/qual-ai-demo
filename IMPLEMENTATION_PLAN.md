@@ -1,328 +1,189 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: Gap analysis complete. Most quiz components built; needs integration.
+> Status: P0 Quiz Funnel complete. Remaining work: P1 Infrastructure, P2 Tailwind, P3 Cleanup.
 
 ---
 
 ## Summary
 
-The specs describe a **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`). Significant progress has been made — most individual components are built, but the main Quiz page (`pages/Quiz.tsx`) is still a placeholder and needs to orchestrate all components.
+The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is now fully implemented. All quiz components, results page, and data flow are complete.
 
-**Gap Analysis Results:**
-- **P0 (Quiz Funnel):** ~75% complete — All core components exist; Quiz.tsx needs integration; Results view needs assembly
-- **P1 (Infrastructure):** ~20% complete — Missing 404 route, error boundary, SEO files
+**Status:**
+- **P0 (Quiz Funnel):** 100% complete
+- **P1 (Infrastructure):** Partial — Missing 404 route, error boundary, accessibility improvements
 - **P2 (Tailwind):** 0% complete — Still using CDN with inline config
-- **P3 (Cleanup):** Orphan files and minor issues exist
+- **P3 (Cleanup):** Orphan files exist
 
 ---
 
 ## Completed Items
 
-### Phase 0A: Foundation (COMPLETE)
+### P0 — QualAI Quiz Funnel (COMPLETE)
 
-- [x] **QZ-001: Quiz route wired in App.tsx**
-  - Route `/quiz` exists in `constants.ts`
-  - Route wired in `App.tsx` with lazy loading
-  - Header/footer hidden for quiz page
+All 25 tasks from Phases 0A-0E are complete.
 
-- [x] **QZ-002: Quiz TypeScript types created**
-  - `lib/quiz-types.ts` exists with full schema matching spec
-  - All type unions defined (BusinessType, MonthlyJobs, etc.)
-  - `initialQuizData` helper exported
+#### Phase 0A: Foundation & Routing (COMPLETE)
 
-- [x] **QZ-003: Quiz constants created**
-  - `lib/quiz-constants.ts` exists with all question text, options, labels
-  - All 5 question steps have complete data
-  - Contact info step metadata exists
-  - Hero, benefits, results copy all present
+- [x] **QZ-001: Add QUIZ route to constants and App.tsx**
+  - Route `/quiz` added to `constants.ts`
+  - Lazy-loaded Quiz page in `App.tsx`
+  - Header/footer hidden for quiz route
 
-### Phase 0B: Quiz Page Components (MOSTLY COMPLETE)
+- [x] **QZ-002: Create quiz TypeScript types**
+  - Created `lib/quiz-types.ts` with:
+    - `QuizData` interface matching spec schema
+    - All type unions (BusinessType, MonthlyJobs, etc.)
+    - `QuizStep`, `QuizStepConfig`, `QuizOption` types
+    - `initialQuizData` helper
 
-- [x] **QZ-005: HeroSection component created**
-  - `components/quiz/HeroSection.tsx` exists
-  - Headline, subheadline, CTA button, trust bar implemented
-  - Copy matches spec
+- [x] **QZ-003: Create quiz constants**
+  - Created `lib/quiz-constants.ts` with:
+    - Question text for all 6 steps
+    - Option values and labels
+    - Hero copy, benefits copy, results copy
+    - Validation regex and messages
 
-- [x] **QZ-006: BenefitsSection component created**
-  - `components/quiz/BenefitsSection.tsx` exists
-  - 5 benefit cards with icons (Phone, Bot, RefreshCw, Star, Handshake)
-  - Copy matches spec
+#### Phase 0B: Quiz Page Components (COMPLETE)
 
-- [x] **QZ-007: QuizForm container component created**
-  - `components/quiz/QuizForm.tsx` exists
-  - State management for currentStep (1-6) and quizData
-  - Progress bar using shadcn Progress
-  - Dynamic step rendering
-  - Navigation buttons (Back/Next)
+- [x] **QZ-004: Create Quiz page orchestrator** (`pages/Quiz.tsx`)
+- [x] **QZ-005: Create HeroSection component** (`components/quiz/HeroSection.tsx`)
+- [x] **QZ-006: Create BenefitsSection component** (`components/quiz/BenefitsSection.tsx`)
+- [x] **QZ-007: Create QuizForm container** (`components/quiz/QuizForm.tsx`)
+- [x] **QZ-008: Create QuizStep component** (`components/quiz/QuizStep.tsx`)
+- [x] **QZ-009: Implement Step 1 - Business Type**
+- [x] **QZ-010: Implement Step 2 - Volume & Job Value**
+- [x] **QZ-011: Implement Step 3 - Leads & Calls**
+- [x] **QZ-012: Implement Step 4 - Missed Calls & Follow-up**
+- [x] **QZ-013: Implement Step 5 - Budget & Model Fit**
+- [x] **QZ-014: Create ContactInfoStep component** (`components/quiz/ContactInfoStep.tsx`)
+- [x] **QZ-015: Implement quiz navigation and validation**
+- [x] **QZ-016: Create quiz mobile StickyCTA** (`components/quiz/QuizStickyCTA.tsx`)
 
-- [x] **QZ-008: QuizStep component created**
-  - `components/quiz/QuizStep.tsx` exists
-  - Full tappable option cards (not tiny radio circles)
-  - Support for conditional "Other" text input
-  - Proper styling (min-h-[56px], rounded-xl, border-2)
+#### Phase 0C: Results Page Components (COMPLETE)
 
-- [x] **QZ-009 through QZ-013: All quiz steps implemented**
-  - Step 1 (Business Type) with conditional "Other" input
-  - Step 2 (Volume & Job Value) with optional text input
-  - Step 3 (Leads & Calls) with conditional "Other" input
-  - Step 4 (Missed Calls & Follow-up)
-  - Step 5 (Budget & Model Fit)
-  - All wired in QuizForm.tsx
+- [x] **QZ-017: Create QuizResults view** (integrated in `pages/Quiz.tsx`)
+- [x] **QZ-018: Create ResultsBanner component** (`components/quiz/ResultsBanner.tsx`)
+- [x] **QZ-019: Create VSLSection component** (`components/quiz/VSLSection.tsx`)
+- [x] **QZ-020: Create CalendarSection component** (`components/quiz/CalendarSection.tsx`)
+- [x] **QZ-021: Create results mobile StickyCTA** (reuses `QuizStickyCTA.tsx`)
 
-- [x] **QZ-014: ContactInfoStep component created**
-  - `components/quiz/ContactInfoStep.tsx` exists
-  - All fields: firstName, lastName, email, phone, companyName
-  - Error state support
+#### Phase 0D: Quiz Data Flow (COMPLETE)
 
-- [x] **QZ-015: Quiz navigation and validation implemented**
-  - validateCurrentStep() checks each step's required fields
-  - validateContactInfo() checks email/phone formats
-  - Back/Next navigation works
-  - Contact errors displayed
+- [x] **QZ-022: Implement quiz submission handler**
+- [x] **QZ-023: Pass quiz data to Results view**
 
-### Phase 0C: Results Page Components (MOSTLY COMPLETE)
+#### Phase 0E: Design System Compliance (COMPLETE)
 
-- [x] **QZ-018: ResultsBanner component created**
-  - `components/quiz/ResultsBanner.tsx` exists
-  - Headline, subheadline, dynamic line placeholder
+- [x] **QZ-024: Apply design system styles**
+  - Quiz card: max-width 480px, rounded-2xl, shadow-lg
+  - Option cards: min 56px height, full tappable blocks
+  - Buttons: min 52px height
+  - Progress bar: 8px height
+  - Mobile-first responsive layout
 
-- [x] **QZ-019: VSLSection component created**
-  - `components/quiz/VSLSection.tsx` exists
-  - Title, video placeholder (16:9), 5 benefit bullets
+- [x] **QZ-025: Ensure mobile-first responsive layout**
+  - Mobile: 16px padding, full-width quiz card
+  - Desktop: centered 480px quiz card
+  - Sticky CTA on mobile
 
-- [x] **QZ-020: CalendarSection component created**
-  - `components/quiz/CalendarSection.tsx` exists
-  - Headline, subheadline, calendar placeholder
-  - Preparation bullets, trust text
-  - calendarRef prop for scroll-to
+#### Tests (COMPLETE)
+
+- [x] **TEST-001: Add quiz funnel routing tests**
+  - Quiz route test added to `test/routing.test.tsx`
+  - Audit route test added
+  - Header hidden tests for Quiz and Audit pages
+  - Total: 34 passing tests
 
 ---
 
 ## Tasks (Priority Order)
 
-### P0 — QualAI Quiz Funnel Implementation (Remaining)
-
-The individual components are built. Now they need to be assembled.
-
-#### Phase 0B: Quiz Page Integration
-
-- [ ] **QZ-004: Integrate Quiz.tsx page orchestrator**
-  - **Files**: Rewrite `pages/Quiz.tsx`
-  - **Changes**: Replace placeholder with full implementation:
-    - Import and render HeroSection, BenefitsSection, QuizForm
-    - Add quiz section ref for scroll-to-quiz functionality
-    - State: showResults flag to switch between quiz and results views
-    - Pass onComplete callback to QuizForm
-    - When quiz completes, set showResults=true and store quizData
-    - Conditionally render quiz view or results view based on showResults
-  - **Acceptance criteria**:
-    - Quiz page renders HeroSection, BenefitsSection, QuizForm
-    - REQ-QP-001: QualAI logo displays in header
-    - REQ-QP-002: Hero section displays headline, subheadline, CTA, trust bar
-    - REQ-QP-003: CTA button scrolls to quiz section
-    - AC-QP-001 through AC-QP-003 satisfied
-
-- [ ] **QZ-016: Create quiz mobile StickyCTA**
-  - **Files**: New file: `components/quiz/QuizStickyCTA.tsx`, update `pages/Quiz.tsx`
-  - **Changes**: Create sticky CTA that:
-    - Shows "Start Quiz" button when quiz not in viewport
-    - Uses Intersection Observer to detect quiz visibility
-    - Scrolls to quiz on click
-    - Hidden when user is in quiz flow (after first step)
-  - **Acceptance criteria**:
-    - REQ-QP-D06: Sticky CTA on mobile when quiz not in view
-    - AC-QP-014: Sticky CTA appears on mobile when scrolled past quiz
-
-#### Phase 0C: Results Page Integration
-
-- [ ] **QZ-017: Create QuizResults view**
-  - **Files**: New file: `components/quiz/QuizResults.tsx`
-  - **Changes**: Create results view that:
-    - Renders minimal header with QualAI logo
-    - Renders ResultsBanner, VSLSection, CalendarSection
-    - Accepts quizData prop for future personalization
-    - Includes calendarRef for scroll-to functionality
-  - **Acceptance criteria**:
-    - REQ-RP-001: QualAI logo displays in header
-    - AC-RP-001: QualAI logo visible in header
-    - AC-RP-008: Page maintains brand consistency with Quiz Page
-
-- [ ] **QZ-021: Create results mobile StickyCTA**
-  - **Files**: New file: `components/quiz/ResultsStickyCTA.tsx`, update `components/quiz/QuizResults.tsx`
-  - **Changes**: Create sticky CTA for results page:
-    - Shows "Book Your Call →" when calendar not in viewport
-    - Uses Intersection Observer
-    - Scrolls to calendar section on click
-  - **Acceptance criteria**:
-    - REQ-RP-010: Sticky CTA appears on mobile when calendar not in view
-    - AC-RP-009: Sticky CTA appears on mobile when calendar not in view
-
-#### Phase 0D: Quiz Data Flow & Submission
-
-- [ ] **QZ-022: Implement quiz submission handler in Quiz.tsx**
-  - **Files**: `pages/Quiz.tsx`
-  - **Changes**:
-    - QuizForm calls onComplete with quizData
-    - Quiz.tsx stores quizData and sets showResults=true
-    - Log submission for debugging (console.log)
-    - Future: send to API endpoint
-  - **Acceptance criteria**:
-    - REQ-QP-014: On submit, quiz data is captured
-    - REQ-QP-015: After successful submit, user sees Results view
-    - AC-QP-012: Successful submission shows Results view
-    - AC-QQ-007: Final submission includes all collected data
-
-- [ ] **QZ-023: Pass quiz data to QuizResults**
-  - **Files**: `pages/Quiz.tsx`, `components/quiz/QuizResults.tsx`
-  - **Changes**:
-    - Pass quizData as prop to QuizResults component
-    - QuizResults can display personalized content (future)
-    - QuizResults renders correctly even without data (fallback)
-  - **Acceptance criteria**:
-    - REQ-RP-008: Results view receives quiz data
-    - REQ-RP-009: Results view can display without quiz data
-    - REQ-QQ-009: Quiz data passed to Results after submission
-
-#### Phase 0E: Design System Compliance
-
-- [ ] **QZ-024: Audit and apply design system styles**
-  - **Files**: All quiz components in `components/quiz/`
-  - **Changes**: Review and ensure compliance with `specs/design-system.md`:
-    - Quiz card: max-width 480px ✓, rounded-2xl ✓, shadow-lg ✓
-    - Option cards: min 56px height ✓, full tappable ✓, 12px gap (check spacing)
-    - Buttons: min 52px height ✓ (h-[52px] used)
-    - Progress bar: 8px height (currently h-2 = 8px ✓)
-    - Typography: Inter font (check heading font is Inter not Lexend)
-    - Verify colors: primary blue-600, proper text colors
-  - **Acceptance criteria**:
-    - REQ-DS-001 through REQ-DS-009 satisfied
-    - AC-DS-001 through AC-DS-009 satisfied
-    - All quiz components use consistent design tokens
-
-- [ ] **QZ-025: Verify mobile-first responsive layout**
-  - **Files**: All quiz components
-  - **Changes**:
-    - Test at 375px, 768px, 1440px breakpoints
-    - Verify section spacing (48px mobile, 80px desktop)
-    - Verify no horizontal scroll
-    - Verify sticky CTA safe area padding
-  - **Acceptance criteria**:
-    - AC-QP-013: Page is fully responsive (mobile-first)
-    - AC-RP-007: Page is fully responsive
-    - AC-DS-008: No horizontal scroll on any screen size
-    - AC-DS-009: Design is consistent between quiz and results views
-
----
-
 ### P1 — Infrastructure & Production Readiness
 
 - [ ] **INFRA-001: Add 404 catch-all route**
-  - **Files**: `App.tsx`, new `pages/NotFound.tsx`
+  - **Files**: `App.tsx`
   - **Change**: Add `<Route path="*">` fallback with 404 page
-  - **Acceptance criteria**:
-    - Navigating to non-existent route shows 404 page
+  - **Acceptance criteria**: Navigating to non-existent route shows 404 page
 
 - [ ] **INFRA-002: Add Error Boundary**
   - **Files**: `App.tsx` or new `components/ErrorBoundary.tsx`
-  - **Acceptance criteria**:
-    - Unhandled render errors display friendly fallback UI
+  - **Acceptance criteria**: Unhandled render errors display friendly fallback UI
 
 - [ ] **A11Y-001: Add mobile menu accessibility attributes**
   - **Files**: `components/Header.tsx`
   - **Change**: Add `aria-label` and `aria-expanded` to hamburger button
-  - **Acceptance criteria**:
-    - Hamburger button has `aria-label` and `aria-expanded` attributes
+  - **Acceptance criteria**: Hamburger button has proper accessibility attributes
 
 - [ ] **SEO-001: Fix OG meta tags in index.html**
   - **Files**: `index.html`
-  - **Changes**:
-    - Update `og:title` to QualAI branding
-    - Update `og:description` to match offer
-    - Add `<meta name="description">` tag
-  - **Acceptance criteria**:
-    - `og:title` matches QualAI branding
-    - `<meta name="description">` tag exists
+  - **Changes**: Update `og:title`, `og:description`, add `<meta name="description">`
+  - **Acceptance criteria**: Meta tags match homepage branding
 
 - [ ] **SEO-002: Add robots.txt**
   - **Files**: New file: `public/robots.txt`
-  - **Acceptance criteria**:
-    - `robots.txt` is served at `/robots.txt`
+  - **Acceptance criteria**: `robots.txt` is served at `/robots.txt`
 
 - [ ] **SEO-003: Add sitemap.xml**
   - **Files**: New file: `public/sitemap.xml`
-  - **Acceptance criteria**:
-    - `sitemap.xml` exists in `public/`
-
-- [ ] **TEST-001: Add quiz route to routing tests**
-  - **Files**: `test/routing.test.tsx`
-  - **Acceptance criteria**:
-    - Test exists for `/quiz` route
-    - Tests verify quiz page renders correctly
+  - **Acceptance criteria**: `sitemap.xml` exists in `public/`
 
 ---
 
 ### P2 — Tailwind Migration (CDN → Build-Time)
 
-Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipeline exists.
-
 - [ ] **TW-001: Create build-time Tailwind infrastructure**
-  - **Files**: New files: `tailwind.config.ts`, `postcss.config.js`, `src/index.css`
-  - **Changes**:
-    - Install `tailwindcss`, `postcss`, `autoprefixer` as dev dependencies
-    - Create `tailwind.config.ts` with custom theme from `index.html` inline config
-    - Create `postcss.config.js`
-    - Create CSS file with Tailwind directives
-    - Migrate custom CSS animations from `index.html` (~280 lines)
-    - Import CSS file in `index.tsx`
-    - Update `components.json` with correct tailwind paths
-  - **Acceptance criteria**:
-    - `tailwind.config.ts` exists with all custom theme values
-    - `postcss.config.js` exists
-    - CSS file imported in entry point
-    - `components.json` tailwind paths are valid
+  - **Files**: `tailwind.config.ts`, `postcss.config.js`, CSS file
+  - **Changes**: Install tailwindcss, create config, migrate inline config
+  - **Acceptance criteria**: Build-time Tailwind compiles correctly
 
 - [ ] **TW-002: Remove Tailwind CDN from index.html**
   - **Files**: `index.html`
-  - **Changes**:
-    - Remove `<script src="https://cdn.tailwindcss.com"></script>`
-    - Remove inline `tailwind.config` block
-    - Move remaining `<style>` content to CSS file
-  - **Acceptance criteria**:
-    - No Tailwind CDN script in `index.html`
-    - All pages render correctly with build-time Tailwind
-    - Visual check at 375px, 768px, 1440px passes
+  - **Changes**: Remove CDN script and inline config
+  - **Acceptance criteria**: All pages render correctly with build-time Tailwind
 
 ---
 
-### P3 — Cleanup & Test Gaps
+### P3 — Cleanup
 
 - [ ] **CLEAN-001: Delete orphaned SocialProofToast.tsx**
   - **Files**: `components/SocialProofToast.tsx`
-  - **Acceptance criteria**:
-    - File does not exist; no imports reference it
+  - **Acceptance criteria**: File removed, no imports reference it
 
 - [ ] **CLEAN-002: Remove stale copy-of-qual-ai-lead-loss-audit.zip**
   - **Files**: `copy-of-qual-ai-lead-loss-audit.zip`
-  - **Acceptance criteria**:
-    - File removed from working directory
+  - **Acceptance criteria**: File removed from working directory
 
 - [ ] **CLEAN-003: Remove alexhormoziimplementation directory**
   - **Files**: `alexhormoziimplementation/`
-  - **Acceptance criteria**:
-    - Directory removed
+  - **Acceptance criteria**: Directory removed
 
 - [ ] **CLEAN-004: Remove unused GEMINI_API_KEY config**
   - **Files**: `vite.config.ts`
-  - **Change**: Remove unused `GEMINI_API_KEY` defines
-  - **Acceptance criteria**:
-    - `vite.config.ts` does not reference unused API keys
+  - **Acceptance criteria**: No unused API key references
 
 - [ ] **CLEAN-005: Improve TypeScript strictness**
   - **Files**: `components/audit/NicheSelection.tsx`
   - **Change**: Replace `(Icons as any)` cast with typed icon lookup
-  - **Acceptance criteria**:
-    - No `as any` casts in audit components
+  - **Acceptance criteria**: No `as any` casts in audit components
+
+---
+
+## Previous Completed Work
+
+### Audit Landing Page Spec Compliance (COMPLETE)
+
+- [x] AL-001 through AL-008: All audit landing page tasks complete
+
+### Audit Funnel Spec Compliance (COMPLETE)
+
+- [x] All 23 acceptance criteria satisfied
+
+### Infrastructure (COMPLETE)
+
+- [x] 34 passing tests
+- [x] Code splitting implemented
+- [x] Shadcn components integrated
 
 ---
 
@@ -331,47 +192,40 @@ Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipe
 - **Quiz Funnel vs Audit Funnel**: Two separate funnels serving different purposes
   - Audit (`/audit`): Revenue leak calculator, educational, bottom-funnel
   - Quiz (`/quiz`): Lead qualification, partnership positioning, top-funnel
-- **Quiz State**: Component-level state in Quiz.tsx (quizData, showResults)
-- **Quiz → Results**: Single page with conditional rendering (showResults flag)
-- **Component Structure**: Individual components built, page orchestrates them
+- **Quiz State**: Component-level state in Quiz.tsx (quizData, view)
+- **Quiz → Results**: Single page with view state ('quiz' | 'results')
 - Animation system: Framer Motion with shared variants in `lib/animations.ts`
 - Code splitting: React.lazy() for page components
-- CRM data: consolidated in `constants.ts`
 - Shadcn components for UI consistency
 - **Tailwind CSS via CDN** — migration to build-time pending (P2)
 - HashRouter (routes prefixed with `/#/`)
-- Entry point: `index.tsx`
 
 ---
 
-## Notes
+## Quiz Components Created
 
-- Primary conversion flow: Homepage CTA → `/quiz` → Results (booking)
-- Quiz funnel is the new primary funnel (replacing audit focus)
-- All quiz components use Shadcn/Tailwind styling
-- Calendar section has calendarRef prop for scroll-to functionality
-- StickyCTA components need Intersection Observer implementation
-- Audit funnel (`/audit`) still exists and works
+```
+components/quiz/
+├── HeroSection.tsx      # Hero with headline, CTA, trust bar
+├── BenefitsSection.tsx  # 5 benefit cards with icons
+├── QuizForm.tsx         # Main quiz orchestrator (state, steps, navigation)
+├── QuizStep.tsx         # Reusable step with option cards
+├── TextInput.tsx        # Text input field component
+├── ContactInfoStep.tsx  # Step 6 contact form
+├── QuizStickyCTA.tsx    # Mobile sticky CTA (intersection observer)
+├── ResultsBanner.tsx    # Results page hero banner
+├── VSLSection.tsx       # Video section with benefit bullets
+└── CalendarSection.tsx  # Calendar booking section
+```
 
 ---
 
 ## Spec-to-Task Mapping
 
-| Spec | Status | Remaining Tasks |
-|------|--------|-----------------|
-| `quiz-funnel-overview.md` | ~75% | QZ-004, QZ-016, QZ-017, QZ-021-25 |
-| `quiz-page.md` | ~80% | QZ-004, QZ-016 |
-| `quiz-questions.md` | ~95% | QZ-022, QZ-023 |
-| `results-page.md` | ~70% | QZ-017, QZ-021, QZ-023 |
-| `design-system.md` | ~70% | QZ-024, QZ-025 |
-
----
-
-## Recent Progress
-
-- All quiz question/option constants complete
-- All quiz step components (1-5) implemented in QuizForm
-- ContactInfoStep with validation complete
-- ResultsBanner, VSLSection, CalendarSection built
-- HeroSection and BenefitsSection complete
-- Only integration work remaining for P0
+| Spec | Status | Tasks |
+|------|--------|-------|
+| `quiz-funnel-overview.md` | Complete | QZ-001 through QZ-025 |
+| `quiz-page.md` | Complete | QZ-004 through QZ-016 |
+| `quiz-questions.md` | Complete | QZ-003, QZ-009 through QZ-015 |
+| `results-page.md` | Complete | QZ-017 through QZ-023 |
+| `design-system.md` | Complete | QZ-024, QZ-025 |

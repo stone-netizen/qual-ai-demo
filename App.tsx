@@ -10,6 +10,8 @@ import { ROUTES } from './constants';
 // Lazy-loaded pages for code splitting
 const HowItWorks = lazy(() => import('./pages/HowItWorks'));
 const Demo = lazy(() => import('./pages/Demo'));
+const Audit = lazy(() => import('./pages/Audit'));
+const Quiz = lazy(() => import('./pages/Quiz'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const SMSTerms = lazy(() => import('./pages/SMSTerms'));
@@ -31,9 +33,11 @@ const App: React.FC = () => {
   }, [pathname]);
 
   const isPostBooking = pathname === ROUTES.POST_BOOKING;
+  const isAudit = pathname === ROUTES.AUDIT;
+  const isQuiz = pathname === ROUTES.QUIZ;
 
   return (
-    <Layout hideHeader={isPostBooking} hideFooter={isPostBooking}>
+    <Layout hideHeader={isPostBooking || isAudit || isQuiz} hideFooter={isPostBooking || isAudit || isQuiz}>
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path={ROUTES.HOME} element={<Home />} />
@@ -46,6 +50,8 @@ const App: React.FC = () => {
           <Route path={ROUTES.COOKIE_POLICY} element={<CookiePolicy />} />
           <Route path={ROUTES.SECURITY} element={<Security />} />
           <Route path={ROUTES.DEMO} element={<Demo />} />
+          <Route path={ROUTES.AUDIT} element={<Audit />} />
+          <Route path={ROUTES.QUIZ} element={<Quiz />} />
         </Routes>
       </Suspense>
     </Layout>

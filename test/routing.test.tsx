@@ -45,6 +45,14 @@ vi.mock('../pages/Security', () => ({
   default: () => <div data-testid="security-page">Security</div>,
 }));
 
+vi.mock('../pages/Quiz', () => ({
+  default: () => <div data-testid="quiz-page">Quiz Page</div>,
+}));
+
+vi.mock('../pages/Audit', () => ({
+  default: () => <div data-testid="audit-page">Audit Page</div>,
+}));
+
 const renderWithRouter = (initialEntries: string[] = ['/']) => {
   return render(
     <MemoryRouter initialEntries={initialEntries}>
@@ -138,6 +146,22 @@ describe('Application Routing', () => {
         expect(screen.getByTestId('security-page')).toBeInTheDocument();
       });
     });
+
+    it('renders Quiz page', async () => {
+      renderWithRouter([ROUTES.QUIZ]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('quiz-page')).toBeInTheDocument();
+      });
+    });
+
+    it('renders Audit page', async () => {
+      renderWithRouter([ROUTES.AUDIT]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('audit-page')).toBeInTheDocument();
+      });
+    });
   });
 
   describe('Layout behavior', () => {
@@ -173,6 +197,32 @@ describe('Application Routing', () => {
       expect(ROUTES.COOKIE_POLICY).toBe('/cookie-policy');
       expect(ROUTES.SECURITY).toBe('/security');
       expect(ROUTES.DEMO).toBe('/demo');
+      expect(ROUTES.AUDIT).toBe('/audit');
+      expect(ROUTES.QUIZ).toBe('/quiz');
+    });
+  });
+
+  describe('Quiz and Audit pages', () => {
+    it('hides header on Quiz page', async () => {
+      renderWithRouter([ROUTES.QUIZ]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('quiz-page')).toBeInTheDocument();
+      });
+
+      // Header (navigation) should not be present on quiz page
+      expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
+    });
+
+    it('hides header on Audit page', async () => {
+      renderWithRouter([ROUTES.AUDIT]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('audit-page')).toBeInTheDocument();
+      });
+
+      // Header (navigation) should not be present on audit page
+      expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
     });
   });
 });

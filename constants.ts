@@ -11,9 +11,9 @@ export const BRAND = {
 export const MESSAGING = {
   hero: {
     badge: "Exclusive Partnership Program",
-    headline: "High-Intent Appointments",
-    headlineAccent: "Delivered",
-    subheadline: "Performance-driven booking systems that prep your techs to close. AI voice and SMS that turn leads into booked, ready-to-convert appointments.",
+    headline: "We Generate The Leads. We Book The Jobs. We Help You",
+    headlineAccent: "Close Bigger Tickets.",
+    subheadline: "Everything You Need To Grow — Leads, Bookings, and Bigger Job Values.",
   },
   valueProp: [
     { title: "Pay on Performance", description: "Results-based partnership" },
@@ -41,7 +41,7 @@ export const MESSAGING = {
     },
   ],
   cta: {
-    primary: "Apply for Partnership",
+    primary: "Find Your Revenue Leak",
     secondary: "Schedule Consultation",
     subtext: "Limited partnerships available",
   },
@@ -76,7 +76,7 @@ export const CRM_INTEGRATIONS = [
 
 // UI configuration constants
 export const UI_CONFIG = {
-  STICKY_CTA_SCROLL_THRESHOLD: 600, // px scroll before showing sticky CTA
+  STICKY_CTA_SCROLL_THRESHOLD: 100, // px scroll before showing sticky CTA
 };
 
 export const ROUTES = {
@@ -89,6 +89,8 @@ export const ROUTES = {
   SMS_TERMS: "/sms-terms",
   COOKIE_POLICY: "/cookie-policy",
   SECURITY: "/security",
-  DEMO: "/demo"
+  DEMO: "/demo",
+  AUDIT: "/audit",
+  QUIZ: "/quiz"
 };
 
