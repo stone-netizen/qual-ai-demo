@@ -1,0 +1,5 @@
+# QualAI Robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://qual-ai-demo.vercel.app/sitemap.xml
