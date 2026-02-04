@@ -1,7 +1,7 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: P0 Quiz Funnel complete. P1 Infrastructure 100% complete. Remaining: P2 Tailwind, P3 Cleanup.
+> Status: P0 Quiz Funnel complete. P1 Infrastructure complete. Remaining: P2 Tailwind, P3 Cleanup.
 
 ---
 
@@ -13,7 +13,7 @@ The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is full
 - **P0 (Quiz Funnel):** ✅ 100% complete — All core functionality works
 - **P1 (Infrastructure):** ✅ 100% complete — 404, ErrorBoundary, A11Y, SEO all done
 - **P2 (Tailwind):** ❌ 0% complete — Still using CDN with inline config
-- **P3 (Cleanup):** ⚠️ Orphan files and design system inconsistencies exist
+- **P3 (Cleanup):** ⚠️ 20% complete — DS-001 done, orphan files still exist
 
 ---
 
@@ -33,7 +33,7 @@ The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is full
 
 1. **Design System**: Headings use `Lexend` font, but spec says single font (Inter)
 2. **Tailwind**: CDN-based, not build-time
-3. **Cleanup**: Orphan files exist (SocialProofToast.tsx, zip file, alexhormoziimplementation)
+3. **Cleanup**: Orphan files exist (SocialProofToast.tsx, zip file, alexhormoziimplementation, new_plan.md)
 4. **Cleanup**: Unused GEMINI_API_KEY in vite.config.ts
 
 ---
@@ -91,7 +91,12 @@ Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipe
   - **Acceptance criteria**:
     - File removed
 
-- [ ] **CLEAN-004: Remove unused GEMINI_API_KEY config**
+- [ ] **CLEAN-004: Remove stale new_plan.md file**
+  - **Files**: `new_plan.md`
+  - **Acceptance criteria**:
+    - File removed
+
+- [ ] **CLEAN-005: Remove unused GEMINI_API_KEY config**
   - **Files**: `vite.config.ts`
   - **Change**: Remove unused `GEMINI_API_KEY` defines (lines 14-16)
   - **Acceptance criteria**:
