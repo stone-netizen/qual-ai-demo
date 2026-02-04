@@ -1,19 +1,19 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: Gap analysis complete. Major work: QualAI Quiz Funnel (P0), Routing fixes (P1), Infrastructure (P2-P3).
+> Status: Gap analysis complete. Major work: QualAI Quiz Funnel (P0).
 
 ---
 
 ## Summary
 
-The current specs describe a **new QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) that does **not yet exist** in the codebase. The existing `/audit` funnel is a separate revenue-leak calculator, not the quiz funnel described in the specs.
+The specs describe a **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) that does **not yet exist** in the codebase. The existing `/audit` funnel is a separate revenue-leak calculator, not the quiz funnel described in the specs.
 
 **Gap Analysis Results:**
 - **P0 (Quiz Funnel):** 0% complete — No quiz route, no quiz components, no quiz page exists
-- **P1 (Routing):** 0% complete — CTAs still route to `/contact` instead of `/audit`
+- **P1 (Infrastructure):** Partial — Missing 404 route, error boundary, accessibility improvements
 - **P2 (Tailwind):** 0% complete — Still using CDN with inline config
-- **P3 (Infrastructure):** Partially complete — Missing 404 route, error boundary, accessibility
+- **P3 (Cleanup):** Orphan files exist
 
 ---
 
@@ -337,56 +337,44 @@ The specs in `specs/quiz-funnel-overview.md`, `specs/quiz-page.md`, `specs/quiz-
 
 ---
 
-### P1 — Routing Realignment (Audit-First Conversion Flow)
+### P1 — Infrastructure & Production Readiness
 
-CTAs and navigation should route to `/audit` as the primary conversion path.
-
-- [ ] **RT-001: StickyCTA routes to /audit**
-  - **Files**: `components/StickyCTA.tsx` (line 40)
-  - **Change**: `navigate(ROUTES.CONTACT)` → `navigate(ROUTES.AUDIT)`
+- [ ] **INFRA-001: Add 404 catch-all route**
+  - **Files**: `App.tsx`
+  - **Change**: Add `<Route path="*">` fallback
   - **Acceptance criteria**:
-    - Clicking StickyCTA navigates to `/audit`
+    - Navigating to non-existent route shows 404 page
 
-- [ ] **RT-002: Home page CTAs route to /audit**
-  - **Files**: `pages/Home.tsx` (lines 80, 245)
+- [ ] **INFRA-002: Add Error Boundary**
+  - **Files**: `App.tsx` or new `components/ErrorBoundary.tsx`
+  - **Acceptance criteria**:
+    - Unhandled render errors display friendly fallback UI
+
+- [ ] **A11Y-001: Add mobile menu accessibility attributes**
+  - **Files**: `components/Header.tsx` (line 54)
+  - **Change**: Add `aria-label` and `aria-expanded` to hamburger button
+  - **Acceptance criteria**:
+    - Hamburger button has `aria-label` and `aria-expanded` attributes
+
+- [ ] **SEO-001: Fix OG meta tags in index.html**
+  - **Files**: `index.html`
   - **Changes**:
-    - Hero CTA: `navigate(ROUTES.CONTACT)` → `navigate(ROUTES.AUDIT)`
-    - Final CTA: `navigate(ROUTES.CONTACT)` → `navigate(ROUTES.AUDIT)`
+    - Update `og:title` to homepage branding
+    - Update `og:description`
+    - Add `<meta name="description">` tag
   - **Acceptance criteria**:
-    - Both hero and final CTA buttons on homepage navigate to `/audit`
+    - `og:title` matches homepage branding
+    - `<meta name="description">` tag exists
 
-- [ ] **RT-003: HowItWorks CTA routes to /audit**
-  - **Files**: `pages/HowItWorks.tsx` (line 287)
-  - **Change**: `ROUTES.CONTACT` → `ROUTES.AUDIT`
+- [ ] **SEO-002: Add robots.txt**
+  - **Files**: New file: `public/robots.txt`
   - **Acceptance criteria**:
-    - HowItWorks page CTA navigates to `/audit`
+    - `robots.txt` is served at `/robots.txt`
 
-- [ ] **RT-004: Add audit link to Header navigation**
-  - **Files**: `components/Header.tsx` (lines 10-15, 46)
-  - **Changes**:
-    - Add `{ label: 'Revenue Leak Audit', path: ROUTES.AUDIT }` to `navItems` array
-    - Update "Start Pilot" CTA button (line 46) to route to `/audit` instead of `/contact`
+- [ ] **SEO-003: Add sitemap.xml**
+  - **Files**: New file: `public/sitemap.xml`
   - **Acceptance criteria**:
-    - Header nav includes "Revenue Leak Audit" link pointing to `/audit`
-    - Header CTA button navigates to `/audit`
-
-- [ ] **RT-005: Add audit link to Footer navigation**
-  - **Files**: `components/Footer.tsx`
-  - **Change**: Add "Revenue Leak Audit" link in Platform section
-  - **Acceptance criteria**:
-    - Footer Platform section includes "Revenue Leak Audit" link to `/audit`
-
-- [ ] **RT-006: StickyCTA uses shadcn Button component**
-  - **Files**: `components/StickyCTA.tsx` (line 39)
-  - **Change**: Replace raw `<button>` element with `<Button>` from `@/components/ui/button`
-  - **Acceptance criteria**:
-    - StickyCTA renders using `<Button>` component from shadcn
-
-- [ ] **RT-007: Fix unused UI_CONFIG constant**
-  - **Files**: `constants.ts`, `components/StickyCTA.tsx`
-  - **Change**: Use `UI_CONFIG.STICKY_CTA_SCROLL_THRESHOLD` instead of hardcoded `100`
-  - **Acceptance criteria**:
-    - Scroll threshold uses `UI_CONFIG` constant
+    - `sitemap.xml` exists in `public/`
 
 ---
 
@@ -423,54 +411,7 @@ Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipe
 
 ---
 
-### P3 — HTML, SEO & Production Infrastructure
-
-- [ ] **SEO-001: Fix OG meta tags in index.html**
-  - **Files**: `index.html`
-  - **Changes**:
-    - Update `og:title` to homepage branding
-    - Update `og:description`
-    - Add `<meta name="description">` tag
-  - **Acceptance criteria**:
-    - `og:title` matches homepage branding
-    - `<meta name="description">` tag exists
-
-- [ ] **SEO-002: Add robots.txt**
-  - **Files**: New file: `public/robots.txt`
-  - **Acceptance criteria**:
-    - `robots.txt` is served at `/robots.txt`
-
-- [ ] **SEO-003: Add sitemap.xml**
-  - **Files**: New file: `public/sitemap.xml`
-  - **Acceptance criteria**:
-    - `sitemap.xml` exists in `public/`
-
-- [ ] **INFRA-001: Add 404 catch-all route**
-  - **Files**: `App.tsx`
-  - **Change**: Add `<Route path="*">` fallback
-  - **Acceptance criteria**:
-    - Navigating to non-existent route shows 404 page
-
-- [ ] **INFRA-002: Remove dead GEMINI_API_KEY config**
-  - **Files**: `vite.config.ts`
-  - **Change**: Remove unused `GEMINI_API_KEY` defines
-  - **Acceptance criteria**:
-    - `vite.config.ts` does not reference `GEMINI_API_KEY`
-
-- [ ] **INFRA-003: Add Error Boundary**
-  - **Files**: `App.tsx` or new `components/ErrorBoundary.tsx`
-  - **Acceptance criteria**:
-    - Unhandled render errors display friendly fallback UI
-
-- [ ] **A11Y-001: Add mobile menu accessibility attributes**
-  - **Files**: `components/Header.tsx` (line 54)
-  - **Change**: Add `aria-label` and `aria-expanded` to hamburger button
-  - **Acceptance criteria**:
-    - Hamburger button has `aria-label` and `aria-expanded` attributes
-
----
-
-### P4 — Cleanup & Test Gaps
+### P3 — Cleanup & Test Gaps
 
 - [ ] **CLEAN-001: Delete orphaned SocialProofToast.tsx**
   - **Files**: `components/SocialProofToast.tsx`
@@ -487,18 +428,19 @@ Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipe
   - **Acceptance criteria**:
     - Directory removed
 
-- [ ] **TEST-001: Add routing test for /audit**
-  - **Files**: `test/routing.test.tsx`
+- [ ] **CLEAN-004: Remove unused GEMINI_API_KEY config**
+  - **Files**: `vite.config.ts`
+  - **Change**: Remove unused `GEMINI_API_KEY` defines if present
   - **Acceptance criteria**:
-    - Test exists that renders `/audit` and asserts basic content
+    - `vite.config.ts` does not reference unused API keys
 
-- [ ] **TEST-002: Add quiz funnel routing tests**
+- [ ] **TEST-001: Add quiz funnel routing tests**
   - **Files**: `test/routing.test.tsx`
   - **Acceptance criteria**:
     - Test exists for `/quiz` route
     - Tests verify quiz page renders correctly
 
-- [ ] **CLEAN-004: Improve TypeScript strictness**
+- [ ] **CLEAN-005: Improve TypeScript strictness**
   - **Files**: `components/audit/NicheSelection.tsx`
   - **Change**: Replace `(Icons as any)` cast with typed icon lookup
   - **Acceptance criteria**:
