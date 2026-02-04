@@ -53,6 +53,10 @@ vi.mock('../pages/Audit', () => ({
   default: () => <div data-testid="audit-page">Audit Page</div>,
 }));
 
+vi.mock('../pages/NotFound', () => ({
+  default: () => <div data-testid="not-found-page">404 Not Found</div>,
+}));
+
 const renderWithRouter = (initialEntries: string[] = ['/']) => {
   return render(
     <MemoryRouter initialEntries={initialEntries}>
@@ -223,6 +227,16 @@ describe('Application Routing', () => {
 
       // Header (navigation) should not be present on audit page
       expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('404 Not Found', () => {
+    it('renders 404 page for unknown routes', async () => {
+      renderWithRouter(['/this-route-does-not-exist']);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('not-found-page')).toBeInTheDocument();
+      });
     });
   });
 });

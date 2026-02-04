@@ -17,6 +17,7 @@ const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const SMSTerms = lazy(() => import('./pages/SMSTerms'));
 const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
 const Security = lazy(() => import('./pages/Security'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Loading fallback
 const PageLoader = () => (
@@ -52,6 +53,7 @@ const App: React.FC = () => {
           <Route path={ROUTES.DEMO} element={<Demo />} />
           <Route path={ROUTES.AUDIT} element={<Audit />} />
           <Route path={ROUTES.QUIZ} element={<Quiz />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </Layout>

@@ -1,7 +1,7 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: P0 Quiz Funnel complete. Remaining work: P1 Infrastructure, P2 Tailwind, P3 Cleanup.
+> Status: P0 Quiz Funnel complete. P1 Infrastructure partially complete (404, ErrorBoundary, A11Y done). Remaining: P1 SEO, P2 Tailwind, P3 Cleanup.
 
 ---
 
@@ -101,18 +101,20 @@ All 25 tasks from Phases 0A-0E are complete.
 
 ### P1 — Infrastructure & Production Readiness
 
-- [ ] **INFRA-001: Add 404 catch-all route**
-  - **Files**: `App.tsx`
-  - **Change**: Add `<Route path="*">` fallback with 404 page
+- [x] **INFRA-001: Add 404 catch-all route** ✅
+  - **Files**: `App.tsx`, `pages/NotFound.tsx`
+  - **Change**: Created NotFound page component, added catch-all route
   - **Acceptance criteria**: Navigating to non-existent route shows 404 page
+  - **Test**: Added 404 test in `test/routing.test.tsx` (35 tests passing)
 
-- [ ] **INFRA-002: Add Error Boundary**
-  - **Files**: `App.tsx` or new `components/ErrorBoundary.tsx`
+- [x] **INFRA-002: Add Error Boundary** ✅
+  - **Files**: `components/ErrorBoundary.tsx`, `index.tsx`
+  - **Change**: Created ErrorBoundary class component, wrapped App in index.tsx
   - **Acceptance criteria**: Unhandled render errors display friendly fallback UI
 
-- [ ] **A11Y-001: Add mobile menu accessibility attributes**
+- [x] **A11Y-001: Add mobile menu accessibility attributes** ✅
   - **Files**: `components/Header.tsx`
-  - **Change**: Add `aria-label` and `aria-expanded` to hamburger button
+  - **Change**: Added `aria-label`, `aria-expanded`, and `aria-hidden` to hamburger button/icon
   - **Acceptance criteria**: Hamburger button has proper accessibility attributes
 
 - [ ] **SEO-001: Fix OG meta tags in index.html**
