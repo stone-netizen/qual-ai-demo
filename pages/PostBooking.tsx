@@ -58,7 +58,7 @@ const PostBooking: React.FC = () => {
 
           {/* Headline */}
           <motion.div variants={fadeInUp} className="text-center mb-10">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 font-heading leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
               You're Confirmed
             </h1>
             <p className="text-blue-200 text-lg">

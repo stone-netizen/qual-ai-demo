@@ -23,7 +23,7 @@ const Header: React.FC = () => {
               <div className="w-10 h-10 bg-navy-900 rounded flex items-center justify-center">
                 <span className="text-white font-bold text-xl">Q</span>
               </div>
-              <span className="text-2xl font-bold tracking-tight text-navy-950 font-heading">
+              <span className="text-2xl font-bold tracking-tight text-navy-950">
                 Qual <span className="text-accent text-lg">AI</span>
               </span>
             </Link>

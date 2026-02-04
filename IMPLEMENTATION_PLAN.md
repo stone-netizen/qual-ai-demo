@@ -27,11 +27,11 @@ The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is full
 | `quiz-page.md` | ✅ Complete | All requirements satisfied |
 | `quiz-questions.md` | ✅ Complete | All 6 steps + contact info |
 | `results-page.md` | ✅ Complete | All sections implemented |
-| `design-system.md` | ⚠️ 95% | Typography uses Lexend for headings (spec says Inter only) |
+| `design-system.md` | ✅ Complete | Typography now uses Inter only |
 
 ### Remaining Issues
 
-1. **Design System**: Headings use `Lexend` font, but spec says single font (Inter)
+1. ~~**Design System**: Headings use `Lexend` font, but spec says single font (Inter)~~ ✅ Fixed
 2. **Tailwind**: CDN-based, not build-time
 3. **Cleanup**: Orphan files exist (SocialProofToast.tsx, zip file, alexhormoziimplementation, new_plan.md)
 4. **Cleanup**: Unused GEMINI_API_KEY in vite.config.ts
@@ -102,14 +102,17 @@ Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipe
   - **Acceptance criteria**:
     - `vite.config.ts` does not reference unused API keys
 
-- [ ] **DS-001: Unify heading font to Inter**
-  - **Files**: `index.html`
-  - **Change**: Remove Lexend font, use Inter for headings as per design-system.md spec
-  - **Note**: Design system spec says "single sans-serif font (Inter)" but current code uses Lexend for headings
-  - **Acceptance criteria**:
+- [x] **DS-001: Unify heading font to Inter** ✅
+  - **Files**: `index.html`, all pages and components using `font-heading`
+  - **Changes made**:
+    - Removed Lexend from Google Fonts link
+    - Removed `font-heading` from Tailwind config
+    - Removed CSS rule setting h1-h4 to Lexend
+    - Removed all `font-heading` class usages from 12 files
+  - **Acceptance criteria**: ✅ All met
     - Single font family (Inter) used throughout
-    - Headings no longer use `font-heading` class referencing Lexend
-    - Google Fonts link only loads Inter (removes Lexend)
+    - No `font-heading` class references in codebase
+    - Google Fonts link only loads Inter
 
 ---
 

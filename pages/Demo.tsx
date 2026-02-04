@@ -99,7 +99,7 @@ const Demo: React.FC = () => {
                         Live AI Demo
                     </Badge>
 
-                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-heading tracking-tight">
+                    <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
                         Talk to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-accent">Qual AI</span>
                     </h1>
                     <p className="text-xl text-blue-200/80 leading-relaxed font-light">

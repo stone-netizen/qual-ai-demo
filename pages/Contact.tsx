@@ -46,7 +46,7 @@ const Contact: React.FC = () => {
           >
             <motion.h1
               variants={fadeInUp}
-              className="text-4xl md:text-5xl font-bold text-navy-950 mb-6 font-heading tracking-tight"
+              className="text-4xl md:text-5xl font-bold text-navy-950 mb-6 tracking-tight"
             >
               Schedule Your Evaluation
             </motion.h1>
@@ -67,7 +67,7 @@ const Contact: React.FC = () => {
           >
             <Card className="rounded-3xl shadow-xl overflow-hidden border-gray-100 py-0">
               <CardHeader className="border-b pb-4">
-                <CardTitle className="text-2xl font-heading text-navy-950">Book Your Demo</CardTitle>
+                <CardTitle className="text-2xl text-navy-950">Book Your Demo</CardTitle>
                 <CardDescription>Select a time that works for you</CardDescription>
               </CardHeader>
               <CardContent className="p-0">
@@ -122,7 +122,7 @@ const Contact: React.FC = () => {
             viewport={defaultViewport}
             variants={fadeInUp}
           >
-            <h2 className="text-2xl font-bold text-navy-950 mb-3 font-heading">
+            <h2 className="text-2xl font-bold text-navy-950 mb-3">
               Other Ways to Reach Us
             </h2>
             <p className="text-gray-600">

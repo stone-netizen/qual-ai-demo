@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
               <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
                 <span className="text-navy-950 font-bold text-lg">Q</span>
               </div>
-              <span className="text-xl font-bold tracking-tight text-white font-heading">
+              <span className="text-xl font-bold tracking-tight text-white">
                 Qual <span className="text-accent text-sm">AI</span>
               </span>
             </Link>

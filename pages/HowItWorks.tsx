@@ -145,7 +145,7 @@ const HowItWorks: React.FC = () => {
           </motion.div>
           <motion.h1
             variants={fadeInUp}
-            className="text-4xl lg:text-6xl font-bold mb-6 font-heading"
+            className="text-4xl lg:text-6xl font-bold mb-6"
           >
             The Booking Ecosystem
           </motion.h1>
@@ -184,7 +184,7 @@ const HowItWorks: React.FC = () => {
                     <Badge className="w-16 h-16 bg-navy-900 text-white rounded-2xl flex items-center justify-center mb-8 p-0">
                       {step.icon}
                     </Badge>
-                    <h3 className="text-2xl font-bold text-navy-950 mb-4 font-heading">
+                    <h3 className="text-2xl font-bold text-navy-950 mb-4">
                       {step.title}
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
@@ -212,7 +212,7 @@ const HowItWorks: React.FC = () => {
             viewport={defaultViewport}
           >
             <motion.div variants={fadeInUp}>
-              <h2 className="text-3xl font-bold text-navy-950 mb-8 font-heading">
+              <h2 className="text-3xl font-bold text-navy-950 mb-8">
                 Full Transparency for HVAC Owners
               </h2>
               <p className="text-gray-600 mb-6 leading-relaxed">
