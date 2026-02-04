@@ -12,12 +12,12 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <div className="px-8 md:px-12 lg:px-16 pt-6 pb-8 md:pt-8 md:pb-12 text-center">
+      <div className="px-8 md:px-12 lg:px-16 pt-6 pb-4 md:pt-8 md:pb-6 text-center">
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-tight mb-6">
           Your Business Is Leaking Revenue.
           <br />
-          <span className="text-blue-600">Let Me Show You Where It's Going.</span>
+          <span className="text-blue-600">Want to Know Where?</span>
         </h1>
 
         {/* Subheadline */}
@@ -30,7 +30,7 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
         <Button
           onClick={onStart}
           size="lg"
-          className="group bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 px-10 rounded-2xl text-xl shadow-xl shadow-blue-600/25 transition-all transform hover:scale-[1.02] active:scale-95 mb-4"
+          className="group bg-blue-600 hover:bg-blue-700 text-white font-bold py-6 px-14 rounded-2xl text-2xl shadow-2xl shadow-blue-600/30 transition-all transform hover:scale-[1.02] active:scale-95 mb-2"
         >
           Start My Leak Audit
           <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -41,7 +41,7 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
         </p>
 
         {/* Trust Icons */}
-        <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-slate-400 text-xs font-bold uppercase tracking-wider">
+        <div className="flex flex-wrap items-center justify-center gap-6 mt-4 text-slate-400 text-xs font-bold uppercase tracking-wider">
           <span className="flex items-center gap-2">
             <Lock className="w-4 h-4 text-blue-600" /> Private
           </span>
@@ -55,7 +55,7 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
       </div>
 
       {/* Video Section */}
-      <div className="px-8 md:px-12 lg:px-16 pb-12">
+      <div className="px-8 md:px-12 lg:px-16 pb-8">
         <div className="max-w-3xl mx-auto">
           <div className="bg-slate-100 rounded-3xl p-1.5 shadow-xl">
             <div className="relative aspect-video bg-slate-900 rounded-[1.25rem] flex flex-col items-center justify-center group cursor-pointer overflow-hidden">
@@ -76,7 +76,7 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
             </div>
           </div>
           <p className="text-center text-slate-500 text-sm mt-4 italic">
-            "You're not losing leads because your ads suck — you're losing them because the bucket is cracked."
+            "You're not losing leads because your ads suck... you're losing them because the bucket is cracked. We created a system that plugs every leak in your revenue flow using AI follow-up and instant engagement. This quick audit shows how bad the leaks are — and what you'd gain from fixing them."
           </p>
         </div>
       </div>
@@ -84,12 +84,9 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
       {/* Why It Matters Section */}
       <div className="bg-slate-50 px-8 md:px-12 lg:px-16 py-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 text-center mb-4">
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 text-center mb-12">
             Most Business Owners Don't Know What's Missing.
           </h2>
-          <p className="text-slate-500 text-center mb-12 text-lg">
-            The biggest loss isn't your ads — it's lead conversion.
-          </p>
 
           {/* Leak Points */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -98,7 +95,7 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
                 <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <PhoneMissed className="w-8 h-8 text-red-500" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-lg mb-2">Missed Calls & Slow Replies</h3>
+                <h3 className="font-bold text-slate-900 text-lg mb-2">Missed calls / slow replies</h3>
                 <p className="text-slate-500 text-sm">Every unanswered call goes straight to your competitor.</p>
               </CardContent>
             </Card>
@@ -108,7 +105,7 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
                 <div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Database className="w-8 h-8 text-orange-500" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-lg mb-2">Lost Leads in Your CRM</h3>
+                <h3 className="font-bold text-slate-900 text-lg mb-2">Lost leads in your CRM</h3>
                 <p className="text-slate-500 text-sm">Thousands in revenue sitting untouched in your database.</p>
               </CardContent>
             </Card>
@@ -118,14 +115,14 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
                 <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Clock className="w-8 h-8 text-blue-500" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-lg mb-2">Dead DMs & Contact Forms</h3>
+                <h3 className="font-bold text-slate-900 text-lg mb-2">Dead DMs or contact forms</h3>
                 <p className="text-slate-500 text-sm">Leads reach out and never hear back in time.</p>
               </CardContent>
             </Card>
           </div>
 
           <p className="text-center text-slate-600 max-w-2xl mx-auto">
-            Whether you're <span className="font-semibold">HVAC, roofing, plumbing, or pest control</span> — this audit scans your systems and shows what you're really losing.
+            Whether you're HVAC, roofing, or pest control — the biggest loss isn't ads... it's lead conversion. This audit scans your systems and shows what you're really losing.
           </p>
         </div>
       </div>
@@ -133,12 +130,10 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
       {/* Trust + Final CTA Section */}
       <div className="px-8 md:px-12 lg:px-16 py-16 text-center">
         <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
-          Backed by Real Performance Math,
-          <br />
-          <span className="text-blue-600">Not Guesswork.</span>
+          Backed by Real Performance Math, Not Guesswork.
         </h2>
         <p className="text-slate-600 max-w-xl mx-auto mb-10 text-lg">
-          We don't sell software. We recover lost profit. Our tools show you exactly what's broken — and how to fix it.
+          We don't sell software. We recover lost profit. Our tools are built to show you exactly what's broken — and fix it, without monthly fees or sales fluff.
         </p>
 
         <Button
@@ -150,10 +145,6 @@ const LeakAuditLanding: React.FC<Props> = ({ onStart }) => {
           <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
         </Button>
 
-        <div className="mt-8 flex items-center justify-center gap-2 text-slate-400 text-sm">
-          <ShieldCheck className="w-4 h-4" />
-          <span>Your data stays private. Results are instant.</span>
-        </div>
       </div>
 
       {/* Footer */}
