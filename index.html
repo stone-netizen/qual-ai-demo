@@ -52,27 +52,6 @@
       font-family: 'Lexend', sans-serif;
     }
 
-    .vsl-pulse {
-      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    @keyframes pulse-ring {
-      0% {
-        transform: scale(0.95);
-        opacity: 0.5;
-      }
-
-      50% {
-        transform: scale(1.05);
-        opacity: 0.3;
-      }
-
-      100% {
-        transform: scale(0.95);
-        opacity: 0.5;
-      }
-    }
-
     @keyframes marquee {
       0% {
         transform: translateX(0);
@@ -178,14 +157,14 @@
       background-clip: padding-box, border-box;
     }
 
-    /* Animated gradient text for hero */
+    /* Animated gradient text for hero - electric cyan to violet */
     .gradient-text-animated {
-      background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
-      background-size: 200% auto;
+      background: linear-gradient(90deg, #06b6d4, #2563eb, #7c3aed, #06b6d4);
+      background-size: 300% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: gradientMove 5s linear infinite;
+      animation: gradientMove 6s linear infinite;
     }
 
     @keyframes gradientMove {
@@ -193,8 +172,45 @@
         background-position: 0% center;
       }
       100% {
-        background-position: 200% center;
+        background-position: 300% center;
       }
+    }
+
+    /* Floating CTA with neon glow effect */
+    .floating-cta-glow {
+      box-shadow: 
+        0 0 20px rgba(37, 99, 235, 0.4),
+        0 0 40px rgba(37, 99, 235, 0.2),
+        0 4px 20px rgba(0, 0, 0, 0.1);
+      animation: neonPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% {
+        box-shadow: 
+          0 0 20px rgba(37, 99, 235, 0.4),
+          0 0 40px rgba(37, 99, 235, 0.2),
+          0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+      50% {
+        box-shadow: 
+          0 0 30px rgba(6, 182, 212, 0.5),
+          0 0 60px rgba(37, 99, 235, 0.3),
+          0 4px 30px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    /* Tech grid background pattern */
+    .tech-grid {
+      background-image: 
+        linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Radial glow for hero background */
+    .hero-radial-glow {
+      background: radial-gradient(ellipse 80% 50% at 50% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
     }
 
     /* Microphone glow effect when listening */
@@ -270,6 +286,39 @@
       50% {
         transform: scaleY(1);
       }
+    }
+
+    /* Phone glow ring effect - top edge */
+    .phone-glow-ring {
+      box-shadow: 
+        0 -20px 60px rgba(6, 182, 212, 0.35),
+        0 -10px 30px rgba(37, 99, 235, 0.25),
+        0 0 20px rgba(6, 182, 212, 0.2);
+    }
+
+    /* Floating badge pulse animation */
+    .floating-badge-pulse {
+      animation: badgePulse 8s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.2);
+      }
+      50% { 
+        transform: scale(1.03);
+        box-shadow: 0 15px 35px -5px rgba(6, 182, 212, 0.3);
+      }
+    }
+
+    /* Enhanced gradient text hover - speeds up animation on hover */
+    .gradient-text-hover {
+      transition: animation-duration 0.3s ease;
+    }
+    
+    .gradient-text-hover:hover {
+      animation-duration: 2s;
     }
   </style>
 
