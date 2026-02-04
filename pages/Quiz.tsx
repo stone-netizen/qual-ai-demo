@@ -15,7 +15,7 @@ const Quiz: React.FC = () => {
   const [view, setView] = useState<QuizView>('quiz');
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const quizFormRef = useRef<HTMLDivElement>(null);
-  const calendarRef = useRef<HTMLDivElement>(null);
+  const calendarRef = useRef<HTMLElement>(null);
 
   // Scroll to quiz form
   const scrollToQuiz = useCallback(() => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { RESULTS_CALENDAR } from '@/lib/quiz-constants';
 
 interface CalendarSectionProps {
-  calendarRef?: React.RefObject<HTMLDivElement>;
+  calendarRef?: React.RefObject<HTMLElement>;
 }
 
 const CalendarSection: React.FC<CalendarSectionProps> = ({ calendarRef }) => {
