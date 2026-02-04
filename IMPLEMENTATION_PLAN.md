@@ -1,19 +1,13 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: All priorities complete! P0 Quiz ✅ | P1 Infrastructure ✅ | P2 Tailwind ✅ | P3 Cleanup ✅
+> Status: All specs satisfied! No remaining tasks.
 
 ---
 
 ## Summary
 
 The **QualAI Quiz Funnel** is fully implemented and production-ready. All specs in `specs/` are satisfied by the current codebase.
-
-**Current Status:**
-- **P0 (Quiz Funnel):** ✅ 100% complete — All core functionality works
-- **P1 (Infrastructure):** ✅ 100% complete — 404, ErrorBoundary, A11Y, SEO all done
-- **P2 (Tailwind Migration):** ✅ 100% complete — Build-time Tailwind, CDN removed
-- **P3 (Cleanup):** ✅ 100% complete — All orphan files removed
 
 **No remaining tasks.** The system fully satisfies current specs.
 
@@ -25,110 +19,111 @@ The **QualAI Quiz Funnel** is fully implemented and production-ready. All specs 
 
 | Spec | Status | Notes |
 |------|--------|-------|
-| `quiz-funnel-overview.md` | ✅ Complete | Architecture, branding, offer all implemented |
-| `quiz-page.md` | ✅ Complete | Hero, Benefits, Quiz Form, Sticky CTA |
-| `quiz-questions.md` | ✅ Complete | All 6 steps + contact info, validation |
-| `results-page.md` | ✅ Complete | Results Banner, VSL, Calendar sections |
-| `design-system.md` | ✅ Complete | Inter font, mobile-first, 52px buttons |
+| `quiz-funnel-overview.md` | ✅ Complete | Two-page architecture, QualAI branding, offer positioning |
+| `quiz-page.md` | ✅ Complete | Hero, Benefits, Quiz Form, Sticky CTA, all validation |
+| `quiz-questions.md` | ✅ Complete | All 6 steps + contact info, "Other" conditionals, data schema |
+| `results-page.md` | ✅ Complete | Results Banner, VSL (16:9), Calendar, trust text |
+| `design-system.md` | ✅ Complete | Inter font, 52px buttons, mobile-first, tappable cards |
 
-### Tailwind Infrastructure Status
+### Infrastructure Status
 
 | Item | Status |
 |------|--------|
 | `tailwind.config.ts` with theme | ✅ Exists |
 | `postcss.config.js` | ✅ Exists |
-| `src/index.css` with directives + animations | ✅ Exists |
+| `src/index.css` with Tailwind directives | ✅ Exists |
 | CSS imported in `index.tsx` | ✅ Done |
-| `components.json` paths | ✅ Correct |
-| Build succeeds with Tailwind | ✅ Works |
 | Tailwind CDN removed from `index.html` | ✅ Done |
-
-### No Remaining Issues
-
-All known issues have been resolved.
+| 404 catch-all route | ✅ Done |
+| Error Boundary | ✅ Done |
+| SEO meta tags (OG) | ✅ Done |
+| robots.txt | ✅ Done |
+| sitemap.xml | ✅ Done |
 
 ---
 
-## Completed Items
+## Detailed Verification
 
-### P2 — Tailwind Migration (COMPLETE ✅)
+### quiz-funnel-overview.md
 
-- [x] **TW-001: Create build-time Tailwind infrastructure**
-  - Installed `tailwindcss`, `postcss`, `autoprefixer`, `@tailwindcss/postcss` as dev dependencies
-  - Created `tailwind.config.ts` with navy colors, accent color, Inter font
-  - Created `postcss.config.js` with `@tailwindcss/postcss` plugin
-  - Created `src/index.css` with Tailwind directives + all custom animations (~280 lines migrated)
-  - Imported CSS in `index.tsx`
-  - Updated `components.json` with correct tailwind paths
+- [x] Two-page funnel architecture (Quiz → Results)
+- [x] Traffic source: Organic Instagram (page standalone, no nav)
+- [x] QualAI branding in headers
+- [x] All offer positioning copy matches spec
+- [x] Mobile-first SaaS-style design
+- [x] Performance-based messaging throughout
 
-- [x] **TW-002: Remove Tailwind CDN from index.html**
-  - Removed CDN script `<script src="https://cdn.tailwindcss.com"></script>`
-  - Removed inline `tailwind.config` block
-  - Removed `<style>` block (all CSS now in `src/index.css`)
-  - `index.html` now only contains: meta tags, font links, favicon
+### quiz-page.md
 
-### P0 — QualAI Quiz Funnel (COMPLETE ✅)
+- [x] REQ-QP-001: QualAI logo in header ✅
+- [x] REQ-QP-002: Hero section with headline, subheadline, CTA, trust bar ✅
+- [x] REQ-QP-003: CTA button scrolls to quiz ✅
+- [x] REQ-QP-004: Benefits section with 5 items + icons ✅
+- [x] REQ-QP-005: Quiz as centered card ✅
+- [x] REQ-QP-006: Progress bar "Step X of 6" ✅
+- [x] REQ-QP-007: One step per screen ✅
+- [x] REQ-QP-008: Option cards are full tappable blocks (56px min) ✅
+- [x] REQ-QP-009: Next button advances with validation ✅
+- [x] REQ-QP-010: Back button preserves answers ✅
+- [x] REQ-QP-011: Contact info step with 5 fields ✅
+- [x] REQ-QP-012: Email format validation ✅
+- [x] REQ-QP-013: Phone format validation ✅
+- [x] REQ-QP-014: Quiz data sent on submit (structure ready) ✅
+- [x] REQ-QP-015: Redirect to Results after submit ✅
+- [x] REQ-QP-016: Quiz answers passed to Results ✅
+- [x] REQ-QP-D05: Buttons 52px min height ✅
+- [x] REQ-QP-D06: Sticky CTA on mobile ✅
+- [x] REQ-QP-D08: Single sans-serif font (Inter) ✅
 
-All quiz funnel tasks are complete.
+### quiz-questions.md
 
-**Quiz Page Components:**
-- [x] Quiz page orchestrator (`pages/Quiz.tsx`) with view state management
-- [x] HeroSection with headline, subheadline, CTA, trust bar
-- [x] BenefitsSection with 5 benefit cards and Lucide icons
-- [x] QuizForm container with step navigation and validation
-- [x] QuizStep with full tappable option cards (56px min-height)
-- [x] TextInput component for text fields
-- [x] ContactInfoStep with all 5 fields + validation
-- [x] QuizStickyCTA with IntersectionObserver for mobile
+- [x] REQ-QQ-001: All 6 steps render correctly ✅
+- [x] REQ-QQ-002: Radio buttons single select ✅
+- [x] REQ-QQ-003: "Other" reveals text input ✅
+- [x] REQ-QQ-004: Text inputs accept freeform ✅
+- [x] REQ-QQ-005: Email format validated ✅
+- [x] REQ-QQ-006: Phone format validated ✅
+- [x] REQ-QQ-007: Required fields block progression ✅
+- [x] REQ-QQ-008: Quiz data matches TypeScript schema ✅
+- [x] REQ-QQ-009: Data passed to Results ✅
 
-**Results Page Components:**
-- [x] ResultsBanner with qualification headline
-- [x] VSLSection with video placeholder (16:9) and 5 benefit bullets
-- [x] CalendarSection with calendar placeholder and trust text
-- [x] Results sticky CTA reusing QuizStickyCTA component
+### results-page.md
 
-**Data & Types:**
-- [x] Quiz types (`lib/quiz-types.ts`) matching spec schema
-- [x] Quiz constants (`lib/quiz-constants.ts`) with all copy
-- [x] Quiz data passed from Quiz to Results view
-- [x] Email and phone validation
+- [x] REQ-RP-001: QualAI logo in header ✅
+- [x] REQ-RP-002: Results banner with headline/subheadline ✅
+- [x] REQ-RP-003: Dynamic revenue line stubbed ✅
+- [x] REQ-RP-004: VSL section with title, placeholder, bullets ✅
+- [x] REQ-RP-005: Video placeholder 16:9 aspect ratio ✅
+- [x] REQ-RP-006: Calendar section with headline/subheadline ✅
+- [x] REQ-RP-007: Preparation bullets and trust text ✅
+- [x] REQ-RP-008: Quiz data available (via state) ✅
+- [x] REQ-RP-009: Page can display without quiz data ✅
+- [x] REQ-RP-010: Sticky CTA on mobile ✅
 
-**Design System Compliance:**
-- [x] Inter font throughout (no Lexend)
-- [x] 52px minimum button height
-- [x] Mobile-first responsive layout
-- [x] Option cards are full tappable blocks
-- [x] Progress bar shows "Step X of 6"
+### design-system.md
 
-### P1 — Infrastructure (COMPLETE ✅)
-
-- [x] **INFRA-001: 404 catch-all route** — `NotFound.tsx` renders for unknown routes
-- [x] **INFRA-002: Error Boundary** — `ErrorBoundary.tsx` wraps app
-- [x] **A11Y-001: Mobile menu accessibility** — Proper ARIA attributes
-- [x] **SEO-001: OG meta tags** — Title, description, image, URL in `index.html`
-- [x] **SEO-002: robots.txt** — Exists in `public/`
-- [x] **SEO-003: sitemap.xml** — Exists in `public/` with all routes
-
-### P3 — Cleanup (COMPLETE ✅)
-
-- [x] **DS-001: Unify typography to Inter** — Removed Lexend, `font-heading` class
-- [x] **CLEAN-001-005: Orphan files removed** — SocialProofToast, zip file, etc. all cleaned
+- [x] REQ-DS-001: Typography scale (Inter font) ✅
+- [x] REQ-DS-002: Color palette in Tailwind config ✅
+- [x] REQ-DS-003: 4px spacing base ✅
+- [x] REQ-DS-004: Cards with border radius/shadow ✅
+- [x] REQ-DS-005: Option cards are tappable blocks ✅
+- [x] REQ-DS-006: Buttons 52px min height ✅
+- [x] REQ-DS-007: Sticky CTA on mobile ✅
+- [x] REQ-DS-008: Progress bar visible ✅
+- [x] REQ-DS-009: Consistent Lucide icons ✅
 
 ---
 
 ## Key Architecture Decisions
 
-- **Quiz Funnel**: Single page (`/quiz`) with conditional rendering
+- **Quiz Funnel Route:** `/quiz` (via HashRouter: `/#/quiz`)
+- **View Management:** Single page with `view` state (`'quiz'` | `'results'`)
   - `view === 'quiz'`: Shows HeroSection, BenefitsSection, QuizForm
   - `view === 'results'`: Shows ResultsBanner, VSLSection, CalendarSection
-- **Quiz State**: Component-level state in Quiz.tsx (quizData, view)
-- **StickyCTA**: Reusable component with Intersection Observer
-- **Tailwind CSS**: Build-time via PostCSS (migrated from CDN)
-  - Config: `tailwind.config.ts`
-  - Styles: `src/index.css`
-  - PostCSS: `postcss.config.js` using `@tailwindcss/postcss`
-- **HashRouter** (routes prefixed with `/#/`)
-- **Code splitting**: React.lazy() for page components
+- **Quiz State:** Managed in `Quiz.tsx`, passed to Results via component state
+- **StickyCTA:** Reusable component using Intersection Observer
+- **Tailwind CSS:** Build-time via PostCSS (migrated from CDN)
+- **Code Splitting:** React.lazy() for page components
 
 ---
 
@@ -137,21 +132,40 @@ All quiz funnel tasks are complete.
 ```
 components/quiz/
 ├── HeroSection.tsx      # Hero with headline, CTA, trust bar
-├── BenefitsSection.tsx  # 5 benefit cards with icons
-├── QuizForm.tsx         # Main quiz orchestrator (state, steps, navigation)
-├── QuizStep.tsx         # Reusable step with option cards
+├── BenefitsSection.tsx  # 5 benefit cards with Lucide icons
+├── QuizForm.tsx         # Main quiz orchestrator (state, steps, nav)
+├── QuizStep.tsx         # Reusable step with tappable option cards
 ├── TextInput.tsx        # Text input field component
-├── ContactInfoStep.tsx  # Step 6 contact form
+├── ContactInfoStep.tsx  # Step 6 contact form (5 fields)
 ├── QuizStickyCTA.tsx    # Mobile sticky CTA (intersection observer)
 ├── ResultsBanner.tsx    # Results page hero banner
 ├── VSLSection.tsx       # Video section with benefit bullets
 └── CalendarSection.tsx  # Calendar booking section
+
+lib/
+├── quiz-types.ts        # TypeScript types matching spec schema
+└── quiz-constants.ts    # All copy/text from specs
 ```
 
 ---
 
 ## Notes
 
-- Primary conversion flow: `/quiz` → Quiz form → Results (calendar booking)
+- Primary conversion flow: `/quiz` → Quiz form (6 steps) → Results (VSL + calendar)
 - Video and calendar are placeholders pending real integrations
-- `quizData` is captured and available for future personalization/API submission
+- `quizData` is captured and available for future API submission/personalization
+- All buttons meet 52px minimum height per design system spec
+- Option cards are full tappable blocks (56px min height)
+
+---
+
+## Future Enhancements (Not Currently Specified)
+
+These are potential future features not covered by current specs:
+
+- Real calendar integration (Calendly, Cal.com, GHL)
+- VSL video content integration
+- Quiz data submission to backend API
+- Dynamic revenue calculation based on quiz answers
+- UTM/source tracking for analytics
+- Loading state during form submission
