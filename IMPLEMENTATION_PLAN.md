@@ -1,18 +1,18 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: P0 Quiz Funnel ✅ | P1 Infrastructure ✅ | P2 Tailwind Migration ❌ | P3 Cleanup ✅
+> Status: All priorities complete! P0 Quiz ✅ | P1 Infrastructure ✅ | P2 Tailwind ✅ | P3 Cleanup ✅
 
 ---
 
 ## Summary
 
-The **QualAI Quiz Funnel** is fully implemented and functional. All specs in `specs/` are satisfied by the current codebase.
+The **QualAI Quiz Funnel** is fully implemented and production-ready. All specs in `specs/` are satisfied.
 
 **Current Status:**
 - **P0 (Quiz Funnel):** ✅ 100% complete — All core functionality works
 - **P1 (Infrastructure):** ✅ 100% complete — 404, ErrorBoundary, A11Y, SEO all done
-- **P2 (Tailwind Migration):** ❌ 0% complete — Still using CDN with inline config
+- **P2 (Tailwind Migration):** ✅ 100% complete — Build-time Tailwind, CDN removed
 - **P3 (Cleanup):** ✅ 100% complete — All orphan files removed
 
 ---
@@ -29,56 +29,29 @@ The **QualAI Quiz Funnel** is fully implemented and functional. All specs in `sp
 | `results-page.md` | ✅ Complete | Results Banner, VSL, Calendar sections |
 | `design-system.md` | ✅ Complete | Inter font, mobile-first, 52px buttons |
 
-### Remaining Issues
+### No Remaining Issues
 
-1. **Tailwind CSS**: Running via CDN (`https://cdn.tailwindcss.com`) with inline config in `index.html`
-2. **components.json**: Has empty paths for `tailwind.config` and `css`
-
----
-
-## Remaining Tasks (Priority Order)
-
-### P2 — Tailwind Migration (CDN → Build-Time)
-
-Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipeline exists. This is functional but not production-ready.
-
-- [ ] **TW-001: Create build-time Tailwind infrastructure**
-  - **Files**: Create: `tailwind.config.ts`, `postcss.config.js`, `src/index.css`; Update: `components.json`, `index.tsx`
-  - **Changes**:
-    - Install `tailwindcss`, `postcss`, `autoprefixer` as dev dependencies
-    - Create `tailwind.config.ts` with custom theme from `index.html` inline config:
-      - Colors: navy (800/900/950), accent (#2563eb)
-      - Font family: Inter
-    - Create `postcss.config.js`
-    - Create CSS file with Tailwind directives (`@tailwind base; @tailwind components; @tailwind utilities;`)
-    - Migrate custom CSS animations from `index.html` (~280 lines of keyframes) to the CSS file
-    - Import CSS file in entry point
-    - Update `components.json` with correct tailwind paths
-  - **Acceptance criteria**:
-    - [ ] `tailwind.config.ts` exists with navy colors, accent color, Inter font
-    - [ ] `postcss.config.js` exists
-    - [ ] CSS file with Tailwind directives + animations exists
-    - [ ] CSS file imported in `index.tsx`
-    - [ ] `components.json` tailwind paths point to real files
-    - [ ] `npm run build` succeeds
-
-- [ ] **TW-002: Remove Tailwind CDN from index.html**
-  - **Files**: `index.html`
-  - **Changes**:
-    - Remove `<script src="https://cdn.tailwindcss.com"></script>`
-    - Remove inline `tailwind.config` block (lines 22-41)
-    - Remove all CSS from `<style>` block (already migrated in TW-001)
-    - Keep only: meta tags, font links, favicon link
-  - **Acceptance criteria**:
-    - [ ] No Tailwind CDN script in `index.html`
-    - [ ] No inline `tailwind.config` in `index.html`
-    - [ ] `<style>` block removed
-    - [ ] All pages render correctly with build-time Tailwind
-    - [ ] Visual check at 375px, 768px, 1440px passes
+All known issues have been resolved.
 
 ---
 
 ## Completed Items
+
+### P2 — Tailwind Migration (COMPLETE ✅)
+
+- [x] **TW-001: Create build-time Tailwind infrastructure**
+  - Installed `tailwindcss`, `postcss`, `autoprefixer`, `@tailwindcss/postcss` as dev dependencies
+  - Created `tailwind.config.ts` with navy colors, accent color, Inter font
+  - Created `postcss.config.js` with `@tailwindcss/postcss` plugin
+  - Created `src/index.css` with Tailwind directives + all custom animations (~280 lines migrated)
+  - Imported CSS in `index.tsx`
+  - Updated `components.json` with correct tailwind paths
+
+- [x] **TW-002: Remove Tailwind CDN from index.html**
+  - Removed CDN script `<script src="https://cdn.tailwindcss.com"></script>`
+  - Removed inline `tailwind.config` block
+  - Removed `<style>` block (all CSS now in `src/index.css`)
+  - `index.html` now only contains: meta tags, font links, favicon
 
 ### P0 — QualAI Quiz Funnel (COMPLETE ✅)
 
@@ -136,7 +109,10 @@ All quiz funnel tasks are complete.
   - `view === 'results'`: Shows ResultsBanner, VSLSection, CalendarSection
 - **Quiz State**: Component-level state in Quiz.tsx (quizData, view)
 - **StickyCTA**: Reusable component with Intersection Observer
-- **Tailwind CSS via CDN** — migration to build-time pending (P2)
+- **Tailwind CSS**: Build-time via PostCSS (migrated from CDN)
+  - Config: `tailwind.config.ts`
+  - Styles: `src/index.css`
+  - PostCSS: `postcss.config.js` using `@tailwindcss/postcss`
 - **HashRouter** (routes prefixed with `/#/`)
 - **Code splitting**: React.lazy() for page components
 
@@ -165,4 +141,3 @@ components/quiz/
 - Primary conversion flow: `/quiz` → Quiz form → Results (calendar booking)
 - Video and calendar are placeholders pending real integrations
 - `quizData` is captured and available for future personalization/API submission
-- Tailwind CDN is functional but should be migrated for production builds
