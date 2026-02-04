@@ -1,7 +1,7 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: P0 Quiz Funnel complete. P1 Infrastructure complete. Remaining: P2 Tailwind, P3 Cleanup.
+> Status: P0 Quiz Funnel complete. P1 Infrastructure complete. P3 Cleanup complete. Remaining: P2 Tailwind.
 
 ---
 
@@ -13,7 +13,7 @@ The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is full
 - **P0 (Quiz Funnel):** ✅ 100% complete — All core functionality works
 - **P1 (Infrastructure):** ✅ 100% complete — 404, ErrorBoundary, A11Y, SEO all done
 - **P2 (Tailwind):** ❌ 0% complete — Still using CDN with inline config
-- **P3 (Cleanup):** ⚠️ 20% complete — DS-001 done, orphan files still exist
+- **P3 (Cleanup):** ✅ 100% complete — All orphan files removed, unused config cleaned
 
 ---
 
@@ -32,8 +32,6 @@ The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is full
 ### Remaining Issues
 
 1. **Tailwind**: CDN-based, not build-time (components.json has empty tailwind paths)
-2. **Cleanup**: Orphan files exist (SocialProofToast.tsx, zip file, alexhormoziimplementation, new_plan.md)
-3. **Cleanup**: Unused GEMINI_API_KEY in vite.config.ts
 
 ---
 
@@ -72,44 +70,6 @@ Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipe
     - `<style>` block removed (all CSS in build-time file)
     - All pages render correctly with build-time Tailwind
     - Visual check at 375px, 768px, 1440px passes
-
----
-
-### P3 — Cleanup & Housekeeping
-
-- [ ] **CLEAN-001: Delete orphaned SocialProofToast.tsx**
-  - **Files**: `components/SocialProofToast.tsx`
-  - **Reason**: Untracked file, not imported anywhere
-  - **Acceptance criteria**:
-    - File does not exist
-    - No imports reference it
-    - App builds successfully
-
-- [ ] **CLEAN-002: Remove stale copy-of-qual-ai-lead-loss-audit.zip**
-  - **Files**: `copy-of-qual-ai-lead-loss-audit.zip`
-  - **Reason**: Old artifact, 64KB zip file in root
-  - **Acceptance criteria**:
-    - File removed from working directory
-    - Not in git tracked files
-
-- [ ] **CLEAN-003: Remove alexhormoziimplementation file**
-  - **Files**: `alexhormoziimplementation`
-  - **Reason**: Old notes file, not part of spec
-  - **Acceptance criteria**:
-    - File removed
-
-- [ ] **CLEAN-004: Remove stale new_plan.md file**
-  - **Files**: `new_plan.md`
-  - **Reason**: Old planning doc, superseded by specs
-  - **Acceptance criteria**:
-    - File removed
-
-- [ ] **CLEAN-005: Remove unused GEMINI_API_KEY config**
-  - **Files**: `vite.config.ts`
-  - **Change**: Remove unused `GEMINI_API_KEY` defines (lines 14-17)
-  - **Acceptance criteria**:
-    - `vite.config.ts` does not reference unused API keys
-    - Build still works
 
 ---
 
@@ -175,13 +135,19 @@ All 25 tasks from Phases 0A-0E are complete.
   - Contains main page URLs (/, /quiz, /how-it-works, /demo, /audit, /privacy, /terms)
   - Valid XML structure
 
-### P3 — Cleanup (PARTIAL)
+### P3 — Cleanup (COMPLETE)
 
 - [x] **DS-001: Unify heading font to Inter** ✅
   - Removed Lexend from Google Fonts link
   - Removed `font-heading` from Tailwind config
   - Removed CSS rule setting h1-h4 to Lexend
   - Removed all `font-heading` class usages from 12 files
+- [x] **CLEAN-001: Delete orphaned SocialProofToast.tsx** ✅
+- [x] **CLEAN-002: Remove stale copy-of-qual-ai-lead-loss-audit.zip** ✅
+- [x] **CLEAN-003: Remove alexhormoziimplementation file** ✅
+- [x] **CLEAN-004: Remove stale new_plan.md file** ✅
+- [x] **CLEAN-005: Remove unused GEMINI_API_KEY config** ✅
+  - Removed unused `define` block and `loadEnv` import from vite.config.ts
 
 ---
 
