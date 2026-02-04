@@ -1,7 +1,7 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: P0 Quiz Funnel complete. P1 Infrastructure partially complete (404, ErrorBoundary, A11Y done). Remaining: P1 SEO, P2 Tailwind, P3 Cleanup.
+> Status: P0 Quiz Funnel complete. P1 Infrastructure ~60% complete. Remaining: P1 SEO, P2 Tailwind, P3 Cleanup.
 
 ---
 
@@ -9,11 +9,11 @@
 
 The **QualAI Quiz Funnel** (`specs/quiz-*.md`, `specs/design-system.md`) is now fully implemented. All quiz components, results page, and data flow are complete.
 
-**Status:**
-- **P0 (Quiz Funnel):** 100% complete
-- **P1 (Infrastructure):** Partial — Missing 404 route, error boundary, accessibility improvements
-- **P2 (Tailwind):** 0% complete — Still using CDN with inline config
-- **P3 (Cleanup):** Orphan files exist
+**Current Status:**
+- **P0 (Quiz Funnel):** ✅ 100% complete — All core functionality works
+- **P1 (Infrastructure):** ⚠️ ~60% complete — 404, ErrorBoundary, A11Y done; SEO tasks remain
+- **P2 (Tailwind):** ❌ 0% complete — Still using CDN with inline config
+- **P3 (Cleanup):** ⚠️ Orphan files and minor issues exist
 
 ---
 
@@ -119,55 +119,96 @@ All 25 tasks from Phases 0A-0E are complete.
 
 - [ ] **SEO-001: Fix OG meta tags in index.html**
   - **Files**: `index.html`
-  - **Changes**: Update `og:title`, `og:description`, add `<meta name="description">`
-  - **Acceptance criteria**: Meta tags match homepage branding
+  - **Changes**:
+    - Update `og:title` to "QualAI | High-Ticket Calls + AI Capture System"
+    - Update `og:description` to match quiz funnel offer
+    - Update `<title>` tag to QualAI branding
+    - Add `<meta name="description">` tag
+  - **Acceptance criteria**:
+    - `og:title` matches QualAI branding
+    - `<meta name="description">` tag exists
+    - Page title reflects QualAI branding
 
 - [ ] **SEO-002: Add robots.txt**
   - **Files**: New file: `public/robots.txt`
-  - **Acceptance criteria**: `robots.txt` is served at `/robots.txt`
+  - **Content**: Basic robots.txt allowing all crawlers
+  - **Acceptance criteria**:
+    - `robots.txt` exists in `public/`
+    - File is served at `/robots.txt`
 
 - [ ] **SEO-003: Add sitemap.xml**
   - **Files**: New file: `public/sitemap.xml`
-  - **Acceptance criteria**: `sitemap.xml` exists in `public/`
+  - **Content**: Basic sitemap with main routes
+  - **Acceptance criteria**:
+    - `sitemap.xml` exists in `public/`
+    - Contains main page URLs
 
 ---
 
 ### P2 — Tailwind Migration (CDN → Build-Time)
 
+Tailwind runs via CDN with inline config in `index.html`. No build-time CSS pipeline exists.
+
 - [ ] **TW-001: Create build-time Tailwind infrastructure**
-  - **Files**: `tailwind.config.ts`, `postcss.config.js`, CSS file
-  - **Changes**: Install tailwindcss, create config, migrate inline config
-  - **Acceptance criteria**: Build-time Tailwind compiles correctly
+  - **Files**: New files: `tailwind.config.ts`, `postcss.config.js`, `src/index.css`
+  - **Changes**:
+    - Install `tailwindcss`, `postcss`, `autoprefixer` as dev dependencies
+    - Create `tailwind.config.ts` with custom theme from `index.html` inline config
+    - Create `postcss.config.js`
+    - Create CSS file with Tailwind directives
+    - Migrate custom CSS animations from `index.html` (~280 lines)
+    - Import CSS file in `index.tsx`
+    - Update `components.json` with correct tailwind paths
+  - **Acceptance criteria**:
+    - `tailwind.config.ts` exists with all custom theme values
+    - `postcss.config.js` exists
+    - CSS file imported in entry point
+    - `components.json` tailwind paths are valid
 
 - [ ] **TW-002: Remove Tailwind CDN from index.html**
   - **Files**: `index.html`
-  - **Changes**: Remove CDN script and inline config
-  - **Acceptance criteria**: All pages render correctly with build-time Tailwind
+  - **Changes**:
+    - Remove `<script src="https://cdn.tailwindcss.com"></script>`
+    - Remove inline `tailwind.config` block
+    - Move remaining `<style>` content to CSS file
+  - **Acceptance criteria**:
+    - No Tailwind CDN script in `index.html`
+    - All pages render correctly with build-time Tailwind
+    - Visual check at 375px, 768px, 1440px passes
 
 ---
 
-### P3 — Cleanup
+### P3 — Cleanup & Minor Issues
 
 - [ ] **CLEAN-001: Delete orphaned SocialProofToast.tsx**
   - **Files**: `components/SocialProofToast.tsx`
-  - **Acceptance criteria**: File removed, no imports reference it
+  - **Acceptance criteria**:
+    - File does not exist
+    - No imports reference it
 
 - [ ] **CLEAN-002: Remove stale copy-of-qual-ai-lead-loss-audit.zip**
   - **Files**: `copy-of-qual-ai-lead-loss-audit.zip`
-  - **Acceptance criteria**: File removed from working directory
+  - **Acceptance criteria**:
+    - File removed from working directory
 
 - [ ] **CLEAN-003: Remove alexhormoziimplementation directory**
   - **Files**: `alexhormoziimplementation/`
-  - **Acceptance criteria**: Directory removed
+  - **Acceptance criteria**:
+    - Directory removed
 
 - [ ] **CLEAN-004: Remove unused GEMINI_API_KEY config**
   - **Files**: `vite.config.ts`
-  - **Acceptance criteria**: No unused API key references
+  - **Change**: Remove unused `GEMINI_API_KEY` defines (lines 14-16)
+  - **Acceptance criteria**:
+    - `vite.config.ts` does not reference unused API keys
 
-- [ ] **CLEAN-005: Improve TypeScript strictness**
-  - **Files**: `components/audit/NicheSelection.tsx`
-  - **Change**: Replace `(Icons as any)` cast with typed icon lookup
-  - **Acceptance criteria**: No `as any` casts in audit components
+- [ ] **CLEAN-005: Unify heading font to Inter**
+  - **Files**: `index.html`
+  - **Change**: Remove Lexend font, use Inter for headings as per design-system.md spec
+  - **Note**: Design system spec says "single sans-serif font (Inter)" but current code uses Lexend for headings
+  - **Acceptance criteria**:
+    - Single font family (Inter) used throughout
+    - Headings no longer use `font-heading` class
 
 ---
 
@@ -181,30 +222,23 @@ All 25 tasks from Phases 0A-0E are complete.
 
 - [x] All 23 acceptance criteria satisfied
 
-### Infrastructure (COMPLETE)
-
-- [x] 34 passing tests
-- [x] Code splitting implemented
-- [x] Shadcn components integrated
-
 ---
 
 ## Key Architecture Decisions
 
-- **Quiz Funnel vs Audit Funnel**: Two separate funnels serving different purposes
-  - Audit (`/audit`): Revenue leak calculator, educational, bottom-funnel
-  - Quiz (`/quiz`): Lead qualification, partnership positioning, top-funnel
+- **Quiz Funnel**: Single page (`/quiz`) with conditional rendering
+  - `view === 'quiz'`: Shows HeroSection, BenefitsSection, QuizForm
+  - `view === 'results'`: Shows ResultsBanner, VSLSection, CalendarSection
 - **Quiz State**: Component-level state in Quiz.tsx (quizData, view)
-- **Quiz → Results**: Single page with view state ('quiz' | 'results')
-- Animation system: Framer Motion with shared variants in `lib/animations.ts`
-- Code splitting: React.lazy() for page components
-- Shadcn components for UI consistency
+- **StickyCTA**: Reusable component with Intersection Observer for both quiz and results
+- **Component Structure**: Individual components for each section, orchestrated by Quiz.tsx
 - **Tailwind CSS via CDN** — migration to build-time pending (P2)
-- HashRouter (routes prefixed with `/#/`)
+- **HashRouter** (routes prefixed with `/#/`)
+- **Code splitting**: React.lazy() for page components
 
 ---
 
-## Quiz Components Created
+## Quiz Components Structure
 
 ```
 components/quiz/
@@ -222,12 +256,22 @@ components/quiz/
 
 ---
 
-## Spec-to-Task Mapping
+## Spec Compliance Summary
 
-| Spec | Status | Tasks |
+| Spec | Status | Notes |
 |------|--------|-------|
-| `quiz-funnel-overview.md` | Complete | QZ-001 through QZ-025 |
-| `quiz-page.md` | Complete | QZ-004 through QZ-016 |
-| `quiz-questions.md` | Complete | QZ-003, QZ-009 through QZ-015 |
-| `results-page.md` | Complete | QZ-017 through QZ-023 |
-| `design-system.md` | Complete | QZ-024, QZ-025 |
+| `quiz-funnel-overview.md` | ✅ Complete | All sections implemented |
+| `quiz-page.md` | ✅ Complete | All requirements satisfied |
+| `quiz-questions.md` | ✅ Complete | All 6 steps + contact info |
+| `results-page.md` | ✅ Complete | All sections implemented |
+| `design-system.md` | ⚠️ 95% | Typography uses Lexend for headings (spec says Inter only) |
+
+---
+
+## Notes
+
+- Primary conversion flow: `/quiz` → Quiz form → Results (calendar booking)
+- Quiz funnel is the primary funnel (audit funnel at `/audit` still exists)
+- All quiz components use Shadcn/Tailwind styling
+- Video and calendar are placeholders pending real integrations
+- `quizData` is captured and available for future personalization/API submission
