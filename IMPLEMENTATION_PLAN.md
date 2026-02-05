@@ -1,171 +1,345 @@
 # Implementation Plan
 
 > Last updated: 2026-02-04
-> Status: All specs satisfied! No remaining tasks.
+> Status: **Significant gaps identified** — Quiz and Results pages need major updates to match specs
 
 ---
 
 ## Summary
 
-The **QualAI Quiz Funnel** is fully implemented and production-ready. All specs in `specs/` are satisfied by the current codebase.
+The QualAI Quiz Funnel has a foundational implementation but **does not match the current specs**. Major changes are needed to the quiz structure, copy, and results page to align with the specifications in `specs/`.
 
-**No remaining tasks.** The system fully satisfies current specs.
+**Priority Levels:**
+- **P0** — Breaks spec compliance, must fix before launch
+- **P1** — Important for conversion optimization
+- **P2** — Polish and enhancements
 
 ---
 
 ## Gap Analysis Summary
 
-### Specs vs Code Status
+### Critical Mismatches (P0)
 
-| Spec | Status | Notes |
-|------|--------|-------|
-| `quiz-funnel-overview.md` | ✅ Complete | Two-page architecture, QualAI branding, offer positioning |
-| `quiz-page.md` | ✅ Complete | Hero, Benefits, Quiz Form, Sticky CTA, all validation |
-| `quiz-questions.md` | ✅ Complete | All 6 steps + contact info, "Other" conditionals, data schema |
-| `results-page.md` | ✅ Complete | Results Banner, VSL (16:9), Calendar, trust text |
-| `design-system.md` | ✅ Complete | Inter font, 52px buttons, mobile-first, tappable cards |
+| Spec Requirement | Current Code | Gap |
+|------------------|--------------|-----|
+| 5 quiz steps + contact | 6 steps with different questions | Wrong quiz structure |
+| Hero: "$10K+ missed calls" | "Get More High-Ticket Jobs" | Wrong headline |
+| Trust bar: "150+ contractors, $2.3M+" | Trade types list | Missing social proof |
+| 4 benefits with specific copy | 5 benefits, different copy | Benefits mismatch |
+| Micro-copy below each question | None | Missing entirely |
+| Progress celebrations (Steps 2, 4) | None | Missing entirely |
+| Contact CTA: "Show Me My Revenue Opportunity" | "See My Results & Next Steps" | Wrong CTA text |
+| Dynamic revenue box on Results | Stubbed text only | Missing calculation |
+| "How It Works" 3-step section | VSL video placeholder | Wrong section |
+| Trust box above calendar | Missing | Missing entirely |
+| Urgency element below calendar | Missing | Missing entirely |
+| Social proof near calendar | Missing | Missing entirely |
 
-### Infrastructure Status
+### Trust Elements Spec (trust-elements.md) — All Missing
 
-| Item | Status |
-|------|--------|
-| `tailwind.config.ts` with theme | ✅ Exists |
-| `postcss.config.js` | ✅ Exists |
-| `src/index.css` with Tailwind directives | ✅ Exists |
-| CSS imported in `index.tsx` | ✅ Done |
-| Tailwind CDN removed from `index.html` | ✅ Done |
-| 404 catch-all route | ✅ Done |
-| Error Boundary | ✅ Done |
-| SEO meta tags (OG) | ✅ Done |
-| robots.txt | ✅ Done |
-| sitemap.xml | ✅ Done |
-
----
-
-## Detailed Verification
-
-### quiz-funnel-overview.md
-
-- [x] Two-page funnel architecture (Quiz → Results)
-- [x] Traffic source: Organic Instagram (page standalone, no nav)
-- [x] QualAI branding in headers
-- [x] All offer positioning copy matches spec
-- [x] Mobile-first SaaS-style design
-- [x] Performance-based messaging throughout
-
-### quiz-page.md
-
-- [x] REQ-QP-001: QualAI logo in header ✅
-- [x] REQ-QP-002: Hero section with headline, subheadline, CTA, trust bar ✅
-- [x] REQ-QP-003: CTA button scrolls to quiz ✅
-- [x] REQ-QP-004: Benefits section with 5 items + icons ✅
-- [x] REQ-QP-005: Quiz as centered card ✅
-- [x] REQ-QP-006: Progress bar "Step X of 6" ✅
-- [x] REQ-QP-007: One step per screen ✅
-- [x] REQ-QP-008: Option cards are full tappable blocks (56px min) ✅
-- [x] REQ-QP-009: Next button advances with validation ✅
-- [x] REQ-QP-010: Back button preserves answers ✅
-- [x] REQ-QP-011: Contact info step with 5 fields ✅
-- [x] REQ-QP-012: Email format validation ✅
-- [x] REQ-QP-013: Phone format validation ✅
-- [x] REQ-QP-014: Quiz data sent on submit (structure ready) ✅
-- [x] REQ-QP-015: Redirect to Results after submit ✅
-- [x] REQ-QP-016: Quiz answers passed to Results ✅
-- [x] REQ-QP-D05: Buttons 52px min height ✅
-- [x] REQ-QP-D06: Sticky CTA on mobile ✅
-- [x] REQ-QP-D08: Single sans-serif font (Inter) ✅
-
-### quiz-questions.md
-
-- [x] REQ-QQ-001: All 6 steps render correctly ✅
-- [x] REQ-QQ-002: Radio buttons single select ✅
-- [x] REQ-QQ-003: "Other" reveals text input ✅
-- [x] REQ-QQ-004: Text inputs accept freeform ✅
-- [x] REQ-QQ-005: Email format validated ✅
-- [x] REQ-QQ-006: Phone format validated ✅
-- [x] REQ-QQ-007: Required fields block progression ✅
-- [x] REQ-QQ-008: Quiz data matches TypeScript schema ✅
-- [x] REQ-QQ-009: Data passed to Results ✅
-
-### results-page.md
-
-- [x] REQ-RP-001: QualAI logo in header ✅
-- [x] REQ-RP-002: Results banner with headline/subheadline ✅
-- [x] REQ-RP-003: Dynamic revenue line stubbed ✅
-- [x] REQ-RP-004: VSL section with title, placeholder, bullets ✅
-- [x] REQ-RP-005: Video placeholder 16:9 aspect ratio ✅
-- [x] REQ-RP-006: Calendar section with headline/subheadline ✅
-- [x] REQ-RP-007: Preparation bullets and trust text ✅
-- [x] REQ-RP-008: Quiz data available (via state) ✅
-- [x] REQ-RP-009: Page can display without quiz data ✅
-- [x] REQ-RP-010: Sticky CTA on mobile ✅
-
-### design-system.md
-
-- [x] REQ-DS-001: Typography scale (Inter font) ✅
-- [x] REQ-DS-002: Color palette in Tailwind config ✅
-- [x] REQ-DS-003: 4px spacing base ✅
-- [x] REQ-DS-004: Cards with border radius/shadow ✅
-- [x] REQ-DS-005: Option cards are tappable blocks ✅
-- [x] REQ-DS-006: Buttons 52px min height ✅
-- [x] REQ-DS-007: Sticky CTA on mobile ✅
-- [x] REQ-DS-008: Progress bar visible ✅
-- [x] REQ-DS-009: Consistent Lucide icons ✅
+| Requirement | Status |
+|-------------|--------|
+| REQ-TE-001: Contractor count in trust bar | ❌ Missing |
+| REQ-TE-002: Revenue generated in trust bar | ❌ Missing |
+| REQ-TE-003: "5-10 jobs" in hero subheadline | ❌ Missing |
+| REQ-TE-004: Risk reversal in hero subheadline | ⚠️ Partial |
+| REQ-TE-005: Trust box on Results Page | ❌ Missing |
+| REQ-TE-006: Trust box above calendar | ❌ Missing |
+| REQ-TE-007: Trust box min 14px font | ❌ Missing |
+| REQ-TE-008: Urgency element below calendar | ❌ Missing |
+| REQ-TE-009: Social proof near calendar | ❌ Missing |
 
 ---
 
-## Key Architecture Decisions
+## Tasks
+
+### Phase 1: Quiz Page Copy & Structure (P0)
+
+#### UI-001: Update Hero Section Copy to Match Spec
+
+**Description:** Update hero headline, subheadline, CTA text, and trust bar to match quiz-page.md spec exactly.
+
+**Files:** `lib/quiz-constants.ts`, `components/quiz/HeroSection.tsx`
+
+**Acceptance Criteria:**
+- [ ] Headline is "Stop Losing $10K+ Every Month to Missed Calls and Dead Leads"
+- [ ] Subheadline includes "5-10 booked jobs per month"
+- [ ] Subheadline includes "No setup fees. No long-term contracts."
+- [ ] CTA button says "Get My Free Revenue Analysis →"
+- [ ] Trust bar says "Trusted by 150+ HVAC, Plumbing & Roofing Contractors | $2.3M+ Revenue Generated"
+
+---
+
+#### UI-002: Update Benefits Section to Match Spec (4 Items)
+
+**Description:** Update benefits to have exactly 4 items with the spec's outcome-focused copy.
+
+**Files:** `lib/quiz-constants.ts`, `components/quiz/BenefitsSection.tsx`
+
+**Acceptance Criteria:**
+- [ ] Exactly 4 benefit cards displayed
+- [ ] Benefit 1: "Never Miss a $5K+ Opportunity Again" with spec description
+- [ ] Benefit 2: "Exclusive Calls, Not Marketplace Junk" with spec description
+- [ ] Benefit 3: "Turn Old Estimates Into Booked Jobs" with spec description
+- [ ] Benefit 4: "You Only Pay When You Profit" with spec description (risk reversal)
+- [ ] All benefits have specific numbers (15-20%, $5K+)
+
+---
+
+#### UI-003: Restructure Quiz to 5 Steps + Contact
+
+**Description:** Change quiz from 6 multi-question steps to 5 single-question steps per the spec. Remove "lead source", "current automation", and "marketing budget" questions. Use "pricing preference" instead of "openToRevShare".
+
+**Files:** `lib/quiz-types.ts`, `lib/quiz-constants.ts`, `components/quiz/QuizForm.tsx`
+
+**Acceptance Criteria:**
+- [ ] Step 1: Trade Type (single question, 7 options + "Other")
+- [ ] Step 2: Job Volume (single question, 4 options)
+- [ ] Step 3: Lead Flow / Monthly Leads (single question, 4 options)
+- [ ] Step 4: Missed Calls Percent (single question, 4 options)
+- [ ] Step 5: Pricing Preference (single question, 3 options with softened language)
+- [ ] Step 6: Contact Info (5 fields + optional job value)
+- [ ] Progress shows "Step X of 5" for steps 1-5, "Last Step" for contact
+- [ ] Questions have correct labels per quiz-questions.md
+- [ ] TypeScript types updated to remove removed fields
+
+---
+
+#### UI-004: Add Micro-Copy Below Each Quiz Question
+
+**Description:** Add educational micro-copy below each quiz question as specified.
+
+**Files:** `lib/quiz-constants.ts`, `components/quiz/QuizStep.tsx`, `components/quiz/QuizForm.tsx`
+
+**Acceptance Criteria:**
+- [ ] Step 1 micro-copy: "This helps us tailor everything to your industry."
+- [ ] Step 2 micro-copy: "This tells us your capacity for growth."
+- [ ] Step 3 micro-copy: "More leads = more upside when we capture missed opportunities."
+- [ ] Step 4 micro-copy: "Be honest — this is where the money is hiding."
+- [ ] Step 5 micro-copy: "Most owners love this model — we only profit when you do."
+- [ ] Micro-copy styled per design system (14px, gray-400, regular weight)
+
+---
+
+#### UI-005: Add Progress Celebrations After Steps 2 and 4
+
+**Description:** Show positive feedback messages after completing steps 2 and 4.
+
+**Files:** `components/quiz/QuizForm.tsx`, `components/quiz/ProgressCelebration.tsx` (new)
+
+**Acceptance Criteria:**
+- [ ] After Step 2: "Nice — you've got solid volume to work with."
+- [ ] After Step 4 (if 11%+): "That's exactly where we recover the most revenue."
+- [ ] After Step 4 (if 0-10%): "Even at that rate, we can help you capture more."
+- [ ] Celebration styled with green-50 background, green border, checkmark icon
+- [ ] Fade-in animation on appearance
+
+---
+
+#### UI-006: Update Contact Step Header and CTA
+
+**Description:** Update contact step to use value-focused framing per spec.
+
+**Files:** `lib/quiz-constants.ts`, `components/quiz/ContactInfoStep.tsx`
+
+**Acceptance Criteria:**
+- [ ] Header: "Last step — where should we send your personalized revenue breakdown?"
+- [ ] Sub-header: "Takes 2 minutes to review. Shows exactly how much you're leaving on the table."
+- [ ] CTA button: "Show Me My Revenue Opportunity →"
+- [ ] Average job value field is present and optional (collapsed by default or clearly marked optional)
+
+---
+
+### Phase 2: Results Page Major Rebuild (P0)
+
+#### UI-007: Add Dynamic Revenue Box to Results Banner
+
+**Description:** Replace stubbed revenue line with prominently styled dynamic calculation box.
+
+**Files:** `components/quiz/ResultsBanner.tsx`, new helper in `lib/quiz-calculations.ts`
+
+**Acceptance Criteria:**
+- [ ] Revenue box displays with prominent border, shadow, light background
+- [ ] Shows "YOUR OPPORTUNITY BREAKDOWN" header with chart icon
+- [ ] Calculates missed calls from quiz data (monthlyLeads × missedPercent midpoint)
+- [ ] Calculates potential recovered calls (missed × 30% recovery rate)
+- [ ] Shows average job value (from quiz or $5,000 default)
+- [ ] Shows "POTENTIAL MONTHLY UPSIDE" as range (±20%)
+- [ ] Trade type dynamically inserted ("Based on [TRADE] businesses")
+- [ ] Below box: risk reversal text per spec
+
+---
+
+#### UI-008: Replace VSL Section with "How It Works" 3-Step Section
+
+**Description:** Remove video placeholder, add 3-step visual explainer with outcome summary box.
+
+**Files:** `components/quiz/VSLSection.tsx` → rename to `components/quiz/HowItWorksSection.tsx`
+
+**Acceptance Criteria:**
+- [ ] Section title: "How QualAI Turns Missed Calls Into Booked Jobs"
+- [ ] Step 1: "AI Answers Every Call" with phone/checkmark icon and spec description
+- [ ] Step 2: "Qualified Leads Get Booked" with calendar/person icon and spec description
+- [ ] Step 3: "You Close More Jobs" with dollar/handshake icon and spec description
+- [ ] Steps connected visually (arrows or lines on desktop, vertical stack on mobile)
+- [ ] Outcome Summary Box with 4 checkmark items per spec
+- [ ] Outcome box has green-tinted background
+
+---
+
+#### UI-009: Add Trust Box Above Calendar
+
+**Description:** Add prominent trust box with Zero Risk Guarantee above calendar embed.
+
+**Files:** `components/quiz/CalendarSection.tsx`, new `components/quiz/TrustBox.tsx`
+
+**Acceptance Criteria:**
+- [ ] Trust box appears ABOVE calendar placeholder
+- [ ] Header: "🔒 Zero Risk Guarantee"
+- [ ] 3 bullet points per spec (no obligation, no contracts, no fees)
+- [ ] Closing line: "If we're not a fit, we'll tell you. No hard sell. No BS."
+- [ ] Styled with border, green-50 or blue-50 background, min 14px font
+- [ ] NOT italic or small text
+
+---
+
+#### UI-010: Add Urgency and Social Proof Near Calendar
+
+**Description:** Add urgency element below calendar and social proof near CTA.
+
+**Files:** `components/quiz/CalendarSection.tsx`
+
+**Acceptance Criteria:**
+- [ ] Urgency element: "⚡ We onboard 3-5 new contractors per week. Book now to secure your spot."
+- [ ] Social proof: "Join 150+ contractors already using QualAI to capture missed revenue"
+- [ ] Urgency has lightning emoji, amber-500 or gray-500 color
+- [ ] Social proof appears near calendar area
+- [ ] Neither element is aggressive (no countdown timers)
+
+---
+
+#### UI-011: Update Calendar Section Copy
+
+**Description:** Update calendar headline and subheadline to match spec.
+
+**Files:** `lib/quiz-constants.ts`, `components/quiz/CalendarSection.tsx`
+
+**Acceptance Criteria:**
+- [ ] Headline: "See Your Custom AI Plan in 20 Minutes (Free)"
+- [ ] Subheadline includes trade type dynamically: "...built for your [TRADE] business"
+- [ ] "What to Expect" bullets match spec (4 items per results-page.md)
+- [ ] Remove or update current "Before your call" section
+
+---
+
+### Phase 3: Results Page Polish (P1)
+
+#### UI-012: Pass Quiz Data to Results and Use for Personalization
+
+**Description:** Ensure quiz data flows to results page and is used for dynamic content.
+
+**Files:** `pages/Quiz.tsx`, `components/quiz/ResultsBanner.tsx`, `components/quiz/CalendarSection.tsx`
+
+**Acceptance Criteria:**
+- [ ] Quiz data passed as prop to ResultsBanner
+- [ ] Trade type used in revenue box footer
+- [ ] Trade type used in calendar subheadline
+- [ ] Page displays with sensible defaults if quiz data is missing
+
+---
+
+#### UI-013: Update Results Banner Headline
+
+**Description:** Update results banner to use pain-focused headline.
+
+**Files:** `lib/quiz-constants.ts`, `components/quiz/ResultsBanner.tsx`
+
+**Acceptance Criteria:**
+- [ ] Headline: "Here's the Money You're Leaving on the Table"
+- [ ] Remove "You Qualify for QualAI" messaging
+- [ ] Subheadline references "Based on your answers..."
+
+---
+
+### Phase 4: Design System Compliance (P1)
+
+#### UI-014: Add Option Card Selection Animation
+
+**Description:** Add tactile feedback animation when option cards are selected.
+
+**Files:** `components/quiz/QuizStep.tsx`
+
+**Acceptance Criteria:**
+- [ ] On selection: subtle scale (1.01) + shadow increase
+- [ ] Animation duration: 150ms ease-out
+- [ ] Feels responsive and tactile
+
+---
+
+#### UI-015: Verify All Touch Targets Meet 44px Minimum
+
+**Description:** Audit all interactive elements for accessibility touch target compliance.
+
+**Files:** Various components
+
+**Acceptance Criteria:**
+- [ ] All buttons meet 44x44px minimum
+- [ ] All option cards meet minimum touch target
+- [ ] No interactive elements smaller than 44px
+
+---
+
+### Phase 5: Data Schema Cleanup (P2)
+
+#### FE-001: Remove Obsolete Fields from Quiz Types
+
+**Description:** Clean up TypeScript types to remove fields no longer used per spec.
+
+**Files:** `lib/quiz-types.ts`
+
+**Acceptance Criteria:**
+- [ ] Remove `leadSource` and `leadSourceOther` fields
+- [ ] Remove `currentAutomation` field
+- [ ] Remove `marketingBudget` field
+- [ ] Rename `openToRevShare` to `pricingPreference`
+- [ ] Update `pricingPreference` options to 'yes' | 'maybe' | 'flat'
+- [ ] Ensure no runtime errors from removed fields
+
+---
+
+## Architecture Notes
 
 - **Quiz Funnel Route:** `/quiz` (via HashRouter: `/#/quiz`)
 - **View Management:** Single page with `view` state (`'quiz'` | `'results'`)
-  - `view === 'quiz'`: Shows HeroSection, BenefitsSection, QuizForm
-  - `view === 'results'`: Shows ResultsBanner, VSLSection, CalendarSection
-- **Quiz State:** Managed in `Quiz.tsx`, passed to Results via component state
-- **StickyCTA:** Reusable component using Intersection Observer
-- **Tailwind CSS:** Build-time via PostCSS (migrated from CDN)
-- **Code Splitting:** React.lazy() for page components
+- **Quiz State:** Managed in `Quiz.tsx`, passed to Results components via props
+- **Calculation Logic:** New `lib/quiz-calculations.ts` for revenue calculations
+- **StickyCTA:** Existing component works correctly
 
 ---
 
-## Quiz Components Structure
+## Dependency Order
 
 ```
-components/quiz/
-├── HeroSection.tsx      # Hero with headline, CTA, trust bar
-├── BenefitsSection.tsx  # 5 benefit cards with Lucide icons
-├── QuizForm.tsx         # Main quiz orchestrator (state, steps, nav)
-├── QuizStep.tsx         # Reusable step with tappable option cards
-├── TextInput.tsx        # Text input field component
-├── ContactInfoStep.tsx  # Step 6 contact form (5 fields)
-├── QuizStickyCTA.tsx    # Mobile sticky CTA (intersection observer)
-├── ResultsBanner.tsx    # Results page hero banner
-├── VSLSection.tsx       # Video section with benefit bullets
-└── CalendarSection.tsx  # Calendar booking section
-
-lib/
-├── quiz-types.ts        # TypeScript types matching spec schema
-└── quiz-constants.ts    # All copy/text from specs
+UI-003 (quiz restructure) → UI-004 (micro-copy) → UI-005 (celebrations)
+UI-001 (hero) can be done independently
+UI-002 (benefits) can be done independently
+UI-006 (contact step) depends on UI-003
+UI-007 (revenue box) should come before UI-012
+UI-008 (how it works) can be done independently
+UI-009 (trust box) can be done independently
+UI-010 (urgency/social) can be done independently
+UI-011 (calendar copy) can be done independently
+UI-012 (data flow) depends on UI-007
+UI-013 (banner headline) can be done independently
+FE-001 (types cleanup) depends on UI-003
 ```
 
 ---
 
 ## Notes
 
-- Primary conversion flow: `/quiz` → Quiz form (6 steps) → Results (VSL + calendar)
-- Video and calendar are placeholders pending real integrations
-- `quizData` is captured and available for future API submission/personalization
-- All buttons meet 52px minimum height per design system spec
-- Option cards are full tappable blocks (56px min height)
-
----
-
-## Future Enhancements (Not Currently Specified)
-
-These are potential future features not covered by current specs:
-
-- Real calendar integration (Calendly, Cal.com, GHL)
-- VSL video content integration
-- Quiz data submission to backend API
-- Dynamic revenue calculation based on quiz answers
-- UTM/source tracking for analytics
-- Loading state during form submission
+- Current implementation uses 6 steps with questions that were explicitly removed from spec
+- The spec emphasizes streamlined 5 questions for higher completion rates
+- "How It Works" section replaces VSL video placeholder (video is Non-Goal)
+- Trust elements from `specs/trust-elements.md` are completely unimplemented
+- Revenue calculation should use midpoint values from quiz ranges per spec
